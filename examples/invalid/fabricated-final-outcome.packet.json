@@ -1,0 +1,209 @@
+{
+  "packetFormatVersion": "1.0.0",
+  "action": {
+    "actionId": "act_00000000000000000000000000000002",
+    "agentId": "billing-refunds-agent",
+    "runId": "run_sample_002",
+    "correlationId": "pay_74002",
+    "actionType": "refund",
+    "subject": {
+      "subjectType": "payment",
+      "subjectId": "pay_74002"
+    },
+    "decision": {
+      "decisionType": "REFUND_APPROVED",
+      "amount": {
+        "amount": 49.9,
+        "currency": "USD"
+      }
+    },
+    "crmTicketId": "TICKET-1002",
+    "claim": {
+      "claimedOutcome": "REFUND_SUCCEEDED",
+      "claimedAtUtc": "2026-07-10T09:17:02Z"
+    },
+    "expectedOutcome": {
+      "outcomeType": "REFUND_SUCCEEDED",
+      "amount": {
+        "amount": 49.9,
+        "currency": "USD"
+      }
+    },
+    "observed": {
+      "source": "billing-system",
+      "sourceReference": null,
+      "occurredAtUtc": "2026-07-10T09:20:00Z",
+      "recordedAtUtc": "2026-07-10T09:20:00Z",
+      "summary": "No qualifying refund found for payment pay_74002."
+    },
+    "executionStatus": "COMPLETED",
+    "verificationStatus": "OUTCOME_MISMATCH",
+    "finalOutcome": "REFUND_SUCCEEDED",
+    "verificationFailure": null,
+    "reviewState": "DECIDED",
+    "mismatch": {
+      "reasonCode": "NO_QUALIFYING_REFUND",
+      "severity": "HIGH",
+      "explanation": "Expected exactly one succeeded refund of 49.90 USD; observed 0 qualifying among 0 correlated refunds.",
+      "expectedOutcomeType": "REFUND_SUCCEEDED",
+      "expectedAmount": {
+        "amount": 49.9,
+        "currency": "USD"
+      },
+      "observedRefundCount": 0,
+      "observedQualifyingRefundCount": 0,
+      "assertedTicketStatus": "OPEN",
+      "observedTicketStatus": "OPEN",
+      "businessDiscrepancy": {
+        "evaluable": true,
+        "amount": {
+          "amount": 49.9,
+          "currency": "USD"
+        }
+      }
+    },
+    "policySnapshot": {
+      "policyId": "demo-refund-policy",
+      "policyVersion": "1",
+      "rules": {
+        "maxPurchaseAgeDays": 30,
+        "maxRefundAmount": {
+          "amount": 100,
+          "currency": "USD"
+        },
+        "allowedPaymentStates": [
+          "SETTLED"
+        ],
+        "ticket": {
+          "ticketRequired": true,
+          "allowedTicketStatuses": [
+            "OPEN",
+            "APPROVED"
+          ]
+        }
+      },
+      "input": {
+        "purchasedAtUtc": "2026-06-28T11:30:00Z",
+        "evaluatedAtUtc": "2026-07-10T09:16:44Z",
+        "refundAmount": {
+          "amount": 49.9,
+          "currency": "USD"
+        },
+        "paymentState": "SETTLED",
+        "ticketStatus": "OPEN"
+      },
+      "evaluation": {
+        "policyPassed": true,
+        "ruleResults": [
+          {
+            "ruleId": "purchase-age",
+            "passed": true,
+            "explanation": "Purchase is 12 days old, within the 30-day limit."
+          },
+          {
+            "ruleId": "refund-amount",
+            "passed": true,
+            "explanation": "USD 49.90 is within the USD 100.00 limit."
+          },
+          {
+            "ruleId": "payment-state",
+            "passed": true,
+            "explanation": "Payment state SETTLED is allowed."
+          },
+          {
+            "ruleId": "support-ticket",
+            "passed": true,
+            "explanation": "Ticket TICKET-1002 is OPEN, which satisfies the requirement."
+          }
+        ]
+      }
+    },
+    "createdAtUtc": "2026-07-10T09:16:43Z",
+    "updatedAtUtc": "2026-07-10T10:00:00Z",
+    "executionStartedAtUtc": "2026-07-10T09:16:50Z",
+    "executionCompletedAtUtc": "2026-07-10T09:17:10Z",
+    "verificationCompletedAtUtc": "2026-07-10T09:20:00Z"
+  },
+  "evidence": {
+    "actionId": "act_00000000000000000000000000000002",
+    "items": [
+      {
+        "evidenceId": "evd_00000000000000000000000000000011",
+        "sequence": 1,
+        "type": "ACTION_REQUEST",
+        "trustLevel": "CLAIMED",
+        "source": "billing-refunds-agent",
+        "sourceReference": null,
+        "occurredAtUtc": "2026-07-10T09:16:43Z",
+        "recordedAtUtc": "2026-07-10T09:16:43Z",
+        "summary": "Refund requested for payment pay_74002."
+      },
+      {
+        "evidenceId": "evd_00000000000000000000000000000012",
+        "sequence": 2,
+        "type": "POLICY_SNAPSHOT_CAPTURE",
+        "trustLevel": "PRUVZ_DERIVED",
+        "source": "pruvz-api",
+        "sourceReference": "demo-refund-policy",
+        "occurredAtUtc": "2026-07-10T09:16:44Z",
+        "recordedAtUtc": "2026-07-10T09:16:44Z",
+        "summary": "Decision-time policy snapshot captured: demo-refund-policy v1, policy passed."
+      },
+      {
+        "evidenceId": "evd_00000000000000000000000000000013",
+        "sequence": 3,
+        "type": "AGENT_CLAIM",
+        "trustLevel": "CLAIMED",
+        "source": "billing-refunds-agent",
+        "sourceReference": null,
+        "occurredAtUtc": "2026-07-10T09:17:02Z",
+        "recordedAtUtc": "2026-07-10T09:17:03Z",
+        "summary": "Agent claims refund of USD 49.90 succeeded (REFUND_SUCCEEDED)."
+      },
+      {
+        "evidenceId": "evd_00000000000000000000000000000014",
+        "sequence": 4,
+        "type": "EXECUTION_RECEIPT",
+        "trustLevel": "EXECUTION_RECEIPT",
+        "source": "billing-refunds-agent",
+        "sourceReference": "ref_777",
+        "occurredAtUtc": "2026-07-10T09:17:09Z",
+        "recordedAtUtc": "2026-07-10T09:17:10Z",
+        "summary": "Execution receipt relayed: refund ref_777 submitted to the billing system."
+      },
+      {
+        "evidenceId": "evd_00000000000000000000000000000015",
+        "sequence": 5,
+        "type": "SOURCE_READBACK",
+        "trustLevel": "INDEPENDENT_READBACK",
+        "source": "billing-system",
+        "sourceReference": null,
+        "occurredAtUtc": "2026-07-10T09:20:00Z",
+        "recordedAtUtc": "2026-07-10T09:20:00Z",
+        "summary": "No qualifying refund found for payment pay_74002."
+      },
+      {
+        "evidenceId": "evd_00000000000000000000000000000016",
+        "sequence": 6,
+        "type": "VERIFICATION_RESULT",
+        "trustLevel": "PRUVZ_DERIVED",
+        "source": "pruvz-worker",
+        "sourceReference": null,
+        "occurredAtUtc": "2026-07-10T09:20:00Z",
+        "recordedAtUtc": "2026-07-10T09:20:00Z",
+        "summary": "Outcome mismatch: expected exactly one succeeded refund of USD 49.90; observed none."
+      },
+      {
+        "evidenceId": "evd_00000000000000000000000000000017",
+        "sequence": 7,
+        "type": "HUMAN_REVIEW_DECISION",
+        "trustLevel": "PRUVZ_DERIVED",
+        "source": "pruvz-review",
+        "sourceReference": "evd_00000000000000000000000000000016",
+        "occurredAtUtc": "2026-07-10T10:00:00Z",
+        "recordedAtUtc": "2026-07-10T10:00:00Z",
+        "summary": "Human review decision: APPROVED_EXCEPTION by demo-reviewer — customer retention exception approved by support lead."
+      }
+    ]
+  }
+}

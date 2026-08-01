@@ -1,0 +1,142 @@
+{
+  "packetFormatVersion": "1.0.0",
+  "action": {
+    "actionId": "act_00000000000000000000000000000003",
+    "agentId": "billing-refunds-agent",
+    "runId": "run_sample_003",
+    "correlationId": "pay_74003",
+    "actionType": "refund",
+    "subject": { "subjectType": "payment", "subjectId": "pay_74003" },
+    "decision": {
+      "decisionType": "REFUND_APPROVED",
+      "amount": { "amount": 19.99, "currency": "USD" }
+    },
+    "crmTicketId": "TICKET-1003",
+    "claim": {
+      "claimedOutcome": "REFUND_SUCCEEDED",
+      "claimedAtUtc": "2026-07-10T09:31:12Z"
+    },
+    "expectedOutcome": {
+      "outcomeType": "REFUND_SUCCEEDED",
+      "amount": { "amount": 19.99, "currency": "USD" }
+    },
+    "observed": null,
+    "executionStatus": "COMPLETED",
+    "verificationStatus": "VERIFICATION_FAILED",
+    "finalOutcome": null,
+    "verificationFailure": {
+      "reason": "Billing system unavailable; the read-back retry budget was exhausted.",
+      "attemptCount": 3,
+      "retryable": true
+    },
+    "reviewState": "NOT_REQUIRED",
+    "mismatch": null,
+    "policySnapshot": {
+      "policyId": "demo-refund-policy",
+      "policyVersion": "1",
+      "rules": {
+        "maxPurchaseAgeDays": 30,
+        "maxRefundAmount": { "amount": 100, "currency": "USD" },
+        "allowedPaymentStates": ["SETTLED"],
+        "ticket": { "ticketRequired": true, "allowedTicketStatuses": ["OPEN", "APPROVED"] }
+      },
+      "input": {
+        "purchasedAtUtc": "2026-07-01T14:00:00Z",
+        "evaluatedAtUtc": "2026-07-10T09:30:59Z",
+        "refundAmount": { "amount": 19.99, "currency": "USD" },
+        "paymentState": "SETTLED",
+        "ticketStatus": "APPROVED"
+      },
+      "evaluation": {
+        "policyPassed": true,
+        "ruleResults": [
+          {
+            "ruleId": "purchase-age",
+            "passed": true,
+            "explanation": "Purchase is 9 days old, within the 30-day limit."
+          },
+          {
+            "ruleId": "refund-amount",
+            "passed": true,
+            "explanation": "USD 19.99 is within the USD 100.00 limit."
+          },
+          {
+            "ruleId": "payment-state",
+            "passed": true,
+            "explanation": "Payment state SETTLED is allowed."
+          },
+          {
+            "ruleId": "support-ticket",
+            "passed": true,
+            "explanation": "Ticket TICKET-1003 is APPROVED, which satisfies the requirement."
+          }
+        ]
+      }
+    },
+    "createdAtUtc": "2026-07-10T09:30:58Z",
+    "updatedAtUtc": "2026-07-10T09:45:00Z",
+    "executionStartedAtUtc": "2026-07-10T09:31:02Z",
+    "executionCompletedAtUtc": "2026-07-10T09:31:20Z",
+    "verificationCompletedAtUtc": "2026-07-10T09:45:00Z"
+  },
+  "evidence": {
+    "actionId": "act_00000000000000000000000000000003",
+    "items": [
+      {
+        "evidenceId": "evd_00000000000000000000000000000021",
+        "sequence": 1,
+        "type": "ACTION_REQUEST",
+        "trustLevel": "CLAIMED",
+        "source": "billing-refunds-agent",
+        "sourceReference": null,
+        "occurredAtUtc": "2026-07-10T09:30:58Z",
+        "recordedAtUtc": "2026-07-10T09:30:58Z",
+        "summary": "Refund requested for payment pay_74003."
+      },
+      {
+        "evidenceId": "evd_00000000000000000000000000000022",
+        "sequence": 2,
+        "type": "POLICY_SNAPSHOT_CAPTURE",
+        "trustLevel": "PRUVZ_DERIVED",
+        "source": "pruvz-api",
+        "sourceReference": "demo-refund-policy",
+        "occurredAtUtc": "2026-07-10T09:30:59Z",
+        "recordedAtUtc": "2026-07-10T09:30:59Z",
+        "summary": "Decision-time policy snapshot captured: demo-refund-policy v1, policy passed."
+      },
+      {
+        "evidenceId": "evd_00000000000000000000000000000023",
+        "sequence": 3,
+        "type": "AGENT_CLAIM",
+        "trustLevel": "CLAIMED",
+        "source": "billing-refunds-agent",
+        "sourceReference": null,
+        "occurredAtUtc": "2026-07-10T09:31:12Z",
+        "recordedAtUtc": "2026-07-10T09:31:13Z",
+        "summary": "Agent claims refund of USD 19.99 succeeded (REFUND_SUCCEEDED)."
+      },
+      {
+        "evidenceId": "evd_00000000000000000000000000000024",
+        "sequence": 4,
+        "type": "EXECUTION_RECEIPT",
+        "trustLevel": "EXECUTION_RECEIPT",
+        "source": "billing-refunds-agent",
+        "sourceReference": "ref_888",
+        "occurredAtUtc": "2026-07-10T09:31:19Z",
+        "recordedAtUtc": "2026-07-10T09:31:20Z",
+        "summary": "Execution receipt relayed: refund ref_888 submitted to the billing system."
+      },
+      {
+        "evidenceId": "evd_00000000000000000000000000000025",
+        "sequence": 5,
+        "type": "VERIFICATION_RESULT",
+        "trustLevel": "PRUVZ_DERIVED",
+        "source": "pruvz-worker",
+        "sourceReference": null,
+        "occurredAtUtc": "2026-07-10T09:45:00Z",
+        "recordedAtUtc": "2026-07-10T09:45:00Z",
+        "summary": "VERIFICATION_FAILED: billing system unreadable after 3 attempts; no business outcome was proven or disproven."
+      }
+    ]
+  }
+}

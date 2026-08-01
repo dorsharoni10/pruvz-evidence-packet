@@ -1,0 +1,127 @@
+{
+  "packetFormatVersion": "1.0.0",
+  "action": {
+    "actionId": "act_00000000000000000000000000000004",
+    "agentId": "billing-refunds-agent",
+    "runId": "run_sample_004",
+    "correlationId": "pay_74004",
+    "actionType": "refund",
+    "subject": { "subjectType": "payment", "subjectId": "pay_74004" },
+    "decision": {
+      "decisionType": "REFUND_APPROVED",
+      "amount": { "amount": 75, "currency": "EUR" }
+    },
+    "crmTicketId": null,
+    "claim": {
+      "claimedOutcome": "REFUND_SUCCEEDED",
+      "claimedAtUtc": "2026-07-10T09:52:30Z"
+    },
+    "expectedOutcome": {
+      "outcomeType": "REFUND_SUCCEEDED",
+      "amount": { "amount": 75, "currency": "EUR" }
+    },
+    "observed": null,
+    "executionStatus": "COMPLETED",
+    "verificationStatus": "VERIFICATION_PENDING",
+    "finalOutcome": null,
+    "verificationFailure": null,
+    "reviewState": "NOT_DETERMINED",
+    "mismatch": null,
+    "policySnapshot": {
+      "policyId": "demo-refund-policy",
+      "policyVersion": "1",
+      "rules": {
+        "maxPurchaseAgeDays": 30,
+        "maxRefundAmount": { "amount": 100, "currency": "EUR" },
+        "allowedPaymentStates": ["SETTLED"],
+        "ticket": { "ticketRequired": false, "allowedTicketStatuses": [] }
+      },
+      "input": {
+        "purchasedAtUtc": "2026-07-05T10:00:00Z",
+        "evaluatedAtUtc": "2026-07-10T09:52:01Z",
+        "refundAmount": { "amount": 75, "currency": "EUR" },
+        "paymentState": "SETTLED",
+        "ticketStatus": null
+      },
+      "evaluation": {
+        "policyPassed": true,
+        "ruleResults": [
+          {
+            "ruleId": "purchase-age",
+            "passed": true,
+            "explanation": "Purchase is 5 days old, within the 30-day limit."
+          },
+          {
+            "ruleId": "refund-amount",
+            "passed": true,
+            "explanation": "EUR 75.00 is within the EUR 100.00 limit."
+          },
+          {
+            "ruleId": "payment-state",
+            "passed": true,
+            "explanation": "Payment state SETTLED is allowed."
+          },
+          {
+            "ruleId": "support-ticket",
+            "passed": true,
+            "explanation": "No ticket is required by this policy."
+          }
+        ]
+      }
+    },
+    "createdAtUtc": "2026-07-10T09:52:00Z",
+    "updatedAtUtc": "2026-07-10T09:52:45Z",
+    "executionStartedAtUtc": "2026-07-10T09:52:10Z",
+    "executionCompletedAtUtc": "2026-07-10T09:52:44Z",
+    "verificationCompletedAtUtc": null
+  },
+  "evidence": {
+    "actionId": "act_00000000000000000000000000000004",
+    "items": [
+      {
+        "evidenceId": "evd_00000000000000000000000000000031",
+        "sequence": 1,
+        "type": "ACTION_REQUEST",
+        "trustLevel": "CLAIMED",
+        "source": "billing-refunds-agent",
+        "sourceReference": null,
+        "occurredAtUtc": "2026-07-10T09:52:00Z",
+        "recordedAtUtc": "2026-07-10T09:52:00Z",
+        "summary": "Refund requested for payment pay_74004."
+      },
+      {
+        "evidenceId": "evd_00000000000000000000000000000032",
+        "sequence": 2,
+        "type": "POLICY_SNAPSHOT_CAPTURE",
+        "trustLevel": "PRUVZ_DERIVED",
+        "source": "pruvz-api",
+        "sourceReference": "demo-refund-policy",
+        "occurredAtUtc": "2026-07-10T09:52:01Z",
+        "recordedAtUtc": "2026-07-10T09:52:01Z",
+        "summary": "Decision-time policy snapshot captured: demo-refund-policy v1, policy passed."
+      },
+      {
+        "evidenceId": "evd_00000000000000000000000000000033",
+        "sequence": 3,
+        "type": "AGENT_CLAIM",
+        "trustLevel": "CLAIMED",
+        "source": "billing-refunds-agent",
+        "sourceReference": null,
+        "occurredAtUtc": "2026-07-10T09:52:30Z",
+        "recordedAtUtc": "2026-07-10T09:52:31Z",
+        "summary": "Agent claims refund of EUR 75.00 succeeded (REFUND_SUCCEEDED)."
+      },
+      {
+        "evidenceId": "evd_00000000000000000000000000000034",
+        "sequence": 4,
+        "type": "EXECUTION_RECEIPT",
+        "trustLevel": "EXECUTION_RECEIPT",
+        "source": "billing-refunds-agent",
+        "sourceReference": "ref_999",
+        "occurredAtUtc": "2026-07-10T09:52:43Z",
+        "recordedAtUtc": "2026-07-10T09:52:44Z",
+        "summary": "Execution receipt relayed: refund ref_999 submitted to the billing system."
+      }
+    ]
+  }
+}
