@@ -20,4 +20,4 @@ jobs:
       - run: npm ci
       - run: npm test
       - name: Validate every published valid example via the documented command
-        run: npm run validate -- examples/valid/*.packet.json
+        run: npm run validate -- examples/valid/*.packet.json examples/captured/*.packet.json

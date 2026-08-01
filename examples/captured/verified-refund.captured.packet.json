@@ -1,0 +1,166 @@
+{
+  "packetFormatVersion": "1.0.0",
+  "action": {
+    "actionId": "act_763ecaa1a06d4874999593ff76ed12be",
+    "agentId": "demo-agent",
+    "runId": "cefd0d9b-a06c-4468-99b8-03928f190fd5",
+    "correlationId": "pay_db80dba41dc141d394ea72e50fe2fa02",
+    "actionType": "refund",
+    "subject": {
+      "subjectType": "payment",
+      "subjectId": "pay_db80dba41dc141d394ea72e50fe2fa02"
+    },
+    "decision": {
+      "decisionType": "REFUND_APPROVED",
+      "amount": {
+        "amount": 49.9,
+        "currency": "USD"
+      }
+    },
+    "crmTicketId": "tick_a31f141bd6d844b9aee12db95a13c8b6",
+    "claim": {
+      "claimedOutcome": "REFUND_SUBMITTED",
+      "claimedAtUtc": "2026-08-01T21:51:59.859Z"
+    },
+    "expectedOutcome": {
+      "outcomeType": "REFUND_SUCCEEDED",
+      "amount": {
+        "amount": 49.9,
+        "currency": "USD"
+      }
+    },
+    "observed": {
+      "source": "billing-sandbox",
+      "sourceReference": "pay_db80dba41dc141d394ea72e50fe2fa02",
+      "occurredAtUtc": "2026-08-01T21:52:01.18Z",
+      "recordedAtUtc": "2026-08-01T21:52:01.26Z",
+      "summary": "Independent billing read-back found 1 refund(s) for the payment (1 succeeded)."
+    },
+    "executionStatus": "COMPLETED",
+    "verificationStatus": "VERIFIED",
+    "finalOutcome": "REFUND_SUCCEEDED",
+    "verificationFailure": null,
+    "reviewState": "NOT_REQUIRED",
+    "mismatch": null,
+    "policySnapshot": {
+      "policyId": "refund-policy",
+      "policyVersion": "v2",
+      "rules": {
+        "maxPurchaseAgeDays": 14,
+        "maxRefundAmount": {
+          "amount": 100,
+          "currency": "USD"
+        },
+        "allowedPaymentStates": [
+          "SUCCEEDED"
+        ],
+        "ticket": {
+          "ticketRequired": true,
+          "allowedTicketStatuses": [
+            "OPEN"
+          ]
+        }
+      },
+      "input": {
+        "purchasedAtUtc": "2026-07-29T21:51:59.639Z",
+        "evaluatedAtUtc": "2026-08-01T21:52:00.04Z",
+        "refundAmount": {
+          "amount": 49.9,
+          "currency": "USD"
+        },
+        "paymentState": "SUCCEEDED",
+        "ticketStatus": "OPEN"
+      },
+      "evaluation": {
+        "policyPassed": true,
+        "ruleResults": [
+          {
+            "ruleId": "purchase-age",
+            "passed": true,
+            "explanation": "Purchase date 2026-07-29T21:51:59.639Z is within 14 days of the evaluation time 2026-08-01T21:52:00.040Z."
+          },
+          {
+            "ruleId": "refund-amount",
+            "passed": true,
+            "explanation": "Refund amount 49.90 USD is within the policy limit 100.00 USD."
+          },
+          {
+            "ruleId": "payment-state",
+            "passed": true,
+            "explanation": "Payment state SUCCEEDED is one of the allowed states: SUCCEEDED."
+          },
+          {
+            "ruleId": "support-ticket",
+            "passed": true,
+            "explanation": "Ticket status OPEN is one of the allowed statuses: OPEN."
+          }
+        ]
+      }
+    },
+    "createdAtUtc": "2026-08-01T21:52:00.04Z",
+    "updatedAtUtc": "2026-08-01T21:52:01.26Z",
+    "executionStartedAtUtc": null,
+    "executionCompletedAtUtc": "2026-08-01T21:52:00.493Z",
+    "verificationCompletedAtUtc": "2026-08-01T21:52:01.26Z"
+  },
+  "evidence": {
+    "actionId": "act_763ecaa1a06d4874999593ff76ed12be",
+    "items": [
+      {
+        "evidenceId": "evd_b1f7436dcbad40bf981160d1bad2a11f",
+        "sequence": 1,
+        "type": "AGENT_CLAIM",
+        "trustLevel": "CLAIMED",
+        "source": "demo-agent",
+        "sourceReference": "re_cefd0d9b-a06c-4468-99b8-03928f190fd5_1",
+        "occurredAtUtc": "2026-08-01T21:51:59.859Z",
+        "recordedAtUtc": "2026-08-01T21:52:00.371Z",
+        "summary": "Agent claimed the refund was submitted."
+      },
+      {
+        "evidenceId": "evd_e2a538da8cd443dfbd610ae14303b056",
+        "sequence": 2,
+        "type": "EXECUTION_RECEIPT",
+        "trustLevel": "EXECUTION_RECEIPT",
+        "source": "billing-sandbox",
+        "sourceReference": "re_cefd0d9b-a06c-4468-99b8-03928f190fd5_1",
+        "occurredAtUtc": "2026-08-01T21:51:59.859Z",
+        "recordedAtUtc": "2026-08-01T21:52:00.474Z",
+        "summary": "The billing sandbox issued refund re_cefd0d9b-a06c-4468-99b8-03928f190fd5_1 with status SUCCEEDED."
+      },
+      {
+        "evidenceId": "evd_317b288b70fb4c4488ee08c2057983d4",
+        "sequence": 3,
+        "type": "SOURCE_READBACK",
+        "trustLevel": "INDEPENDENT_READBACK",
+        "source": "crm-sandbox",
+        "sourceReference": "tick_a31f141bd6d844b9aee12db95a13c8b6",
+        "occurredAtUtc": "2026-08-01T21:52:01.178Z",
+        "recordedAtUtc": "2026-08-01T21:52:01.26Z",
+        "summary": "Independent CRM read-back observed ticket tick_a31f141bd6d844b9aee12db95a13c8b6 in status REFUNDED."
+      },
+      {
+        "evidenceId": "evd_9978f22415744fd284ba4ee5eda53521",
+        "sequence": 4,
+        "type": "SOURCE_READBACK",
+        "trustLevel": "INDEPENDENT_READBACK",
+        "source": "billing-sandbox",
+        "sourceReference": "pay_db80dba41dc141d394ea72e50fe2fa02",
+        "occurredAtUtc": "2026-08-01T21:52:01.18Z",
+        "recordedAtUtc": "2026-08-01T21:52:01.26Z",
+        "summary": "Independent billing read-back found 1 refund(s) for the payment (1 succeeded)."
+      },
+      {
+        "evidenceId": "evd_02eb95ac2ae74a73ae24adfb0537ed26",
+        "sequence": 5,
+        "type": "VERIFICATION_RESULT",
+        "trustLevel": "PRUVZ_DERIVED",
+        "source": "pruvz-worker",
+        "sourceReference": "vjob_e531817a11464339a81f5b0fabde22b7",
+        "occurredAtUtc": "2026-08-01T21:52:01.26Z",
+        "recordedAtUtc": "2026-08-01T21:52:01.26Z",
+        "summary": "Verification derived VERIFIED: REFUND_VERIFIED: exactly one succeeded refund matches the expected refund."
+      }
+    ]
+  }
+}

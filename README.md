@@ -61,7 +61,9 @@ npm run compose -- action.json evidence.json my-action.packet.json
 
 ## Examples
 
-All examples are synthetic. Every identifier, amount and timestamp is fabricated; none of it comes from a real customer, a real payment system, or real operational data.
+The authored examples are synthetic — every identifier, amount and timestamp is fabricated. The captured example is real product output from the deterministic demo environment, which generates its own payments, tickets and refunds per run; nothing anywhere comes from a real customer, a real payment system, or real operational data.
+
+- [`examples/captured/`](examples/captured/) — a packet composed from the two API responses of a live demo run with `npm run compose`: the conformance proof that real product output fits this schema. See [`docs/CONFORMANCE.md`](docs/CONFORMANCE.md).
 
 - [`examples/valid/`](examples/valid/) — one packet per verification path: [verified](examples/valid/verified-refund.packet.json), [outcome mismatch with a recorded human review decision](examples/valid/outcome-mismatch-decided.packet.json), [technical verification failure](examples/valid/verification-failed.packet.json), and [verification still pending](examples/valid/verification-pending.packet.json).
 - [`examples/invalid/`](examples/invalid/) — ten packets, each broken by exactly one documented defect (a fabricated outcome on a mismatch, an evidence item claiming a trust level its type cannot carry, a fabricated zero where "no amount" belongs, and so on). See [`examples/invalid/README.md`](examples/invalid/README.md).

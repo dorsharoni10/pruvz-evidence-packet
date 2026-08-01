@@ -12,6 +12,7 @@ import { SUPPORTED_VERSIONS, createValidator, validatePacket } from '../lib/vali
 const here = path.dirname(fileURLToPath(import.meta.url))
 const repoRoot = path.join(here, '..')
 const validDir = path.join(repoRoot, 'examples', 'valid')
+const capturedDir = path.join(repoRoot, 'examples', 'captured')
 const invalidDir = path.join(repoRoot, 'examples', 'invalid')
 
 const loadPacket = (dir, name) => JSON.parse(readFileSync(path.join(dir, name), 'utf8'))
@@ -38,6 +39,19 @@ test('every valid example conforms to the published schema', () => {
 
   for (const file of files) {
     const { valid, errors } = validatePacket(loadPacket(validDir, file))
+    assert.ok(valid, `${file} should be valid but failed: ${JSON.stringify(errors, null, 2)}`)
+  }
+})
+
+test('the packet captured from a real product run conforms', () => {
+  // The conformance proof (docs/CONFORMANCE.md): real product output,
+  // composed with bin/compose.mjs, must pass the same two-layer validation
+  // as every authored example.
+  const files = packetFiles(capturedDir)
+  assert.ok(files.length >= 1, 'expected at least one captured packet')
+
+  for (const file of files) {
+    const { valid, errors } = validatePacket(loadPacket(capturedDir, file))
     assert.ok(valid, `${file} should be valid but failed: ${JSON.stringify(errors, null, 2)}`)
   }
 })
