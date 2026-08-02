@@ -154,7 +154,7 @@ Evidence type → trust level (the schema enforces every row):
 | `VERIFICATION_RESULT` | Pruvz assigned the final verification result. | `PRUVZ_DERIVED` |
 | `HUMAN_REVIEW_DECISION` | A human reviewer's documented decision on a mismatch exception, recorded by Pruvz through the controlled review path. | `PRUVZ_DERIVED` |
 
-Trust levels, from least to most independent:
+Trust levels — four provenance classes. `CLAIMED`, `EXECUTION_RECEIPT` and `INDEPENDENT_READBACK` grade how independent a **source observation** is, from least to most; `PRUVZ_DERIVED` marks Pruvz's own derived records (snapshots, rulings, recorded decisions) — a conclusion class, not a more-independent observation:
 
 | Value | Meaning |
 |---|---|

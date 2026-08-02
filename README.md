@@ -84,7 +84,7 @@ Packet format v1.0.0 deliberately contains no content hashes, no signed manifest
 
 - [Product demo](https://pruvz.ai/demo) — the end-to-end verification flow this contract is exported from.
 - [Security architecture](https://pruvz.ai/security) — trust model, data access, and verification lifecycle.
-- A published sample packet with a full technical walkthrough will be linked here when it ships.
+- [A real captured packet, explained field by field](https://pruvz.ai/evidence-packet) — the captured packet from [`examples/captured/`](examples/captured/) published with its full technical walkthrough: every field group, the evidence timeline, and the verification sequence on the packet's own timestamps.
 
 ## License, contributing, security
 
