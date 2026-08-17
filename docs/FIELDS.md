@@ -1,16 +1,16 @@
-# Field and enum reference — packet format v1.0.0
+# Field and enum reference — packet format v1.1.0
 
-Every field of the Public Evidence Packet, what it means, and every closed enum value. The authoritative structural rules are the schemas themselves; this document explains intent and semantics.
+Every field of the Public Evidence Packet, what it means, and every closed enum value. The authoritative structural rules are the schemas themselves; this document explains intent and semantics. Fields new in format `1.1.0` are marked; everything else is unchanged from `1.0.0`.
 
 ## Envelope
 
 | Field | Meaning |
 |---|---|
-| `packetFormatVersion` | The packet format release this document conforms to. Fixed to `"1.0.0"` in this release. Metadata of the file, not a product field. |
+| `packetFormatVersion` | The packet format release this document conforms to. Fixed to `"1.1.0"` in this release. Metadata of the file, not a product field. |
 | `action` | The action record — see below. |
 | `evidence` | The ordered evidence timeline — see below. |
 
-**Enforced by the validator, not expressible in JSON Schema:** `action.actionId` must equal `evidence.actionId`; timeline sequences are unique, ascending and contiguous from 1; evidence ids are unique; a `DECIDED` review state and `HUMAN_REVIEW_DECISION` evidence imply each other; execution state agrees with its timestamps and with the verification state. The bundled validator checks all of these after schema validation — a third-party validator using the schema files alone will not.
+**Enforced by the validator, not expressible in JSON Schema:** `action.actionId` must equal `evidence.actionId`; timeline sequences are unique, ascending and contiguous from 1; evidence ids are unique; a `DECIDED` review state and `HUMAN_REVIEW_DECISION` evidence imply each other; execution state agrees with its timestamps and with the verification state; an `EXPECTED_OUTCOME_ABSENT_AFTER_DEADLINE` mismatch requires a resolved `verificationTiming.deadlineAtUtc` (1.1.0). The bundled validator checks all of these after schema validation — a third-party validator using the schema files alone will not.
 
 ## The action record
 
@@ -61,6 +61,20 @@ Execution and verification are separate by design: execution reflects what the a
 
 A verification result states what the systems of record showed during the verification window. It becomes final on a terminal observation and is not silently re-checked afterward.
 
+### The frozen verification timing (new in 1.1.0)
+
+`verificationTiming` — the action's temporal verification model, resolved **exactly once** when the action was accepted and never re-resolved: later policy or configuration changes cannot affect an in-flight action. `null` only on action records that predate the timing model.
+
+| Field | Meaning |
+|---|---|
+| `initialCheckAfterSeconds` | How long after acceptance the first independent read-back becomes meaningful (the source of record's expected visibility delay). |
+| `readbackIntervalSeconds` | The cadence between absence re-checks across the window. |
+| `deadlineAtUtc` | When the business window closes. `null` means **no verification deadline was resolved**: such an action can never produce a time-based mismatch and stays `VERIFICATION_PENDING`, surfaced as "verification deadline not configured". |
+| `deadlineSource` | Where the deadline came from, in resolution precedence order: `POLICY` (the decision-time Policy Snapshot), `TENANT_OVERRIDE` (explicit tenant/action configuration), `PRODUCT_SPEC` (the product's per-action-type default — which may also be an explicit no-deadline decision), `NOT_CONFIGURED` (no source resolved one). |
+| `resolvedAtUtc` | The acceptance moment the resolution was made and the deadline anchored to. |
+
+Two temporal rules the product guarantees: absence of the expected outcome **inside** the window keeps the action `VERIFICATION_PENDING` (eventual consistency is never misread as a mismatch), and absence becomes definitive **only** after a resolved deadline passes. Positive contradictory evidence is ruled immediately regardless of any deadline.
+
 ### Terminal-result fields
 
 | Field | Meaning |
@@ -76,7 +90,8 @@ The review classification and expected-versus-observed dimensions behind one `OU
 
 | Field | Meaning |
 |---|---|
-| `reasonCode` | Stable machine classification. **Intentionally an open string**: consumers must treat unknown future codes as valid and fall back to `explanation`. Known v1.0.0 codes below. |
+| `mismatchReason` | **New in 1.1.0.** The temporal mismatch category — a closed enum: `CONTRADICTORY_EVIDENCE` (positive evidence contradicts the claim; assigned immediately, no deadline wait) or `EXPECTED_OUTCOME_ABSENT_AFTER_DEADLINE` (the expected outcome never appeared and the resolved verification deadline passed; only ever assigned under a resolved deadline). Derived server-side from `reasonCode`; the two can never disagree. |
+| `reasonCode` | Stable machine classification. **Intentionally an open string**: consumers must treat unknown future codes as valid and fall back to `explanation`. Known v1.1.0 codes below. |
 | `severity` | `HIGH` or `MEDIUM`, derived from documented rules per reason code. |
 | `explanation` | Human-readable statement of the business difference, referencing the observations the classifier used. |
 | `expectedOutcomeType`, `expectedAmount` | The server-derived expectation the observation was evaluated against. |
@@ -85,13 +100,14 @@ The review classification and expected-versus-observed dimensions behind one `OU
 | `assertedTicketStatus` / `observedTicketStatus` | The decision-time asserted CRM ticket status versus what CRM read-back observed; `null` when not applicable. |
 | `businessDiscrepancy` | The mismatch's monetary discrepancy, or its explicit absence. |
 
-Known v1.0.0 `reasonCode` values:
+Known v1.1.0 `reasonCode` values:
 
-| Code | Meaning | Severity |
-|---|---|---|
-| `NO_QUALIFYING_REFUND` | The expected refund was not found in the system of record. | `HIGH` |
-| `MULTIPLE_QUALIFYING_REFUNDS` | More than one qualifying refund was found — an over-refund. | `HIGH` |
-| `CRM_STATE_INCONSISTENT` | The refund may be correct, but the CRM state contradicts what was asserted — a governance exception. | `MEDIUM` |
+| Code | Meaning | Severity | Category |
+|---|---|---|---|
+| `NO_QUALIFYING_REFUND` | The expected refund was still absent when the resolved verification deadline passed. | `HIGH` | `EXPECTED_OUTCOME_ABSENT_AFTER_DEADLINE` |
+| `MULTIPLE_QUALIFYING_REFUNDS` | More than one qualifying refund was found — an over-refund. | `HIGH` | `CONTRADICTORY_EVIDENCE` |
+| `CRM_STATE_INCONSISTENT` | The refund may be correct, but the CRM state contradicts what was asserted — a governance exception. | `MEDIUM` | `CONTRADICTORY_EVIDENCE` |
+| `REFUND_FAILED` | A refund matching the expectation was observed in a terminal failed state — the claimed refund did not succeed. New in 1.1.0. | `HIGH` | `CONTRADICTORY_EVIDENCE` |
 
 `businessDiscrepancy` semantics: when `evaluable` is `true`, `amount` carries the server-derived monetary discrepancy. When `evaluable` is `false`, `amount` is `null` — **an unknown discrepancy is never rendered as a zero**, because "no amount" and "zero amount" are different business statements. The schema enforces both directions.
 
@@ -115,7 +131,7 @@ The complete immutable decision-time snapshot embedded with the action — read 
 | Field | Meaning |
 |---|---|
 | `policyId`, `policyVersion` | Which policy, at which version, applied at decision time. |
-| `rules` | The rules that applied: `maxPurchaseAgeDays`, `maxRefundAmount`, `allowedPaymentStates`, and the `ticket` requirement (`ticketRequired`, `allowedTicketStatuses`). |
+| `rules` | The rules that applied: `maxPurchaseAgeDays`, `maxRefundAmount`, `allowedPaymentStates`, the `ticket` requirement (`ticketRequired`, `allowedTicketStatuses`), and `verificationDeadlineSeconds` (**new in 1.1.0**, nullable) — the policy's verification deadline, so a `POLICY`-sourced `verificationTiming` is explainable from the packet. |
 | `input` | The normalized inputs the evaluation saw: `purchasedAtUtc`, `evaluatedAtUtc`, `refundAmount`, `paymentState`, `ticketStatus` (`null` when no ticket was asserted). |
 | `evaluation` | The explainable result: `policyPassed` plus one `{ruleId, passed, explanation}` per rule, in policy order. |
 

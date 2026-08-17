@@ -1,5 +1,5 @@
 {
-  "packetFormatVersion": "1.0.0",
+  "packetFormatVersion": "1.1.0",
   "action": {
     "actionId": "act_00000000000000000000000000000002",
     "agentId": "billing-refunds-agent",
@@ -33,9 +33,10 @@
     "verificationFailure": null,
     "reviewState": "DECIDED",
     "mismatch": {
+      "mismatchReason": "EXPECTED_OUTCOME_ABSENT_AFTER_DEADLINE",
       "reasonCode": "NO_QUALIFYING_REFUND",
       "severity": "HIGH",
-      "explanation": "Expected exactly one succeeded refund of 49.90 USD; observed 0 qualifying among 0 correlated refunds.",
+      "explanation": "The expected 49.90 USD refund was still absent when the resolved verification deadline passed; observed 0 qualifying among 0 correlated refunds.",
       "expectedOutcomeType": "REFUND_SUCCEEDED",
       "expectedAmount": { "amount": 49.9, "currency": "USD" },
       "observedRefundCount": 0,
@@ -47,6 +48,13 @@
         "amount": { "amount": 49.9, "currency": "USD" }
       }
     },
+    "verificationTiming": {
+      "initialCheckAfterSeconds": 10,
+      "readbackIntervalSeconds": 30,
+      "deadlineAtUtc": "2026-07-10T09:18:43Z",
+      "deadlineSource": "POLICY",
+      "resolvedAtUtc": "2026-07-10T09:16:43Z"
+    },
     "policySnapshot": {
       "policyId": "demo-refund-policy",
       "policyVersion": "1",
@@ -54,7 +62,8 @@
         "maxPurchaseAgeDays": 30,
         "maxRefundAmount": { "amount": 100, "currency": "USD" },
         "allowedPaymentStates": ["SETTLED"],
-        "ticket": { "ticketRequired": true, "allowedTicketStatuses": ["OPEN", "APPROVED"] }
+        "ticket": { "ticketRequired": true, "allowedTicketStatuses": ["OPEN", "APPROVED"] },
+        "verificationDeadlineSeconds": 120
       },
       "input": {
         "purchasedAtUtc": "2026-06-28T11:30:00Z",
