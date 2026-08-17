@@ -159,6 +159,15 @@ const consistencyScenarios = [
     },
     expect: /executionCompletedAtUtc.*must be null/,
   },
+  {
+    name: 'an absent-after-deadline mismatch without a resolved deadline (format 1.1.0)',
+    base: 'outcome-mismatch-decided.packet.json',
+    mutate: (p) => {
+      p.action.verificationTiming.deadlineAtUtc = null
+      p.action.verificationTiming.deadlineSource = 'NOT_CONFIGURED'
+    },
+    expect: /mismatchReason.*requires a resolved verificationTiming/,
+  },
 ]
 
 test('self-contradictory packets are rejected by the consistency layer', () => {
@@ -183,6 +192,22 @@ test('self-contradictory packets are rejected by the consistency layer', () => {
   }
 })
 
+test('a legacy record without verification timing keeps its historical mismatch valid', () => {
+  // The schema admits verificationTiming: null exactly for action records
+  // that predate the timing model — and such records may carry historical
+  // absent-after-deadline mismatches without a recorded resolution. The
+  // deadline consistency rule must bind only records the timing model covers,
+  // or the contract would reject input it explicitly declares legal.
+  const packet = loadPacket(validDir, 'outcome-mismatch-decided.packet.json')
+  packet.action.verificationTiming = null
+
+  const { valid, errors } = validatePacket(packet)
+  assert.ok(
+    valid,
+    `a legacy no-timing mismatch packet should be valid but failed: ${JSON.stringify(errors, null, 2)}`,
+  )
+})
+
 test('valid and invalid examples stay internally consistent on actionId', () => {
   // Belt and braces: the consistency layer now enforces this at validation
   // time; this keeps the published examples honest even if that layer changes.
@@ -198,7 +223,7 @@ test('valid and invalid examples stay internally consistent on actionId', () => 
 
 test('an unsupported explicit version is refused, not silently accepted', () => {
   assert.throws(() => createValidator('2.0.0'), /Unsupported packet format version/)
-  assert.deepEqual(SUPPORTED_VERSIONS, ['1.0.0'])
+  assert.deepEqual(SUPPORTED_VERSIONS, ['1.1.0', '1.0.0'])
 })
 
 test('the documented CLI command validates without any network access', () => {

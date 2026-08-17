@@ -22,11 +22,11 @@ The packet's parts:
 | `evidence` | The ordered evidence timeline (`GET /api/actions/{actionId}/evidence`): every append-only evidence item in sequence order, each with its server-assigned trust level. |
 | `packetFormatVersion` | Metadata of the packet file itself — the format release it conforms to. |
 
-Schemas live in [`schema/v1.0.0/`](schema/v1.0.0/):
+Schemas live in [`schema/v1.1.0/`](schema/v1.1.0/) (current release; [`schema/v1.0.0/`](schema/v1.0.0/) remains published and immutable):
 
-- [`evidence-packet.schema.json`](schema/v1.0.0/evidence-packet.schema.json) — the packet envelope
-- [`action.schema.json`](schema/v1.0.0/action.schema.json) — the action record
-- [`evidence.schema.json`](schema/v1.0.0/evidence.schema.json) — the evidence timeline
+- [`evidence-packet.schema.json`](schema/v1.1.0/evidence-packet.schema.json) — the packet envelope
+- [`action.schema.json`](schema/v1.1.0/action.schema.json) — the action record
+- [`evidence.schema.json`](schema/v1.1.0/evidence.schema.json) — the evidence timeline
 
 Field-by-field meaning, every enum value, and the type-to-trust mapping are documented in [`docs/FIELDS.md`](docs/FIELDS.md). Versioning and compatibility rules are in [`docs/VERSIONING.md`](docs/VERSIONING.md).
 

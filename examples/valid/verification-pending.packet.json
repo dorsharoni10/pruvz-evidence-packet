@@ -1,5 +1,5 @@
 {
-  "packetFormatVersion": "1.0.0",
+  "packetFormatVersion": "1.1.0",
   "action": {
     "actionId": "act_00000000000000000000000000000004",
     "agentId": "billing-refunds-agent",
@@ -27,6 +27,13 @@
     "verificationFailure": null,
     "reviewState": "NOT_DETERMINED",
     "mismatch": null,
+    "verificationTiming": {
+      "initialCheckAfterSeconds": 10,
+      "readbackIntervalSeconds": 900,
+      "deadlineAtUtc": "2026-07-12T09:52:00Z",
+      "deadlineSource": "PRODUCT_SPEC",
+      "resolvedAtUtc": "2026-07-10T09:52:00Z"
+    },
     "policySnapshot": {
       "policyId": "demo-refund-policy",
       "policyVersion": "1",
@@ -34,7 +41,8 @@
         "maxPurchaseAgeDays": 30,
         "maxRefundAmount": { "amount": 100, "currency": "EUR" },
         "allowedPaymentStates": ["SETTLED"],
-        "ticket": { "ticketRequired": false, "allowedTicketStatuses": [] }
+        "ticket": { "ticketRequired": false, "allowedTicketStatuses": [] },
+        "verificationDeadlineSeconds": null
       },
       "input": {
         "purchasedAtUtc": "2026-07-05T10:00:00Z",
