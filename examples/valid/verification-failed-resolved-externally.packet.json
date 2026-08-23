@@ -1,17 +1,17 @@
 {
   "packetFormatVersion": "1.2.0",
   "action": {
-    "actionId": "act_00000000000000000000000000000003",
+    "actionId": "act_00000000000000000000000000000005",
     "agentId": "billing-refunds-agent",
-    "runId": "run_sample_003",
-    "correlationId": "pay_74003",
+    "runId": "run_sample_005",
+    "correlationId": "pay_74005",
     "actionType": "refund",
-    "subject": { "subjectType": "payment", "subjectId": "pay_74003" },
+    "subject": { "subjectType": "payment", "subjectId": "pay_74005" },
     "decision": {
       "decisionType": "REFUND_APPROVED",
       "amount": { "amount": 19.99, "currency": "USD" }
     },
-    "crmTicketId": "TICKET-1003",
+    "crmTicketId": "TICKET-1005",
     "claim": {
       "claimedOutcome": "REFUND_SUCCEEDED",
       "claimedAtUtc": "2026-07-10T09:31:12Z"
@@ -29,11 +29,47 @@
       "attemptCount": 3,
       "retryable": true
     },
-    "reviewState": "PENDING_REVIEW",
+    "reviewState": "AWAITING_REVERIFICATION",
     "review": {
       "category": "VERIFICATION_FAILURE",
-      "latestDecision": null,
-      "decisions": []
+      "latestDecision": {
+        "decision": "RESOLVED_EXTERNALLY",
+        "reason": "Billing API credentials were rotated; Pruvz can read the billing system again.",
+        "reviewerId": "ops-lead",
+        "previousReviewState": "NEEDS_CORRECTION",
+        "newReviewState": "AWAITING_REVERIFICATION",
+        "reviewedEvidenceId": "evd_00000000000000000000000000000056",
+        "reviewedEvidenceSequence": 6,
+        "evidenceId": "evd_00000000000000000000000000000057",
+        "evidenceSequence": 7,
+        "decidedAtUtc": "2026-07-10T11:30:00Z"
+      },
+      "decisions": [
+        {
+          "decision": "NEEDS_CORRECTION",
+          "reason": "The billing connector is rejecting our credentials; rotate them before a recheck.",
+          "reviewerId": "ops-lead",
+          "previousReviewState": "PENDING_REVIEW",
+          "newReviewState": "NEEDS_CORRECTION",
+          "reviewedEvidenceId": "evd_00000000000000000000000000000055",
+          "reviewedEvidenceSequence": 5,
+          "evidenceId": "evd_00000000000000000000000000000056",
+          "evidenceSequence": 6,
+          "decidedAtUtc": "2026-07-10T10:15:00Z"
+        },
+        {
+          "decision": "RESOLVED_EXTERNALLY",
+          "reason": "Billing API credentials were rotated; Pruvz can read the billing system again.",
+          "reviewerId": "ops-lead",
+          "previousReviewState": "NEEDS_CORRECTION",
+          "newReviewState": "AWAITING_REVERIFICATION",
+          "reviewedEvidenceId": "evd_00000000000000000000000000000056",
+          "reviewedEvidenceSequence": 6,
+          "evidenceId": "evd_00000000000000000000000000000057",
+          "evidenceSequence": 7,
+          "decidedAtUtc": "2026-07-10T11:30:00Z"
+        }
+      ]
     },
     "mismatch": null,
     "verificationTiming": {
@@ -81,22 +117,22 @@
           {
             "ruleId": "support-ticket",
             "passed": true,
-            "explanation": "Ticket TICKET-1003 is APPROVED, which satisfies the requirement."
+            "explanation": "Ticket TICKET-1005 is APPROVED, which satisfies the requirement."
           }
         ]
       }
     },
     "createdAtUtc": "2026-07-10T09:30:58Z",
-    "updatedAtUtc": "2026-07-10T09:45:00Z",
+    "updatedAtUtc": "2026-07-10T11:30:00Z",
     "executionStartedAtUtc": "2026-07-10T09:31:02Z",
     "executionCompletedAtUtc": "2026-07-10T09:31:20Z",
     "verificationCompletedAtUtc": "2026-07-10T09:45:00Z"
   },
   "evidence": {
-    "actionId": "act_00000000000000000000000000000003",
+    "actionId": "act_00000000000000000000000000000005",
     "items": [
       {
-        "evidenceId": "evd_00000000000000000000000000000021",
+        "evidenceId": "evd_00000000000000000000000000000051",
         "sequence": 1,
         "type": "ACTION_REQUEST",
         "trustLevel": "CLAIMED",
@@ -104,10 +140,10 @@
         "sourceReference": null,
         "occurredAtUtc": "2026-07-10T09:30:58Z",
         "recordedAtUtc": "2026-07-10T09:30:58Z",
-        "summary": "Refund requested for payment pay_74003."
+        "summary": "Refund requested for payment pay_74005."
       },
       {
-        "evidenceId": "evd_00000000000000000000000000000022",
+        "evidenceId": "evd_00000000000000000000000000000052",
         "sequence": 2,
         "type": "POLICY_SNAPSHOT_CAPTURE",
         "trustLevel": "PRUVZ_DERIVED",
@@ -118,7 +154,7 @@
         "summary": "Decision-time policy snapshot captured: demo-refund-policy v1, policy passed."
       },
       {
-        "evidenceId": "evd_00000000000000000000000000000023",
+        "evidenceId": "evd_00000000000000000000000000000053",
         "sequence": 3,
         "type": "AGENT_CLAIM",
         "trustLevel": "CLAIMED",
@@ -129,18 +165,18 @@
         "summary": "Agent claims refund of USD 19.99 succeeded (REFUND_SUCCEEDED)."
       },
       {
-        "evidenceId": "evd_00000000000000000000000000000024",
+        "evidenceId": "evd_00000000000000000000000000000054",
         "sequence": 4,
         "type": "EXECUTION_RECEIPT",
         "trustLevel": "EXECUTION_RECEIPT",
         "source": "billing-refunds-agent",
-        "sourceReference": "ref_888",
+        "sourceReference": "ref_890",
         "occurredAtUtc": "2026-07-10T09:31:19Z",
         "recordedAtUtc": "2026-07-10T09:31:20Z",
-        "summary": "Execution receipt relayed: refund ref_888 submitted to the billing system."
+        "summary": "Execution receipt relayed: refund ref_890 submitted to the billing system."
       },
       {
-        "evidenceId": "evd_00000000000000000000000000000025",
+        "evidenceId": "evd_00000000000000000000000000000055",
         "sequence": 5,
         "type": "VERIFICATION_RESULT",
         "trustLevel": "PRUVZ_DERIVED",
@@ -149,6 +185,28 @@
         "occurredAtUtc": "2026-07-10T09:45:00Z",
         "recordedAtUtc": "2026-07-10T09:45:00Z",
         "summary": "VERIFICATION_FAILED: billing system unreadable after 3 attempts; no business outcome was proven or disproven."
+      },
+      {
+        "evidenceId": "evd_00000000000000000000000000000056",
+        "sequence": 6,
+        "type": "HUMAN_REVIEW_DECISION",
+        "trustLevel": "PRUVZ_DERIVED",
+        "source": "pruvz-review",
+        "sourceReference": null,
+        "occurredAtUtc": "2026-07-10T10:15:00Z",
+        "recordedAtUtc": "2026-07-10T10:15:00Z",
+        "summary": "Human review decision: NEEDS_CORRECTION by ops-lead"
+      },
+      {
+        "evidenceId": "evd_00000000000000000000000000000057",
+        "sequence": 7,
+        "type": "HUMAN_REVIEW_DECISION",
+        "trustLevel": "PRUVZ_DERIVED",
+        "source": "pruvz-review",
+        "sourceReference": null,
+        "occurredAtUtc": "2026-07-10T11:30:00Z",
+        "recordedAtUtc": "2026-07-10T11:30:00Z",
+        "summary": "Human review decision: RESOLVED_EXTERNALLY by ops-lead"
       }
     ]
   }

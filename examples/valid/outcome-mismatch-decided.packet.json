@@ -1,5 +1,5 @@
 {
-  "packetFormatVersion": "1.1.0",
+  "packetFormatVersion": "1.2.0",
   "action": {
     "actionId": "act_00000000000000000000000000000002",
     "agentId": "billing-refunds-agent",
@@ -32,6 +32,35 @@
     "finalOutcome": null,
     "verificationFailure": null,
     "reviewState": "DECIDED",
+    "review": {
+      "category": "BUSINESS_MISMATCH",
+      "latestDecision": {
+        "decision": "APPROVED_EXCEPTION",
+        "reason": "Customer retention exception approved by support lead.",
+        "reviewerId": "demo-reviewer",
+        "previousReviewState": "PENDING_REVIEW",
+        "newReviewState": "DECIDED",
+        "reviewedEvidenceId": "evd_00000000000000000000000000000016",
+        "reviewedEvidenceSequence": 6,
+        "evidenceId": "evd_00000000000000000000000000000017",
+        "evidenceSequence": 7,
+        "decidedAtUtc": "2026-07-10T10:00:00Z"
+      },
+      "decisions": [
+        {
+          "decision": "APPROVED_EXCEPTION",
+          "reason": "Customer retention exception approved by support lead.",
+          "reviewerId": "demo-reviewer",
+          "previousReviewState": "PENDING_REVIEW",
+          "newReviewState": "DECIDED",
+          "reviewedEvidenceId": "evd_00000000000000000000000000000016",
+          "reviewedEvidenceSequence": 6,
+          "evidenceId": "evd_00000000000000000000000000000017",
+          "evidenceSequence": 7,
+          "decidedAtUtc": "2026-07-10T10:00:00Z"
+        }
+      ]
+    },
     "mismatch": {
       "mismatchReason": "EXPECTED_OUTCOME_ABSENT_AFTER_DEADLINE",
       "reasonCode": "NO_QUALIFYING_REFUND",
@@ -179,10 +208,10 @@
         "type": "HUMAN_REVIEW_DECISION",
         "trustLevel": "PRUVZ_DERIVED",
         "source": "pruvz-review",
-        "sourceReference": "evd_00000000000000000000000000000016",
+        "sourceReference": null,
         "occurredAtUtc": "2026-07-10T10:00:00Z",
         "recordedAtUtc": "2026-07-10T10:00:00Z",
-        "summary": "Human review decision: APPROVED_EXCEPTION by demo-reviewer — customer retention exception approved by support lead."
+        "summary": "Human review decision: APPROVED_EXCEPTION by demo-reviewer"
       }
     ]
   }

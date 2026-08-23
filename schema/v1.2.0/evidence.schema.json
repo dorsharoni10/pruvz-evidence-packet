@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pruvz.ai/schemas/evidence-packet/v1.2.0/evidence.schema.json",
+  "title": "Pruvz Public Evidence Packet — ordered evidence timeline",
+  "description": "The action's complete append-only evidence timeline as the Pruvz product API reports it (GET /api/actions/{actionId}/evidence): every item in sequence order, each exposing its business-readable fields only. The trust level is server-assigned — derived from the evidence type, never a caller input — and this schema enforces that derivation structurally.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["actionId", "items"],
+  "properties": {
+    "actionId": {
+      "description": "The action this timeline belongs to. Must equal action.actionId in the same packet (a cross-object rule JSON Schema cannot express; see the documentation).",
+      "type": "string",
+      "minLength": 1
+    },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/evidenceItem" }
+    }
+  },
+  "$defs": {
+    "evidenceItem": {
+      "description": "One timeline entry: what happened, where it came from, how much independent trust it carries, and when.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidenceId",
+        "sequence",
+        "type",
+        "trustLevel",
+        "source",
+        "sourceReference",
+        "occurredAtUtc",
+        "recordedAtUtc",
+        "summary"
+      ],
+      "properties": {
+        "evidenceId": { "type": "string", "minLength": 1 },
+        "sequence": {
+          "description": "Position on the action's timeline; allocation is atomic and starts at 1.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "type": {
+          "description": "The kind of event on the timeline. Each type maps to exactly one trust level (enforced below).",
+          "enum": [
+            "ACTION_REQUEST",
+            "POLICY_SNAPSHOT_CAPTURE",
+            "AGENT_CLAIM",
+            "EXECUTION_RECEIPT",
+            "SOURCE_READBACK",
+            "VERIFICATION_RETRY",
+            "VERIFICATION_RESULT",
+            "HUMAN_REVIEW_DECISION"
+          ]
+        },
+        "trustLevel": {
+          "description": "How much independent trust the item carries. Always server-derived from the type: CLAIMED (agent-asserted), EXECUTION_RECEIPT (relayed receipt), INDEPENDENT_READBACK (observed by Pruvz directly from the system of record), PRUVZ_DERIVED (derived by Pruvz itself).",
+          "enum": ["CLAIMED", "EXECUTION_RECEIPT", "INDEPENDENT_READBACK", "PRUVZ_DERIVED"]
+        },
+        "source": {
+          "description": "The system this evidence came from, e.g. an agent identifier, a source-system identifier, or a Pruvz component identifier.",
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceReference": {
+          "description": "An identifier inside the source, e.g. a refund or ticket id; null when none applies.",
+          "type": ["string", "null"]
+        },
+        "occurredAtUtc": {
+          "description": "When the event occurred or was observed. Agent-asserted for claims.",
+          "$ref": "#/$defs/utcTimestamp"
+        },
+        "recordedAtUtc": {
+          "description": "Server time the evidence was recorded by Pruvz.",
+          "$ref": "#/$defs/utcTimestamp"
+        },
+        "summary": {
+          "description": "Business-readable one-line summary of the item.",
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "type": { "const": "ACTION_REQUEST" } }, "required": ["type"] },
+          "then": { "properties": { "trustLevel": { "const": "CLAIMED" } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "AGENT_CLAIM" } }, "required": ["type"] },
+          "then": { "properties": { "trustLevel": { "const": "CLAIMED" } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "EXECUTION_RECEIPT" } }, "required": ["type"] },
+          "then": { "properties": { "trustLevel": { "const": "EXECUTION_RECEIPT" } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "POLICY_SNAPSHOT_CAPTURE" } }, "required": ["type"] },
+          "then": { "properties": { "trustLevel": { "const": "PRUVZ_DERIVED" } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "SOURCE_READBACK" } }, "required": ["type"] },
+          "then": { "properties": { "trustLevel": { "const": "INDEPENDENT_READBACK" } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "VERIFICATION_RETRY" } }, "required": ["type"] },
+          "then": { "properties": { "trustLevel": { "const": "PRUVZ_DERIVED" } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "VERIFICATION_RESULT" } }, "required": ["type"] },
+          "then": { "properties": { "trustLevel": { "const": "PRUVZ_DERIVED" } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "HUMAN_REVIEW_DECISION" } }, "required": ["type"] },
+          "then": { "properties": { "trustLevel": { "const": "PRUVZ_DERIVED" } } }
+        }
+      ]
+    },
+    "utcTimestamp": {
+      "description": "A UTC timestamp: RFC 3339 / ISO 8601 with the Z (Zulu) UTC designator, matching the *AtUtc field names. Local-offset forms such as +03:00 are not valid in this contract.",
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z$"
+    }
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "packetFormatVersion": "1.1.0",
+  "packetFormatVersion": "1.2.0",
   "action": {
     "actionId": "act_00000000000000000000000000000004",
     "agentId": "billing-refunds-agent",
@@ -26,6 +26,7 @@
     "finalOutcome": null,
     "verificationFailure": null,
     "reviewState": "NOT_DETERMINED",
+    "review": null,
     "mismatch": null,
     "verificationTiming": {
       "initialCheckAfterSeconds": 10,

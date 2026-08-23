@@ -1,11 +1,11 @@
 # Versioning and compatibility policy
 
-The Public Evidence Packet format is versioned independently of the Pruvz product, using semantic versioning: `MAJOR.MINOR.PATCH`. The current release is **1.1.0**.
+The Public Evidence Packet format is versioned independently of the Pruvz product, using semantic versioning: `MAJOR.MINOR.PATCH`. The current release is **1.2.0**.
 
 ## What each part means
 
 - **MAJOR** — a breaking change to the packet structure: removing or renaming a field, changing a field's type or nullability, removing an enum value, or tightening a constraint so that previously conforming packets no longer conform.
-- **MINOR** — an additive, non-breaking change to what the product exports: a new field, a new evidence type, a new closed-enum value. Packets of format `1.1.0` are **not** guaranteed to validate against the `1.0.0` schema (the schemas are strict: undeclared fields are rejected). Compatibility is defined at the consumer level, below.
+- **MINOR** — an additive, non-breaking change to what the product exports: a new field, a new evidence type, a new closed-enum value, or a conditional rule relaxed so that a field may now carry values it could not before (for example `1.2.0` admitting review states on a `VERIFICATION_FAILED` action). Packets of format `1.2.0` are **not** guaranteed to validate against the `1.1.0` or `1.0.0` schema (the schemas are strict: undeclared fields are rejected). Compatibility is defined at the consumer level, below.
 - **PATCH** — a repository release (documentation, examples, validator or test changes) that does not alter what conforms. Packet documents keep declaring the `MAJOR.MINOR.0` format version of their structure: a documentation-only release `v1.0.1` of this repository changes nothing about packets, which continue to declare `packetFormatVersion: "1.0.0"`.
 
 ## Rules consumers can rely on
