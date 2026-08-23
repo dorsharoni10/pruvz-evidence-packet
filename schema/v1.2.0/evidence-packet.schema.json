@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pruvz.ai/schemas/evidence-packet/v1.2.0/evidence-packet.schema.json",
+  "title": "Pruvz Public Evidence Packet",
+  "description": "The public export contract for one business action recorded by Pruvz, its verification state and its evidence: the action record (the action details view of the Pruvz product API) together with the action's complete ordered evidence timeline (the evidence view of the same API). A packet may describe any verification state — verified, mismatched, failed or still pending; only a VERIFIED status is an independently confirmed outcome. This schema describes the Public Evidence Packet only — it is not the internal persistence model and it contains no verification logic. Successful validation proves structural conformance to this schema and nothing more.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["packetFormatVersion", "action", "evidence"],
+  "properties": {
+    "packetFormatVersion": {
+      "description": "The version of the Public Evidence Packet format this document conforms to. Metadata of the packet file itself, fixed per schema release.",
+      "const": "1.2.0"
+    },
+    "action": {
+      "$ref": "action.schema.json"
+    },
+    "evidence": {
+      "$ref": "evidence.schema.json"
+    }
+  }
+}

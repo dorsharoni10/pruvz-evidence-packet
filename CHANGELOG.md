@@ -2,6 +2,18 @@
 
 All notable changes to the Public Evidence Packet format and this repository are recorded here. Format releases follow the policy in [`docs/VERSIONING.md`](docs/VERSIONING.md).
 
+## 1.2.0 — 2026-08-23
+
+**MINOR** — additive human-review lifecycle fields (product PRUVZ-49, Customer #1 review lifecycle). Consumers reading `1.1.0` packets keep working on `1.2.0` packets if they ignore fields they do not recognize and treat the closed enums as open to widening; `1.2.0` packets do not validate against the `1.1.0` schema (the schemas are strict by design).
+
+- `schema/v1.2.0/` — new format release:
+  - `action.reviewState` gains `NEEDS_CORRECTION` and `AWAITING_REVERIFICATION`. A `VERIFICATION_FAILED` action is now under review — it reports a workflow state (`PENDING_REVIEW` first) instead of `NOT_REQUIRED`; `VERIFIED` still auto-clears to `NOT_REQUIRED`.
+  - `action.review` (new, nullable object): present exactly for `OUTCOME_MISMATCH` and `VERIFICATION_FAILED` — the review `category` (`BUSINESS_MISMATCH` or `VERIFICATION_FAILURE`, derived from the terminal result), the current `latestDecision` (or `null`) and the complete `decisions` history, one entry per `HUMAN_REVIEW_DECISION` timeline item: `decision` (`APPROVED_EXCEPTION`, `DISMISSED`, `NEEDS_CORRECTION`, `RESOLVED_EXTERNALLY`), `reason`, `reviewerId`, `previousReviewState`, `newReviewState`, the reviewed evidence reference, the decision's own `evidenceId`/`evidenceSequence` and `decidedAtUtc`.
+  - The locked review transitions and the category × decision rule (a `VERIFICATION_FAILURE` never admits `APPROVED_EXCEPTION`) are documented in `docs/FIELDS.md`; no review decision can produce `VERIFIED`.
+  - The terminal status taxonomy, evidence types and trust levels are unchanged.
+- New packet-level consistency rules for `1.2.0`: `review.decisions` lists exactly the timeline's `HUMAN_REVIEW_DECISION` items, in order, each decision's `previousReviewState` continues the previous one's `newReviewState` from `PENDING_REVIEW`; `latestDecision` is the last entry or `null`; `reviewState` equals the latest decision's `newReviewState`, or `PENDING_REVIEW` while no decision was recorded; a `null` review admits no decision evidence. The `1.0.0`/`1.1.0` rule (`DECIDED` ⇔ `HUMAN_REVIEW_DECISION` evidence) still applies to packets of those formats.
+- The four synthetic valid examples now declare format `1.2.0` and carry the review block; a fifth example, `verification-failed-resolved-externally.packet.json`, shows a failure review driven through `NEEDS_CORRECTION` and `RESOLVED_EXTERNALLY`. The captured `1.0.0` conformance proof is unchanged. The validator supports all three formats (`1.2.0`, `1.1.0`, `1.0.0`) and picks the release matching each packet's declaration.
+
 ## 1.1.0 — 2026-08-17
 
 **MINOR** — additive temporal-verification fields (product PRUVZ-84). Consumers reading `1.0.0` packets keep working on `1.1.0` packets if they ignore fields they do not recognize; `1.1.0` packets do not validate against the `1.0.0` schema (the schemas are strict by design).

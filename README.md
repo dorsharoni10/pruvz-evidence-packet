@@ -22,11 +22,11 @@ The packet's parts:
 | `evidence` | The ordered evidence timeline (`GET /api/actions/{actionId}/evidence`): every append-only evidence item in sequence order, each with its server-assigned trust level. |
 | `packetFormatVersion` | Metadata of the packet file itself — the format release it conforms to. |
 
-Schemas live in [`schema/v1.1.0/`](schema/v1.1.0/) (current release; [`schema/v1.0.0/`](schema/v1.0.0/) remains published and immutable):
+Schemas live in [`schema/v1.2.0/`](schema/v1.2.0/) (current release; [`schema/v1.1.0/`](schema/v1.1.0/) and [`schema/v1.0.0/`](schema/v1.0.0/) remain published and immutable):
 
-- [`evidence-packet.schema.json`](schema/v1.1.0/evidence-packet.schema.json) — the packet envelope
-- [`action.schema.json`](schema/v1.1.0/action.schema.json) — the action record
-- [`evidence.schema.json`](schema/v1.1.0/evidence.schema.json) — the evidence timeline
+- [`evidence-packet.schema.json`](schema/v1.2.0/evidence-packet.schema.json) — the packet envelope
+- [`action.schema.json`](schema/v1.2.0/action.schema.json) — the action record
+- [`evidence.schema.json`](schema/v1.2.0/evidence.schema.json) — the evidence timeline
 
 Field-by-field meaning, every enum value, and the type-to-trust mapping are documented in [`docs/FIELDS.md`](docs/FIELDS.md). Versioning and compatibility rules are in [`docs/VERSIONING.md`](docs/VERSIONING.md).
 
@@ -34,7 +34,7 @@ Field-by-field meaning, every enum value, and the type-to-trust mapping are docu
 
 Requires Node.js 18 or newer. Everything runs on your machine: the validator reads the local schema files, performs the validation in-process, and sends nothing anywhere — no telemetry, no packet contents, no phone-home of any kind.
 
-Validation has two layers: JSON Schema validation, then packet-level consistency checks for the cross-object rules JSON Schema cannot express — the action and the timeline must name the same `actionId`, timeline sequences must be unique, ascending and contiguous from 1, evidence ids must be unique, a `DECIDED` review state and `HUMAN_REVIEW_DECISION` evidence must imply each other, and execution state must agree with its timestamps and with the verification state. A third-party validator using the schema files alone will not catch that second layer; the schemas document it, this validator enforces it.
+Validation has two layers: JSON Schema validation, then packet-level consistency checks for the cross-object rules JSON Schema cannot express — the action and the timeline must name the same `actionId`, timeline sequences must be unique, ascending and contiguous from 1, evidence ids must be unique, the review block and review state must agree with the timeline's `HUMAN_REVIEW_DECISION` items (the decision history is exactly those items, in order, and the review state is where the latest decision left it), and execution state must agree with its timestamps and with the verification state. A third-party validator using the schema files alone will not catch that second layer; the schemas document it, this validator enforces it.
 
 ```bash
 npm ci
@@ -65,7 +65,7 @@ The authored examples are synthetic — every identifier, amount and timestamp i
 
 - [`examples/captured/`](examples/captured/) — a packet composed from the two API responses of a live demo run with `npm run compose`: the conformance proof that real product output fits this schema. See [`docs/CONFORMANCE.md`](docs/CONFORMANCE.md).
 
-- [`examples/valid/`](examples/valid/) — one packet per verification path: [verified](examples/valid/verified-refund.packet.json), [outcome mismatch with a recorded human review decision](examples/valid/outcome-mismatch-decided.packet.json), [technical verification failure](examples/valid/verification-failed.packet.json), and [verification still pending](examples/valid/verification-pending.packet.json).
+- [`examples/valid/`](examples/valid/) — one packet per verification path: [verified](examples/valid/verified-refund.packet.json), [outcome mismatch with a recorded human review decision](examples/valid/outcome-mismatch-decided.packet.json), [technical verification failure awaiting review](examples/valid/verification-failed.packet.json), [technical verification failure driven through the correction loop](examples/valid/verification-failed-resolved-externally.packet.json) (two recorded decisions, awaiting re-verification), and [verification still pending](examples/valid/verification-pending.packet.json).
 - [`examples/invalid/`](examples/invalid/) — ten packets, each broken by exactly one documented defect (a fabricated outcome on a mismatch, an evidence item claiming a trust level its type cannot carry, a fabricated zero where "no amount" belongs, and so on). See [`examples/invalid/README.md`](examples/invalid/README.md).
 
 ## What successful validation proves — and what it does not

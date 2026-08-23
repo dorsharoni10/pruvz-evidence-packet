@@ -35,7 +35,7 @@ const invalidExpectations = {
 
 test('every valid example conforms to the published schema', () => {
   const files = packetFiles(validDir)
-  assert.ok(files.length >= 4, 'expected at least four valid examples')
+  assert.ok(files.length >= 5, 'expected at least five valid examples')
 
   for (const file of files) {
     const { valid, errors } = validatePacket(loadPacket(validDir, file))
@@ -125,20 +125,59 @@ const consistencyScenarios = [
     expect: /evidenceId.*must be unique/,
   },
   {
-    name: 'reviewState DECIDED without HUMAN_REVIEW_DECISION evidence',
+    name: 'a review history without its HUMAN_REVIEW_DECISION evidence (format 1.2.0)',
     base: 'outcome-mismatch-decided.packet.json',
     mutate: (p) => {
       p.evidence.items = p.evidence.items.filter((i) => i.type !== 'HUMAN_REVIEW_DECISION')
     },
-    expect: /reviewState.*DECIDED requires a HUMAN_REVIEW_DECISION/,
+    expect: /review\/decisions.*exactly one decision per HUMAN_REVIEW_DECISION/,
   },
   {
-    name: 'HUMAN_REVIEW_DECISION evidence while still PENDING_REVIEW',
+    name: 'a review state that disagrees with the latest decision (format 1.2.0)',
     base: 'outcome-mismatch-decided.packet.json',
     mutate: (p) => {
       p.action.reviewState = 'PENDING_REVIEW'
     },
-    expect: /reviewState.*must be DECIDED/,
+    expect: /reviewState.*must equal the latest decision's newReviewState \(DECIDED/,
+  },
+  {
+    name: 'a latestDecision that is not the last entry of decisions (format 1.2.0)',
+    base: 'verification-failed-resolved-externally.packet.json',
+    mutate: (p) => {
+      p.action.review.latestDecision = p.action.review.decisions[0]
+      p.action.reviewState = 'NEEDS_CORRECTION'
+    },
+    expect: /latestDecision.*must equal the last entry of decisions/,
+  },
+  {
+    name: 'a decision history out of timeline order (format 1.2.0)',
+    base: 'verification-failed-resolved-externally.packet.json',
+    mutate: (p) => {
+      p.action.review.decisions.reverse()
+      p.action.review.latestDecision = p.action.review.decisions[1]
+      p.action.reviewState = 'NEEDS_CORRECTION'
+    },
+    expect: /review\/decisions\/0\/evidenceId.*in order/,
+  },
+  {
+    name: 'decision evidence on an action that is not under review (format 1.2.0)',
+    base: 'outcome-mismatch-decided.packet.json',
+    mutate: (p) => {
+      p.action.verificationStatus = 'VERIFIED'
+      p.action.finalOutcome = 'REFUND_SUCCEEDED'
+      p.action.mismatch = null
+      p.action.reviewState = 'NOT_REQUIRED'
+      p.action.review = null
+    },
+    expect: /\/action\/review.*must be present when the timeline carries a HUMAN_REVIEW_DECISION/,
+  },
+  {
+    name: 'a pending review that already carries a decision (format 1.2.0)',
+    base: 'verification-failed.packet.json',
+    mutate: (p) => {
+      p.action.reviewState = 'DECIDED'
+    },
+    expect: /reviewState.*must be PENDING_REVIEW while no decision was recorded/,
   },
   {
     name: 'VERIFIED while execution is still RECEIVED',
@@ -208,6 +247,26 @@ test('a legacy record without verification timing keeps its historical mismatch 
   )
 })
 
+test('formats before 1.2.0 keep the DECIDED-implies-decision-evidence rule', () => {
+  // A 1.1.0 packet has no review block; its only review rule couples DECIDED
+  // with HUMAN_REVIEW_DECISION evidence both ways. Derived from the 1.2.0
+  // decided example by removing what 1.2.0 added.
+  const packet = loadPacket(validDir, 'outcome-mismatch-decided.packet.json')
+  packet.packetFormatVersion = '1.1.0'
+  delete packet.action.review
+
+  assert.ok(validatePacket(packet).valid, 'the derived 1.1.0 packet should be valid')
+
+  const undecided = JSON.parse(JSON.stringify(packet))
+  undecided.action.reviewState = 'PENDING_REVIEW'
+  const { valid, errors } = validatePacket(undecided)
+  assert.equal(valid, false)
+  assert.match(
+    errors.map((e) => `${e.instancePath} ${e.message}`).join('\n'),
+    /reviewState.*must be DECIDED/,
+  )
+})
+
 test('valid and invalid examples stay internally consistent on actionId', () => {
   // Belt and braces: the consistency layer now enforces this at validation
   // time; this keeps the published examples honest even if that layer changes.
@@ -223,7 +282,7 @@ test('valid and invalid examples stay internally consistent on actionId', () => 
 
 test('an unsupported explicit version is refused, not silently accepted', () => {
   assert.throws(() => createValidator('2.0.0'), /Unsupported packet format version/)
-  assert.deepEqual(SUPPORTED_VERSIONS, ['1.1.0', '1.0.0'])
+  assert.deepEqual(SUPPORTED_VERSIONS, ['1.2.0', '1.1.0', '1.0.0'])
 })
 
 test('the documented CLI command validates without any network access', () => {
