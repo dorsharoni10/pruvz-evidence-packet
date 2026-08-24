@@ -14,3 +14,4 @@ Each file here is a full packet broken by **exactly one** documented defect, so 
 | `mismatch-without-dimensions.packet.json` | An `OUTCOME_MISMATCH` action has `mismatch: null`. | A mismatch ruling always carries its expected-versus-observed dimensions. |
 | `fabricated-zero-discrepancy.packet.json` | `businessDiscrepancy` has `evaluable: false` with an amount of `0`. | "No amount" is never rendered as a zero — a non-evaluable discrepancy carries no amount at all. |
 | `unsupported-format-version.packet.json` | `packetFormatVersion` is `"0.9.0"`. | A packet must declare a format release this schema set defines. |
+| `independently-confirmed-not-verified.packet.json` | An `OUTCOME_MISMATCH` action carries `review.independentlyConfirmed: true`. | Independent confirmation exists only when Pruvz's own re-verification proved the resolution — a VERIFIED action with a DECIDED review (format 1.3.0); a non-verified action can never claim it. |

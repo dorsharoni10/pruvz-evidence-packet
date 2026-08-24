@@ -1,16 +1,16 @@
-# Field and enum reference — packet format v1.2.0
+# Field and enum reference — packet format v1.3.0
 
-Every field of the Public Evidence Packet, what it means, and every closed enum value. The authoritative structural rules are the schemas themselves; this document explains intent and semantics. Fields new in format `1.2.0` and `1.1.0` are marked; everything else is unchanged from `1.0.0`.
+Every field of the Public Evidence Packet, what it means, and every closed enum value. The authoritative structural rules are the schemas themselves; this document explains intent and semantics. Fields new in formats `1.3.0`, `1.2.0` and `1.1.0` are marked; everything else is unchanged from `1.0.0`.
 
 ## Envelope
 
 | Field | Meaning |
 |---|---|
-| `packetFormatVersion` | The packet format release this document conforms to. Fixed to `"1.2.0"` in this release. Metadata of the file, not a product field. |
+| `packetFormatVersion` | The packet format release this document conforms to. Fixed to `"1.3.0"` in this release. Metadata of the file, not a product field. |
 | `action` | The action record — see below. |
 | `evidence` | The ordered evidence timeline — see below. |
 
-**Enforced by the validator, not expressible in JSON Schema:** `action.actionId` must equal `evidence.actionId`; timeline sequences are unique, ascending and contiguous from 1; evidence ids are unique; the review block, the review state and the timeline's `HUMAN_REVIEW_DECISION` items agree (1.2.0 — `review.decisions` lists exactly the timeline's decision items in order, `latestDecision` is the last of them or `null`, `reviewState` is where the latest decision moved the review or `PENDING_REVIEW` while none was recorded; on `1.0.0`/`1.1.0` packets, a `DECIDED` review state and `HUMAN_REVIEW_DECISION` evidence imply each other); execution state agrees with its timestamps and with the verification state; an `EXPECTED_OUTCOME_ABSENT_AFTER_DEADLINE` mismatch requires a resolved `verificationTiming.deadlineAtUtc` (1.1.0). The bundled validator checks all of these after schema validation — a third-party validator using the schema files alone will not.
+**Enforced by the validator, not expressible in JSON Schema:** `action.actionId` must equal `evidence.actionId`; timeline sequences are unique, ascending and contiguous from 1; evidence ids are unique; the review block, the review state and the timeline's `HUMAN_REVIEW_DECISION` items agree (1.2.0 — `review.decisions` lists exactly the timeline's decision items in order, `latestDecision` is the last of them or `null`, `reviewState` is where the latest decision moved the review or `PENDING_REVIEW` while none was recorded; on `1.0.0`/`1.1.0` packets, a `DECIDED` review state and `HUMAN_REVIEW_DECISION` evidence imply each other); on `1.3.0` packets the Worker's re-verification transitions are the only legal gaps in that chain — after a `RESOLVED_EXTERNALLY` decision the review may sit at `DECIDED` (action `VERIFIED`, independently confirmed) or return to `PENDING_REVIEW` without a decision entry, `FOLLOW_UP_INDEPENDENT_READBACK` evidence requires a `RESOLVED_EXTERNALLY` decision and a recorded `reverificationTiming`, and `independentlyConfirmed: true` (or any review on a `VERIFIED` action) requires the latest decision to be `RESOLVED_EXTERNALLY`; execution state agrees with its timestamps and with the verification state; an `EXPECTED_OUTCOME_ABSENT_AFTER_DEADLINE` mismatch requires a resolved `verificationTiming.deadlineAtUtc` (1.1.0). The bundled validator checks all of these after schema validation — a third-party validator using the schema files alone will not.
 
 ## The action record
 
@@ -75,6 +75,10 @@ A verification result states what the systems of record showed during the verifi
 
 Two temporal rules the product guarantees: absence of the expected outcome **inside** the window keeps the action `VERIFICATION_PENDING` (eventual consistency is never misread as a mismatch), and absence becomes definitive **only** after a resolved deadline passes. Positive contradictory evidence is ruled immediately regardless of any deadline.
 
+### The fresh re-verification window (new in 1.3.0)
+
+`reverificationTiming` — the fresh verification window of the latest human-triggered re-verification, in the same shape as `verificationTiming`. When a reviewer reports that a mismatch (or a verification impediment) was corrected outside Pruvz (`RESOLVED_EXTERNALLY`), the original deadline is irrelevant — it already passed; that is why the action mismatched — so a new window is resolved through the same precedence chain, anchored to the moment the correction was reported (`resolvedAtUtc`). `null` while no `RESOLVED_EXTERNALLY` event ever triggered a re-verification; always present (non-null) while `reviewState` is `AWAITING_REVERIFICATION`, and retained afterward as the record of the latest re-check window. The coupling holds in both directions: a non-null `reverificationTiming` requires a `RESOLVED_EXTERNALLY` decision in the review history — a recorded window no reported correction ever opened is rejected by the consistency layer. `verificationTiming` is never touched: it stays the immutable record of the original window.
+
 ### Terminal-result fields
 
 | Field | Meaning |
@@ -120,19 +124,20 @@ Verification answers "what really happened"; review answers "what does the busin
 | Value | Meaning |
 |---|---|
 | `NOT_DETERMINED` | Verification has not concluded; the need for review is honestly unknown — never a terminal-sounding "not required" that would flip later. |
-| `NOT_REQUIRED` | `VERIFIED` auto-clears: an independently confirmed outcome never enters human review. |
+| `NOT_REQUIRED` | A first-pass `VERIFIED` auto-clears: an independently confirmed outcome never enters human review. |
 | `PENDING_REVIEW` | A terminal non-verified result (`OUTCOME_MISMATCH` or, **new in 1.2.0**, `VERIFICATION_FAILED`) awaits a human decision. |
 | `NEEDS_CORRECTION` | **New in 1.2.0.** A reviewer determined that a correction outside Pruvz is required; the review stays open. |
 | `AWAITING_REVERIFICATION` | **New in 1.2.0.** The correction was reported as made outside Pruvz (`RESOLVED_EXTERNALLY`); control returned to Pruvz for an independent re-verification. No further human decision is accepted while Pruvz holds the action. |
-| `DECIDED` | A terminal human disposition (`APPROVED_EXCEPTION` or `DISMISSED`) closed the review. The machine result beside it is untouched. |
+| `DECIDED` | A terminal human disposition (`APPROVED_EXCEPTION` or `DISMISSED`) closed the review — or, **new in 1.3.0**, Pruvz's own re-verification confirmed an externally-reported resolution (the action is then `VERIFIED` and `review.independentlyConfirmed` is `true`). The machine result beside it is untouched. |
 
 Before `1.2.0`, `VERIFICATION_FAILED` reported `NOT_REQUIRED`; since `1.2.0` an exhausted verification failure is under review in its own category.
 
-`review` — **new in 1.2.0.** Present exactly when `verificationStatus` is `OUTCOME_MISMATCH` or `VERIFICATION_FAILED`; `null` otherwise:
+`review` — **new in 1.2.0.** Present when `verificationStatus` is `OUTCOME_MISMATCH` or `VERIFICATION_FAILED` — and, **since 1.3.0**, on a `VERIFIED` action whose review was closed by a confirming re-verification; `null` otherwise:
 
 | Field | Meaning |
 |---|---|
-| `category` | Why the action is under review, derived from the terminal result and never chosen: `BUSINESS_MISMATCH` (an `OUTCOME_MISMATCH` — a definitive business exception requiring a business decision) or `VERIFICATION_FAILURE` (a `VERIFICATION_FAILED` after technical retry exhaustion — "verification could not be completed"; there is no business exception to approve). |
+| `category` | Why the action is under review, derived from the terminal result and never chosen: `BUSINESS_MISMATCH` (an `OUTCOME_MISMATCH` — a definitive business exception requiring a business decision) or `VERIFICATION_FAILURE` (a `VERIFICATION_FAILED` after technical retry exhaustion — "verification could not be completed"; there is no business exception to approve). On a `VERIFIED` action whose review was closed by a confirming re-verification (1.3.0), the category of the superseded result that had opened the review. |
+| `independentlyConfirmed` | **New in 1.3.0.** `true` exactly when Pruvz's own re-verification — not the human report — confirmed the externally-reported resolution and closed the review. This is the packet's human-resolved (`APPROVED_EXCEPTION`/`DISMISSED`, stays `false`) versus independently-confirmed-resolved distinction. |
 | `latestDecision` | The current disposition: the most recent decision or event recorded on this review, or `null` while none was recorded. |
 | `decisions` | The complete history, oldest first — one entry per `HUMAN_REVIEW_DECISION` item on the evidence timeline. |
 
@@ -148,7 +153,9 @@ Each decision entry:
 | `evidenceId`, `evidenceSequence` | The `HUMAN_REVIEW_DECISION` item on the timeline that records this decision. |
 | `decidedAtUtc` | When the decision was recorded. |
 
-The locked transitions: `PENDING_REVIEW` + `APPROVED_EXCEPTION` or `DISMISSED` → `DECIDED`; `PENDING_REVIEW` + `NEEDS_CORRECTION` → `NEEDS_CORRECTION`; `PENDING_REVIEW` or `NEEDS_CORRECTION` + `RESOLVED_EXTERNALLY` → `AWAITING_REVERIFICATION`; `NEEDS_CORRECTION` + `DISMISSED` → `DECIDED`. A `VERIFICATION_FAILURE` review never admits `APPROVED_EXCEPTION`. Every cycle through the correction loop requires a human action; there is no automatic loop.
+The locked human transitions: `PENDING_REVIEW` + `APPROVED_EXCEPTION` or `DISMISSED` → `DECIDED`; `PENDING_REVIEW` + `NEEDS_CORRECTION` → `NEEDS_CORRECTION`; `PENDING_REVIEW` or `NEEDS_CORRECTION` + `RESOLVED_EXTERNALLY` → `AWAITING_REVERIFICATION`; `NEEDS_CORRECTION` + `DISMISSED` → `DECIDED`. A `VERIFICATION_FAILURE` review never admits `APPROVED_EXCEPTION`. Every cycle through the correction loop requires a human action; there is no automatic loop.
+
+**Since 1.3.0** the re-verification itself moves the review — a Worker transition that appends no decision entry: `AWAITING_REVERIFICATION` + re-verification `VERIFIED` → `DECIDED` (resolution independently confirmed, a new superseding fact; the original mismatch stays historical truth); `AWAITING_REVERIFICATION` + re-verification `OUTCOME_MISMATCH` → `PENDING_REVIEW` (category `BUSINESS_MISMATCH`); `AWAITING_REVERIFICATION` + exhausted `VERIFICATION_FAILED` → `PENDING_REVIEW` (category `VERIFICATION_FAILURE`).
 
 A human review decision is **appended as new ordered evidence**; it never rewrites the original verification result or the machine evidence.
 
@@ -194,6 +201,7 @@ Evidence type → trust level (the schema enforces every row):
 | `AGENT_CLAIM` | The agent's claim about its execution outcome. | `CLAIMED` |
 | `EXECUTION_RECEIPT` | A receipt the agent relayed from the system it executed against. | `EXECUTION_RECEIPT` |
 | `SOURCE_READBACK` | Pruvz independently read the system of record. | `INDEPENDENT_READBACK` |
+| `FOLLOW_UP_INDEPENDENT_READBACK` | **New in 1.3.0.** Pruvz independently read the system of record again during a human-triggered re-verification — after a `RESOLVED_EXTERNALLY` review event. Same independent trust as `SOURCE_READBACK`; the distinct type keeps the original campaign and the follow-up separable on the timeline. | `INDEPENDENT_READBACK` |
 | `VERIFICATION_RETRY` | A user-requested verification retry was recorded and re-armed verification. | `PRUVZ_DERIVED` |
 | `VERIFICATION_RESULT` | Pruvz assigned the final verification result. | `PRUVZ_DERIVED` |
 | `HUMAN_REVIEW_DECISION` | A human reviewer's documented decision or event on a review (a business mismatch or, since 1.2.0, an exhausted verification failure), recorded by Pruvz through the controlled review path. One item per decision; the `review.decisions` history mirrors them. | `PRUVZ_DERIVED` |

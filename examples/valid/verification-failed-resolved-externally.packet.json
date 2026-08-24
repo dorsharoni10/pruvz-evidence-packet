@@ -1,15 +1,21 @@
 {
-  "packetFormatVersion": "1.2.0",
+  "packetFormatVersion": "1.3.0",
   "action": {
     "actionId": "act_00000000000000000000000000000005",
     "agentId": "billing-refunds-agent",
     "runId": "run_sample_005",
     "correlationId": "pay_74005",
     "actionType": "refund",
-    "subject": { "subjectType": "payment", "subjectId": "pay_74005" },
+    "subject": {
+      "subjectType": "payment",
+      "subjectId": "pay_74005"
+    },
     "decision": {
       "decisionType": "REFUND_APPROVED",
-      "amount": { "amount": 19.99, "currency": "USD" }
+      "amount": {
+        "amount": 19.99,
+        "currency": "USD"
+      }
     },
     "crmTicketId": "TICKET-1005",
     "claim": {
@@ -18,7 +24,10 @@
     },
     "expectedOutcome": {
       "outcomeType": "REFUND_SUCCEEDED",
-      "amount": { "amount": 19.99, "currency": "USD" }
+      "amount": {
+        "amount": 19.99,
+        "currency": "USD"
+      }
     },
     "observed": null,
     "executionStatus": "COMPLETED",
@@ -32,6 +41,7 @@
     "reviewState": "AWAITING_REVERIFICATION",
     "review": {
       "category": "VERIFICATION_FAILURE",
+      "independentlyConfirmed": false,
       "latestDecision": {
         "decision": "RESOLVED_EXTERNALLY",
         "reason": "Billing API credentials were rotated; Pruvz can read the billing system again.",
@@ -79,20 +89,41 @@
       "deadlineSource": "PRODUCT_SPEC",
       "resolvedAtUtc": "2026-07-10T09:30:58Z"
     },
+    "reverificationTiming": {
+      "initialCheckAfterSeconds": 10,
+      "readbackIntervalSeconds": 900,
+      "deadlineAtUtc": "2026-07-12T11:30:00Z",
+      "deadlineSource": "PRODUCT_SPEC",
+      "resolvedAtUtc": "2026-07-10T11:30:00Z"
+    },
     "policySnapshot": {
       "policyId": "demo-refund-policy",
       "policyVersion": "1",
       "rules": {
         "maxPurchaseAgeDays": 30,
-        "maxRefundAmount": { "amount": 100, "currency": "USD" },
-        "allowedPaymentStates": ["SETTLED"],
-        "ticket": { "ticketRequired": true, "allowedTicketStatuses": ["OPEN", "APPROVED"] },
+        "maxRefundAmount": {
+          "amount": 100,
+          "currency": "USD"
+        },
+        "allowedPaymentStates": [
+          "SETTLED"
+        ],
+        "ticket": {
+          "ticketRequired": true,
+          "allowedTicketStatuses": [
+            "OPEN",
+            "APPROVED"
+          ]
+        },
         "verificationDeadlineSeconds": null
       },
       "input": {
         "purchasedAtUtc": "2026-07-01T14:00:00Z",
         "evaluatedAtUtc": "2026-07-10T09:30:59Z",
-        "refundAmount": { "amount": 19.99, "currency": "USD" },
+        "refundAmount": {
+          "amount": 19.99,
+          "currency": "USD"
+        },
         "paymentState": "SETTLED",
         "ticketStatus": "APPROVED"
       },

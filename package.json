@@ -1,6 +1,6 @@
 {
   "name": "pruvz-evidence-packet",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "private": true,
   "description": "Public JSON Schema, synthetic examples and local structural validator for the Pruvz Public Evidence Packet export contract.",
   "type": "module",
