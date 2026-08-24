@@ -31,6 +31,7 @@ const invalidExpectations = {
   'mismatch-without-dimensions.packet.json': /\/action\/mismatch/,
   'fabricated-zero-discrepancy.packet.json': /businessDiscrepancy\/amount/,
   'unsupported-format-version.packet.json': /packetFormatVersion/,
+  'independently-confirmed-not-verified.packet.json': /independentlyConfirmed/,
 }
 
 test('every valid example conforms to the published schema', () => {
@@ -207,6 +208,45 @@ const consistencyScenarios = [
     },
     expect: /mismatchReason.*requires a resolved verificationTiming/,
   },
+  {
+    name: 'a Worker return to PENDING_REVIEW without a RESOLVED_EXTERNALLY decision (format 1.3.0)',
+    base: 'reverified-mismatch.packet.json',
+    mutate: (p) => {
+      p.action.review.decisions[0].decision = 'NEEDS_CORRECTION'
+      p.action.review.latestDecision.decision = 'NEEDS_CORRECTION'
+    },
+    expect: /reviewState.*must equal the latest decision's newReviewState/,
+  },
+  {
+    name: 'follow-up read-back evidence without a recorded fresh window (format 1.3.0)',
+    base: 'reverified-mismatch.packet.json',
+    mutate: (p) => {
+      p.action.reverificationTiming = null
+    },
+    expect: /reverificationTiming.*requires the fresh re-verification window/,
+  },
+  {
+    name: 'a recorded re-verification window without a RESOLVED_EXTERNALLY report (format 1.3.0)',
+    base: 'outcome-mismatch-decided.packet.json',
+    mutate: (p) => {
+      // The review history holds only APPROVED_EXCEPTION — no reported
+      // external correction ever opened a fresh window, so a recorded one is
+      // fabricated.
+      p.action.reverificationTiming = { ...p.action.verificationTiming }
+    },
+    expect: /reverificationTiming.*requires a RESOLVED_EXTERNALLY decision/,
+  },
+  {
+    name: 'a VERIFIED review closed by a human disposition instead of a re-verification (format 1.3.0)',
+    base: 'reverified-confirmed.packet.json',
+    mutate: (p) => {
+      const last = p.action.review.decisions[1]
+      last.decision = 'DISMISSED'
+      last.newReviewState = 'DECIDED'
+      p.action.review.latestDecision = last
+    },
+    expect: /latest decision must be RESOLVED_EXTERNALLY/,
+  },
 ]
 
 test('self-contradictory packets are rejected by the consistency layer', () => {
@@ -247,6 +287,29 @@ test('a legacy record without verification timing keeps its historical mismatch 
   )
 })
 
+test('formats before 1.3.0 keep the strict review-state chain (no Worker transitions)', () => {
+  // The Worker's re-verification return transitions exist only from format
+  // 1.3.0. A 1.2.0 packet claiming the same shape — PENDING_REVIEW while the
+  // latest decision moved the review to AWAITING_REVERIFICATION — must still
+  // be rejected by the 1.2.0 consistency rules. Derived from the 1.3.0
+  // re-mismatch example by removing everything 1.3.0 added.
+  const packet = loadPacket(validDir, 'reverified-mismatch.packet.json')
+  packet.packetFormatVersion = '1.2.0'
+  delete packet.action.reverificationTiming
+  delete packet.action.review.independentlyConfirmed
+  packet.evidence.items = packet.evidence.items.filter(
+    (item) => item.type !== 'FOLLOW_UP_INDEPENDENT_READBACK',
+  )
+  packet.evidence.items[packet.evidence.items.length - 1].sequence = 8
+
+  const { valid, errors } = validatePacket(packet)
+  assert.equal(valid, false, 'the derived 1.2.0 packet must be rejected')
+  assert.match(
+    errors.map((e) => `${e.instancePath} ${e.message}`).join('\n'),
+    /reviewState.*must equal the latest decision's newReviewState/,
+  )
+})
+
 test('formats before 1.2.0 keep the DECIDED-implies-decision-evidence rule', () => {
   // A 1.1.0 packet has no review block; its only review rule couples DECIDED
   // with HUMAN_REVIEW_DECISION evidence both ways. Derived from the 1.2.0
@@ -254,6 +317,7 @@ test('formats before 1.2.0 keep the DECIDED-implies-decision-evidence rule', () 
   const packet = loadPacket(validDir, 'outcome-mismatch-decided.packet.json')
   packet.packetFormatVersion = '1.1.0'
   delete packet.action.review
+  delete packet.action.reverificationTiming
 
   assert.ok(validatePacket(packet).valid, 'the derived 1.1.0 packet should be valid')
 
@@ -282,7 +346,7 @@ test('valid and invalid examples stay internally consistent on actionId', () => 
 
 test('an unsupported explicit version is refused, not silently accepted', () => {
   assert.throws(() => createValidator('2.0.0'), /Unsupported packet format version/)
-  assert.deepEqual(SUPPORTED_VERSIONS, ['1.2.0', '1.1.0', '1.0.0'])
+  assert.deepEqual(SUPPORTED_VERSIONS, ['1.3.0', '1.2.0', '1.1.0', '1.0.0'])
 })
 
 test('the documented CLI command validates without any network access', () => {

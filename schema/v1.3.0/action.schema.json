@@ -1,0 +1,638 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pruvz.ai/schemas/evidence-packet/v1.3.0/action.schema.json",
+  "title": "Pruvz Public Evidence Packet — action record",
+  "description": "One recorded business action as the Pruvz product API reports it (the action details view, GET /api/actions/{actionId}): the action's business identity, its two separate state machines (execution and verification), the embedded immutable decision-time Policy Snapshot, the frozen verification timing resolved at acceptance (format 1.1.0), the human review lifecycle of a terminal non-verified result (format 1.2.0), the human-triggered re-verification after a RESOLVED_EXTERNALLY review event (format 1.3.0: the fresh re-verification window and the independently-confirmed marker), and the three deliberately separated value groups a reviewer compares — the server-derived expected outcome, the agent's unverified claim, and what independent system-of-record read-back actually observed.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "actionId",
+    "agentId",
+    "runId",
+    "correlationId",
+    "actionType",
+    "subject",
+    "decision",
+    "crmTicketId",
+    "claim",
+    "expectedOutcome",
+    "observed",
+    "executionStatus",
+    "verificationStatus",
+    "finalOutcome",
+    "verificationFailure",
+    "reviewState",
+    "review",
+    "mismatch",
+    "verificationTiming",
+    "reverificationTiming",
+    "policySnapshot",
+    "createdAtUtc",
+    "updatedAtUtc",
+    "executionStartedAtUtc",
+    "executionCompletedAtUtc",
+    "verificationCompletedAtUtc"
+  ],
+  "properties": {
+    "actionId": {
+      "description": "Server-generated identifier of the business action.",
+      "type": "string",
+      "minLength": 1
+    },
+    "agentId": {
+      "description": "The agent that requested the action.",
+      "type": "string",
+      "minLength": 1
+    },
+    "runId": {
+      "description": "The demo/agent run this action belongs to.",
+      "type": "string",
+      "minLength": 1
+    },
+    "correlationId": {
+      "description": "The business correlation key, e.g. the payment the refund belongs to.",
+      "type": "string",
+      "minLength": 1
+    },
+    "actionType": {
+      "description": "The kind of business action, e.g. \"refund\".",
+      "type": "string",
+      "minLength": 1
+    },
+    "subject": {
+      "$ref": "#/$defs/subject"
+    },
+    "decision": {
+      "$ref": "#/$defs/decision"
+    },
+    "crmTicketId": {
+      "description": "The CRM ticket the decision context referenced; null when none was asserted.",
+      "type": ["string", "null"]
+    },
+    "claim": {
+      "description": "The agent's unverified claim about its own execution outcome; null until a claim is recorded. A claim never decides the verification result.",
+      "anyOf": [{ "$ref": "#/$defs/claim" }, { "type": "null" }]
+    },
+    "expectedOutcome": {
+      "description": "Derived by Pruvz server-side from the decision and the immutable Policy Snapshot — never accepted as an agent input. Null until derived.",
+      "anyOf": [{ "$ref": "#/$defs/expectedOutcome" }, { "type": "null" }]
+    },
+    "observed": {
+      "description": "What independent system-of-record read-back actually observed: the latest INDEPENDENT_READBACK evidence, summarized. Null means no independent observation was recorded yet — reported honestly instead of echoing the claim or the expectation.",
+      "anyOf": [{ "$ref": "#/$defs/observed" }, { "type": "null" }]
+    },
+    "executionStatus": {
+      "description": "Agent execution progress — what the agent reports. Separate from verificationStatus by design.",
+      "enum": ["RECEIVED", "EXECUTING", "COMPLETED"]
+    },
+    "verificationStatus": {
+      "description": "Independent verification state — what Pruvz proved. Terminal results (VERIFIED, OUTCOME_MISMATCH, VERIFICATION_FAILED) are assigned only after independent system-of-record read-back, never through any agent-facing contract.",
+      "enum": [
+        "NOT_STARTED",
+        "VERIFICATION_PENDING",
+        "VERIFIED",
+        "OUTCOME_MISMATCH",
+        "VERIFICATION_FAILED"
+      ]
+    },
+    "finalOutcome": {
+      "description": "The proven business outcome, e.g. REFUND_SUCCEEDED. Present exactly when verificationStatus is VERIFIED; a mismatch or a technical failure never fabricates one.",
+      "type": ["string", "null"]
+    },
+    "verificationFailure": {
+      "description": "Why verification failed. Present exactly when verificationStatus is VERIFICATION_FAILED: a technical description of an unreadable source, never a business result.",
+      "anyOf": [{ "$ref": "#/$defs/verificationFailure" }, { "type": "null" }]
+    },
+    "reviewState": {
+      "description": "Where the action stands in the human review lifecycle (format 1.2.0 widened the vocabulary). Only a terminal verification result determines it: NOT_DETERMINED until verification concludes; NOT_REQUIRED for a first-pass VERIFIED, which auto-clears and never enters review; for an OUTCOME_MISMATCH or VERIFICATION_FAILED result, the workflow state — PENDING_REVIEW (awaiting a human decision), NEEDS_CORRECTION (a correction outside Pruvz is required), AWAITING_REVERIFICATION (the correction was reported and control returned to Pruvz for an independent re-verification) or DECIDED (closed by a terminal human disposition); and, since format 1.3.0, DECIDED on a VERIFIED action whose review was closed because Pruvz's re-verification independently confirmed the externally-reported resolution.",
+      "enum": [
+        "PENDING_REVIEW",
+        "NEEDS_CORRECTION",
+        "AWAITING_REVERIFICATION",
+        "DECIDED",
+        "NOT_REQUIRED",
+        "NOT_DETERMINED"
+      ]
+    },
+    "review": {
+      "description": "The human review of a terminal non-verified result (format 1.2.0): its category, the current disposition and the complete decision history. Present when verificationStatus is OUTCOME_MISMATCH or VERIFICATION_FAILED — and, since format 1.3.0, on a VERIFIED action whose review was closed because an independent re-verification confirmed the externally-reported resolution (independentlyConfirmed true); null otherwise. A human decision is appended as HUMAN_REVIEW_DECISION evidence and never rewrites the verification result: no review decision can produce VERIFIED — only Pruvz's own re-verification can.",
+      "anyOf": [{ "$ref": "#/$defs/review" }, { "type": "null" }]
+    },
+    "mismatch": {
+      "description": "The expected-versus-observed dimensions behind an OUTCOME_MISMATCH ruling. Present exactly when verificationStatus is OUTCOME_MISMATCH; a technical failure never carries one.",
+      "anyOf": [{ "$ref": "#/$defs/mismatch" }, { "type": "null" }]
+    },
+    "verificationTiming": {
+      "description": "The action's frozen verification timing (format 1.1.0): resolved exactly once when the action was accepted and never re-resolved, so later policy or configuration changes cannot affect an in-flight action. deadlineAtUtc null means no verification deadline was resolved — such an action can never produce a time-based mismatch and is reported as \"verification deadline not configured\". Null only on action records that predate the timing model.",
+      "anyOf": [{ "$ref": "#/$defs/verificationTiming" }, { "type": "null" }]
+    },
+    "reverificationTiming": {
+      "description": "The fresh verification window of the latest human-triggered re-verification (format 1.3.0): resolved through the same precedence chain as verificationTiming, but anchored to the moment the external correction was reported (the RESOLVED_EXTERNALLY review event), because the original deadline had already passed when the action mismatched. Null while no RESOLVED_EXTERNALLY event ever triggered a re-verification; it never replaces verificationTiming, which stays the immutable record of the original window.",
+      "anyOf": [{ "$ref": "#/$defs/verificationTiming" }, { "type": "null" }]
+    },
+    "policySnapshot": {
+      "$ref": "#/$defs/policySnapshot"
+    },
+    "createdAtUtc": { "$ref": "#/$defs/utcTimestamp" },
+    "updatedAtUtc": { "$ref": "#/$defs/utcTimestamp" },
+    "executionStartedAtUtc": {
+      "anyOf": [{ "$ref": "#/$defs/utcTimestamp" }, { "type": "null" }]
+    },
+    "executionCompletedAtUtc": {
+      "anyOf": [{ "$ref": "#/$defs/utcTimestamp" }, { "type": "null" }]
+    },
+    "verificationCompletedAtUtc": {
+      "description": "When the terminal verification result was assigned; null while verification has not concluded.",
+      "anyOf": [{ "$ref": "#/$defs/utcTimestamp" }, { "type": "null" }]
+    }
+  },
+  "allOf": [
+    {
+      "$comment": "VERIFIED carries the proven outcome and never a failure or mismatch block. A first-pass VERIFIED auto-clears (no review). Since format 1.3.0 a VERIFIED action may instead carry a DECIDED review with independentlyConfirmed true: the action mismatched or failed, a human reported the correction (RESOLVED_EXTERNALLY), and Pruvz's own re-verification — inside the fresh window recorded in reverificationTiming — independently confirmed the resolution.",
+      "if": {
+        "properties": { "verificationStatus": { "const": "VERIFIED" } },
+        "required": ["verificationStatus"]
+      },
+      "then": {
+        "properties": {
+          "finalOutcome": { "type": "string", "minLength": 1 },
+          "verificationFailure": { "type": "null" },
+          "mismatch": { "type": "null" },
+          "verificationCompletedAtUtc": { "$ref": "#/$defs/utcTimestamp" }
+        },
+        "oneOf": [
+          {
+            "properties": {
+              "reviewState": { "const": "NOT_REQUIRED" },
+              "review": { "type": "null" },
+              "reverificationTiming": { "type": "null" }
+            }
+          },
+          {
+            "properties": {
+              "reviewState": { "const": "DECIDED" },
+              "review": {
+                "allOf": [
+                  { "$ref": "#/$defs/review" },
+                  {
+                    "type": "object",
+                    "properties": { "independentlyConfirmed": { "const": true } }
+                  }
+                ]
+              },
+              "reverificationTiming": { "$ref": "#/$defs/verificationTiming" }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "$comment": "OUTCOME_MISMATCH carries its mismatch dimensions and is under review as a business exception (category BUSINESS_MISMATCH); nothing was proven, so no final outcome and no failure block.",
+      "if": {
+        "properties": { "verificationStatus": { "const": "OUTCOME_MISMATCH" } },
+        "required": ["verificationStatus"]
+      },
+      "then": {
+        "properties": {
+          "finalOutcome": { "type": "null" },
+          "verificationFailure": { "type": "null" },
+          "mismatch": { "$ref": "#/$defs/mismatch" },
+          "reviewState": { "$ref": "#/$defs/reviewWorkflowState" },
+          "review": {
+            "allOf": [
+              { "$ref": "#/$defs/review" },
+              {
+                "type": "object",
+                "properties": {
+                  "category": { "const": "BUSINESS_MISMATCH" },
+                  "independentlyConfirmed": { "const": false }
+                }
+              }
+            ]
+          },
+          "verificationCompletedAtUtc": { "$ref": "#/$defs/utcTimestamp" }
+        }
+      }
+    },
+    {
+      "$comment": "VERIFICATION_FAILED is a technical outcome: it carries the failure block and never a business result or a mismatch story. Since format 1.2.0 an exhausted failure is under review in its own category (VERIFICATION_FAILURE) — 'verification could not be completed' — distinct from a business mismatch.",
+      "if": {
+        "properties": { "verificationStatus": { "const": "VERIFICATION_FAILED" } },
+        "required": ["verificationStatus"]
+      },
+      "then": {
+        "properties": {
+          "finalOutcome": { "type": "null" },
+          "verificationFailure": { "$ref": "#/$defs/verificationFailure" },
+          "mismatch": { "type": "null" },
+          "reviewState": { "$ref": "#/$defs/reviewWorkflowState" },
+          "review": {
+            "allOf": [
+              { "$ref": "#/$defs/review" },
+              {
+                "type": "object",
+                "properties": {
+                  "category": { "const": "VERIFICATION_FAILURE" },
+                  "independentlyConfirmed": { "const": false }
+                }
+              }
+            ]
+          },
+          "verificationCompletedAtUtc": { "$ref": "#/$defs/utcTimestamp" }
+        }
+      }
+    },
+    {
+      "$comment": "Before verification concludes nothing terminal may appear: no outcome, no failure, no mismatch, no review, no completion time, and the need for review is honestly undetermined.",
+      "if": {
+        "properties": {
+          "verificationStatus": { "enum": ["NOT_STARTED", "VERIFICATION_PENDING"] }
+        },
+        "required": ["verificationStatus"]
+      },
+      "then": {
+        "properties": {
+          "finalOutcome": { "type": "null" },
+          "verificationFailure": { "type": "null" },
+          "mismatch": { "type": "null" },
+          "reviewState": { "const": "NOT_DETERMINED" },
+          "review": { "type": "null" },
+          "reverificationTiming": { "type": "null" },
+          "verificationCompletedAtUtc": { "type": "null" }
+        }
+      }
+    },
+    {
+      "$comment": "AWAITING_REVERIFICATION means a RESOLVED_EXTERNALLY event returned control to Pruvz for an independent re-check (format 1.3.0) — the fresh window that governs it must be recorded.",
+      "if": {
+        "properties": { "reviewState": { "const": "AWAITING_REVERIFICATION" } },
+        "required": ["reviewState"]
+      },
+      "then": {
+        "properties": {
+          "reverificationTiming": { "$ref": "#/$defs/verificationTiming" }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "utcTimestamp": {
+      "description": "A UTC timestamp: RFC 3339 / ISO 8601 with the Z (Zulu) UTC designator, matching the *AtUtc field names. Local-offset forms such as +03:00 are not valid in this contract.",
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z$"
+    },
+    "money": {
+      "description": "An amount of money in a single ISO 4217 currency.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["amount", "currency"],
+      "properties": {
+        "amount": { "type": "number", "minimum": 0 },
+        "currency": { "type": "string", "pattern": "^[A-Z]{3}$" }
+      }
+    },
+    "subject": {
+      "description": "The business entity the action operates on.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["subjectType", "subjectId"],
+      "properties": {
+        "subjectType": { "type": "string", "minLength": 1 },
+        "subjectId": { "type": "string", "minLength": 1 }
+      }
+    },
+    "decision": {
+      "description": "What the policy evaluation approved. Its amount is the decision amount, never a verified amount.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decisionType", "amount"],
+      "properties": {
+        "decisionType": { "type": "string", "minLength": 1 },
+        "amount": { "$ref": "#/$defs/money" }
+      }
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["claimedOutcome", "claimedAtUtc"],
+      "properties": {
+        "claimedOutcome": { "type": "string", "minLength": 1 },
+        "claimedAtUtc": { "$ref": "#/$defs/utcTimestamp" }
+      }
+    },
+    "expectedOutcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["outcomeType", "amount"],
+      "properties": {
+        "outcomeType": { "type": "string", "minLength": 1 },
+        "amount": { "$ref": "#/$defs/money" }
+      }
+    },
+    "observed": {
+      "description": "The latest independent read-back observation, summarized. Field names match the evidence timeline items so this block can be correlated with its timeline entry.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "sourceReference", "occurredAtUtc", "recordedAtUtc", "summary"],
+      "properties": {
+        "source": { "type": "string", "minLength": 1 },
+        "sourceReference": { "type": ["string", "null"] },
+        "occurredAtUtc": { "$ref": "#/$defs/utcTimestamp" },
+        "recordedAtUtc": { "$ref": "#/$defs/utcTimestamp" },
+        "summary": { "type": "string", "minLength": 1 }
+      }
+    },
+    "verificationFailure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reason", "attemptCount", "retryable"],
+      "properties": {
+        "reason": { "type": "string", "minLength": 1 },
+        "attemptCount": { "type": "integer", "minimum": 0 },
+        "retryable": { "type": "boolean" }
+      }
+    },
+    "verificationTiming": {
+      "description": "The frozen verification timing (format 1.1.0): the technical clock (when the first read-back is meaningful, how often absence is re-checked) and the business clock (the resolved verification deadline with its provenance). Spans are integer seconds so consumers never parse a duration format.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "initialCheckAfterSeconds",
+        "readbackIntervalSeconds",
+        "deadlineAtUtc",
+        "deadlineSource",
+        "resolvedAtUtc"
+      ],
+      "properties": {
+        "initialCheckAfterSeconds": { "type": "integer", "minimum": 0 },
+        "readbackIntervalSeconds": { "type": "integer", "minimum": 0 },
+        "deadlineAtUtc": {
+          "description": "When the business window closes; null when no deadline was resolved — absence then never becomes a time-based mismatch.",
+          "anyOf": [{ "$ref": "#/$defs/utcTimestamp" }, { "type": "null" }]
+        },
+        "deadlineSource": {
+          "description": "Where the deadline came from, in resolution precedence order: POLICY (the decision-time Policy Snapshot), TENANT_OVERRIDE (explicit tenant/action configuration), PRODUCT_SPEC (the product's per-action-type default — which may also be an explicit no-deadline decision), or NOT_CONFIGURED (no source resolved a deadline).",
+          "enum": ["POLICY", "TENANT_OVERRIDE", "PRODUCT_SPEC", "NOT_CONFIGURED"]
+        },
+        "resolvedAtUtc": {
+          "description": "The acceptance moment the resolution was made and the deadline anchored to.",
+          "$ref": "#/$defs/utcTimestamp"
+        }
+      },
+      "allOf": [
+        {
+          "$comment": "A POLICY or TENANT_OVERRIDE provenance always carries a concrete deadline.",
+          "if": {
+            "properties": { "deadlineSource": { "enum": ["POLICY", "TENANT_OVERRIDE"] } },
+            "required": ["deadlineSource"]
+          },
+          "then": {
+            "properties": { "deadlineAtUtc": { "$ref": "#/$defs/utcTimestamp" } }
+          }
+        },
+        {
+          "$comment": "NOT_CONFIGURED means no source resolved a deadline, so none may appear.",
+          "if": {
+            "properties": { "deadlineSource": { "const": "NOT_CONFIGURED" } },
+            "required": ["deadlineSource"]
+          },
+          "then": {
+            "properties": { "deadlineAtUtc": { "type": "null" } }
+          }
+        }
+      ]
+    },
+    "reviewWorkflowState": {
+      "description": "The review states an action under review can be in (format 1.2.0). The locked human transitions: PENDING_REVIEW + APPROVED_EXCEPTION or DISMISSED → DECIDED; PENDING_REVIEW + NEEDS_CORRECTION → NEEDS_CORRECTION; PENDING_REVIEW or NEEDS_CORRECTION + RESOLVED_EXTERNALLY → AWAITING_REVERIFICATION; NEEDS_CORRECTION + DISMISSED → DECIDED. DECIDED is closed; AWAITING_REVERIFICATION accepts no human decision until Pruvz re-verifies. Since format 1.3.0 the re-verification itself moves the review — a Worker transition that appends no decision entry: a re-verification that confirms the resolution (VERIFIED) closes the review as DECIDED, and one that rules OUTCOME_MISMATCH or exhausts as VERIFICATION_FAILED returns the review to PENDING_REVIEW under the category of the new result.",
+      "enum": ["PENDING_REVIEW", "NEEDS_CORRECTION", "AWAITING_REVERIFICATION", "DECIDED"]
+    },
+    "review": {
+      "description": "The human review of one terminal non-verified result (format 1.2.0): the category that opened it, the current disposition, and the complete decision history as recorded on the append-only evidence timeline. Since format 1.3.0 it also states whether an independent re-verification confirmed an externally-reported resolution.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["category", "latestDecision", "decisions", "independentlyConfirmed"],
+      "properties": {
+        "category": {
+          "description": "Why the action is under review, derived from the terminal result and never chosen: BUSINESS_MISMATCH (an OUTCOME_MISMATCH — a definitive business exception requiring a business decision) or VERIFICATION_FAILURE (a VERIFICATION_FAILED after technical retry exhaustion — verification could not be completed; there is no business exception to approve). On a VERIFIED action whose review was closed by a confirming re-verification (format 1.3.0), the category of the superseded result that had opened the review.",
+          "enum": ["BUSINESS_MISMATCH", "VERIFICATION_FAILURE"]
+        },
+        "independentlyConfirmed": {
+          "description": "True exactly when Pruvz's own re-verification — not the human report — confirmed the externally-reported resolution and closed the review (format 1.3.0): the action is VERIFIED and DECIDED, and the distinction from a human-resolved disposition (APPROVED_EXCEPTION or DISMISSED, where independentlyConfirmed stays false) is the packet's human-resolved versus independently-confirmed-resolved line.",
+          "type": "boolean"
+        },
+        "latestDecision": {
+          "description": "The current disposition: the most recent human decision or event recorded on this review, or null while none was recorded.",
+          "anyOf": [{ "$ref": "#/$defs/reviewDecision" }, { "type": "null" }]
+        },
+        "decisions": {
+          "description": "Every human decision and event recorded on this review, oldest first — one entry per HUMAN_REVIEW_DECISION item on the evidence timeline.",
+          "type": "array",
+          "items": { "$ref": "#/$defs/reviewDecision" }
+        }
+      }
+    },
+    "reviewDecision": {
+      "description": "One recorded human decision or event (format 1.2.0): what was decided, by whom and why, the review transition it caused, the evidence the reviewer ruled on, and where its attestation sits on the evidence timeline.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "decision",
+        "reason",
+        "reviewerId",
+        "previousReviewState",
+        "newReviewState",
+        "reviewedEvidenceId",
+        "reviewedEvidenceSequence",
+        "evidenceId",
+        "evidenceSequence",
+        "decidedAtUtc"
+      ],
+      "properties": {
+        "decision": {
+          "description": "APPROVED_EXCEPTION (terminal: the mismatch is accepted as an approved business exception; BUSINESS_MISMATCH only), DISMISSED (terminal: no remediation is required under business policy — it never means the machine result was wrong), NEEDS_CORRECTION (a correction outside Pruvz is required) or RESOLVED_EXTERNALLY (an event: the correction was made outside Pruvz; control returns to Pruvz for an independent re-verification).",
+          "enum": ["APPROVED_EXCEPTION", "DISMISSED", "NEEDS_CORRECTION", "RESOLVED_EXTERNALLY"]
+        },
+        "reason": {
+          "description": "The reviewer's required human explanation.",
+          "type": "string",
+          "minLength": 1
+        },
+        "reviewerId": {
+          "description": "The authenticated identity of the reviewer who decided.",
+          "type": "string",
+          "minLength": 1
+        },
+        "previousReviewState": { "$ref": "#/$defs/reviewWorkflowState" },
+        "newReviewState": { "$ref": "#/$defs/reviewWorkflowState" },
+        "reviewedEvidenceId": {
+          "description": "The evidence item the reviewer ruled on (the latest review-relevant item when the decision was made); at least one of id and sequence is present.",
+          "type": ["string", "null"]
+        },
+        "reviewedEvidenceSequence": {
+          "type": ["integer", "null"],
+          "minimum": 1
+        },
+        "evidenceId": {
+          "description": "The HUMAN_REVIEW_DECISION item on the evidence timeline that records this decision.",
+          "type": "string",
+          "minLength": 1
+        },
+        "evidenceSequence": { "type": "integer", "minimum": 1 },
+        "decidedAtUtc": { "$ref": "#/$defs/utcTimestamp" }
+      },
+      "anyOf": [
+        { "type": "object", "properties": { "reviewedEvidenceId": { "type": "string", "minLength": 1 } } },
+        { "type": "object", "properties": { "reviewedEvidenceSequence": { "type": "integer" } } }
+      ]
+    },
+    "businessDiscrepancy": {
+      "description": "The monetary business discrepancy of one mismatch, or its explicit absence: when evaluable is false there is no amount at all — an unknown discrepancy is never rendered as a zero, because \"no amount\" and \"zero amount\" are different business statements.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evaluable", "amount"],
+      "properties": {
+        "evaluable": { "type": "boolean" },
+        "amount": {
+          "anyOf": [{ "$ref": "#/$defs/money" }, { "type": "null" }]
+        }
+      },
+      "if": {
+        "properties": { "evaluable": { "const": true } },
+        "required": ["evaluable"]
+      },
+      "then": {
+        "properties": { "amount": { "$ref": "#/$defs/money" } }
+      },
+      "else": {
+        "properties": { "amount": { "type": "null" } }
+      }
+    },
+    "mismatch": {
+      "description": "The review classification and expected-versus-observed dimensions behind one OUTCOME_MISMATCH ruling. The observed side is stated as recorded business facts (refund counts, ticket statuses), never as source payload contents.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mismatchReason",
+        "reasonCode",
+        "severity",
+        "explanation",
+        "expectedOutcomeType",
+        "expectedAmount",
+        "observedRefundCount",
+        "observedQualifyingRefundCount",
+        "assertedTicketStatus",
+        "observedTicketStatus",
+        "businessDiscrepancy"
+      ],
+      "properties": {
+        "mismatchReason": {
+          "description": "The temporal mismatch category (format 1.1.0): CONTRADICTORY_EVIDENCE means positive evidence contradicts the claim, assigned immediately with no deadline wait; EXPECTED_OUTCOME_ABSENT_AFTER_DEADLINE means the expected outcome never appeared and the resolved verification deadline passed — only ever assigned when an explicit deadline was resolved. Derived from reasonCode server-side; the two can never disagree.",
+          "enum": ["CONTRADICTORY_EVIDENCE", "EXPECTED_OUTCOME_ABSENT_AFTER_DEADLINE"]
+        },
+        "reasonCode": {
+          "description": "A stable machine classification code. Intentionally an open string: consumers must treat unknown future codes as valid and fall back to the explanation. Known v1.1.0 codes: NO_QUALIFYING_REFUND, MULTIPLE_QUALIFYING_REFUNDS, CRM_STATE_INCONSISTENT, REFUND_FAILED.",
+          "type": "string",
+          "minLength": 1
+        },
+        "severity": { "enum": ["HIGH", "MEDIUM"] },
+        "explanation": { "type": "string", "minLength": 1 },
+        "expectedOutcomeType": { "type": "string", "minLength": 1 },
+        "expectedAmount": { "$ref": "#/$defs/money" },
+        "observedRefundCount": { "type": "integer", "minimum": 0 },
+        "observedQualifyingRefundCount": { "type": "integer", "minimum": 0 },
+        "assertedTicketStatus": { "type": ["string", "null"] },
+        "observedTicketStatus": { "type": ["string", "null"] },
+        "businessDiscrepancy": { "$ref": "#/$defs/businessDiscrepancy" }
+      }
+    },
+    "policySnapshot": {
+      "description": "The complete immutable decision-time Policy Snapshot embedded with the action: policy identity, the rules that applied, the normalized inputs the evaluation saw, and the explainable per-rule results. Read from stored state; never re-evaluated on read.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["policyId", "policyVersion", "rules", "input", "evaluation"],
+      "properties": {
+        "policyId": { "type": "string", "minLength": 1 },
+        "policyVersion": { "type": "string", "minLength": 1 },
+        "rules": { "$ref": "#/$defs/policyRules" },
+        "input": { "$ref": "#/$defs/policyInput" },
+        "evaluation": { "$ref": "#/$defs/policyEvaluation" }
+      }
+    },
+    "policyRules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "maxPurchaseAgeDays",
+        "maxRefundAmount",
+        "allowedPaymentStates",
+        "ticket",
+        "verificationDeadlineSeconds"
+      ],
+      "properties": {
+        "maxPurchaseAgeDays": { "type": "integer", "minimum": 0 },
+        "maxRefundAmount": { "$ref": "#/$defs/money" },
+        "allowedPaymentStates": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "ticket": { "$ref": "#/$defs/ticketRequirement" },
+        "verificationDeadlineSeconds": {
+          "description": "The policy's verification deadline in seconds from action acceptance (format 1.1.0), or null when this policy version sets none. When set, it is the highest-precedence deadline source of the action's frozen verification timing (deadlineSource POLICY).",
+          "type": ["integer", "null"],
+          "minimum": 1
+        }
+      }
+    },
+    "ticketRequirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ticketRequired", "allowedTicketStatuses"],
+      "properties": {
+        "ticketRequired": { "type": "boolean" },
+        "allowedTicketStatuses": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "policyInput": {
+      "description": "The normalized inputs the decision-time evaluation saw.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["purchasedAtUtc", "evaluatedAtUtc", "refundAmount", "paymentState", "ticketStatus"],
+      "properties": {
+        "purchasedAtUtc": { "$ref": "#/$defs/utcTimestamp" },
+        "evaluatedAtUtc": { "$ref": "#/$defs/utcTimestamp" },
+        "refundAmount": { "$ref": "#/$defs/money" },
+        "paymentState": { "type": "string", "minLength": 1 },
+        "ticketStatus": { "type": ["string", "null"] }
+      }
+    },
+    "policyEvaluation": {
+      "description": "The explainable decision-time result: overall pass plus one result per rule, in policy order.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["policyPassed", "ruleResults"],
+      "properties": {
+        "policyPassed": { "type": "boolean" },
+        "ruleResults": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/ruleResult" }
+        }
+      }
+    },
+    "ruleResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ruleId", "passed", "explanation"],
+      "properties": {
+        "ruleId": { "type": "string", "minLength": 1 },
+        "passed": { "type": "boolean" },
+        "explanation": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

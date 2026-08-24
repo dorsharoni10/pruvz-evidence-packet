@@ -1,0 +1,248 @@
+{
+  "packetFormatVersion": "1.3.0",
+  "action": {
+    "actionId": "act_00000000000000000000000000000007",
+    "agentId": "billing-refunds-agent",
+    "runId": "run_sample_007",
+    "correlationId": "pay_74007",
+    "actionType": "refund",
+    "subject": { "subjectType": "payment", "subjectId": "pay_74007" },
+    "decision": {
+      "decisionType": "REFUND_APPROVED",
+      "amount": { "amount": 18, "currency": "USD" }
+    },
+    "crmTicketId": "TICKET-1007",
+    "claim": {
+      "claimedOutcome": "REFUND_SUCCEEDED",
+      "claimedAtUtc": "2026-07-10T09:31:12Z"
+    },
+    "expectedOutcome": {
+      "outcomeType": "REFUND_SUCCEEDED",
+      "amount": { "amount": 18, "currency": "USD" }
+    },
+    "observed": {
+      "source": "billing-sandbox",
+      "sourceReference": "pay_74007",
+      "occurredAtUtc": "2026-07-15T08:00:01Z",
+      "recordedAtUtc": "2026-07-15T08:00:01Z",
+      "summary": "Follow-up independent billing read-back found 0 refund(s) for the payment (0 succeeded)."
+    },
+    "executionStatus": "COMPLETED",
+    "verificationStatus": "OUTCOME_MISMATCH",
+    "finalOutcome": null,
+    "verificationFailure": null,
+    "reviewState": "PENDING_REVIEW",
+    "review": {
+      "category": "BUSINESS_MISMATCH",
+      "independentlyConfirmed": true,
+      "latestDecision": {
+        "decision": "RESOLVED_EXTERNALLY",
+        "reason": "Finance reports the refund was issued manually; please re-verify.",
+        "reviewerId": "finance-reviewer",
+        "previousReviewState": "PENDING_REVIEW",
+        "newReviewState": "AWAITING_REVERIFICATION",
+        "reviewedEvidenceId": "evd_00000000000000000000000000000076",
+        "reviewedEvidenceSequence": 6,
+        "evidenceId": "evd_00000000000000000000000000000077",
+        "evidenceSequence": 7,
+        "decidedAtUtc": "2026-07-13T08:00:00Z"
+      },
+      "decisions": [
+        {
+          "decision": "RESOLVED_EXTERNALLY",
+          "reason": "Finance reports the refund was issued manually; please re-verify.",
+          "reviewerId": "finance-reviewer",
+          "previousReviewState": "PENDING_REVIEW",
+          "newReviewState": "AWAITING_REVERIFICATION",
+          "reviewedEvidenceId": "evd_00000000000000000000000000000076",
+          "reviewedEvidenceSequence": 6,
+          "evidenceId": "evd_00000000000000000000000000000077",
+          "evidenceSequence": 7,
+          "decidedAtUtc": "2026-07-13T08:00:00Z"
+        }
+      ]
+    },
+    "mismatch": {
+      "mismatchReason": "EXPECTED_OUTCOME_ABSENT_AFTER_DEADLINE",
+      "reasonCode": "NO_QUALIFYING_REFUND",
+      "severity": "HIGH",
+      "explanation": "The reported manual refund never appeared in the billing system before the fresh re-verification deadline passed.",
+      "expectedOutcomeType": "REFUND_SUCCEEDED",
+      "expectedAmount": { "amount": 18, "currency": "USD" },
+      "observedRefundCount": 0,
+      "observedQualifyingRefundCount": 0,
+      "assertedTicketStatus": "APPROVED",
+      "observedTicketStatus": "APPROVED",
+      "businessDiscrepancy": {
+        "evaluable": true,
+        "amount": { "amount": 18, "currency": "USD" }
+      }
+    },
+    "verificationTiming": {
+      "initialCheckAfterSeconds": 10,
+      "readbackIntervalSeconds": 900,
+      "deadlineAtUtc": "2026-07-12T09:30:58Z",
+      "deadlineSource": "PRODUCT_SPEC",
+      "resolvedAtUtc": "2026-07-10T09:30:58Z"
+    },
+    "reverificationTiming": {
+      "initialCheckAfterSeconds": 10,
+      "readbackIntervalSeconds": 900,
+      "deadlineAtUtc": "2026-07-15T08:00:00Z",
+      "deadlineSource": "PRODUCT_SPEC",
+      "resolvedAtUtc": "2026-07-13T08:00:00Z"
+    },
+    "policySnapshot": {
+      "policyId": "demo-refund-policy",
+      "policyVersion": "1",
+      "rules": {
+        "maxPurchaseAgeDays": 30,
+        "maxRefundAmount": { "amount": 100, "currency": "USD" },
+        "allowedPaymentStates": ["SETTLED"],
+        "ticket": { "ticketRequired": true, "allowedTicketStatuses": ["OPEN", "APPROVED"] },
+        "verificationDeadlineSeconds": null
+      },
+      "input": {
+        "purchasedAtUtc": "2026-07-01T14:00:00Z",
+        "evaluatedAtUtc": "2026-07-10T09:30:59Z",
+        "refundAmount": { "amount": 18, "currency": "USD" },
+        "paymentState": "SETTLED",
+        "ticketStatus": "APPROVED"
+      },
+      "evaluation": {
+        "policyPassed": true,
+        "ruleResults": [
+          {
+            "ruleId": "purchase-age",
+            "passed": true,
+            "explanation": "Purchase is 9 days old, within the 30-day limit."
+          },
+          {
+            "ruleId": "refund-amount",
+            "passed": true,
+            "explanation": "USD 18.00 is within the USD 100.00 limit."
+          },
+          {
+            "ruleId": "payment-state",
+            "passed": true,
+            "explanation": "Payment state SETTLED is allowed."
+          },
+          {
+            "ruleId": "support-ticket",
+            "passed": true,
+            "explanation": "Ticket TICKET-1007 is APPROVED, which satisfies the requirement."
+          }
+        ]
+      }
+    },
+    "createdAtUtc": "2026-07-10T09:30:58Z",
+    "updatedAtUtc": "2026-07-15T08:00:02Z",
+    "executionStartedAtUtc": "2026-07-10T09:31:02Z",
+    "executionCompletedAtUtc": "2026-07-10T09:31:20Z",
+    "verificationCompletedAtUtc": "2026-07-15T08:00:02Z"
+  },
+  "evidence": {
+    "actionId": "act_00000000000000000000000000000007",
+    "items": [
+      {
+        "evidenceId": "evd_00000000000000000000000000000071",
+        "sequence": 1,
+        "type": "ACTION_REQUEST",
+        "trustLevel": "CLAIMED",
+        "source": "billing-refunds-agent",
+        "sourceReference": null,
+        "occurredAtUtc": "2026-07-10T09:30:58Z",
+        "recordedAtUtc": "2026-07-10T09:30:58Z",
+        "summary": "Refund requested for payment pay_74007."
+      },
+      {
+        "evidenceId": "evd_00000000000000000000000000000072",
+        "sequence": 2,
+        "type": "POLICY_SNAPSHOT_CAPTURE",
+        "trustLevel": "PRUVZ_DERIVED",
+        "source": "pruvz-api",
+        "sourceReference": "demo-refund-policy",
+        "occurredAtUtc": "2026-07-10T09:30:59Z",
+        "recordedAtUtc": "2026-07-10T09:30:59Z",
+        "summary": "Decision-time policy snapshot captured: demo-refund-policy v1, policy passed."
+      },
+      {
+        "evidenceId": "evd_00000000000000000000000000000073",
+        "sequence": 3,
+        "type": "AGENT_CLAIM",
+        "trustLevel": "CLAIMED",
+        "source": "billing-refunds-agent",
+        "sourceReference": null,
+        "occurredAtUtc": "2026-07-10T09:31:12Z",
+        "recordedAtUtc": "2026-07-10T09:31:13Z",
+        "summary": "Agent claims refund of USD 18.00 succeeded (REFUND_SUCCEEDED)."
+      },
+      {
+        "evidenceId": "evd_00000000000000000000000000000074",
+        "sequence": 4,
+        "type": "EXECUTION_RECEIPT",
+        "trustLevel": "EXECUTION_RECEIPT",
+        "source": "billing-refunds-agent",
+        "sourceReference": "ref_970",
+        "occurredAtUtc": "2026-07-10T09:31:19Z",
+        "recordedAtUtc": "2026-07-10T09:31:20Z",
+        "summary": "Execution receipt relayed: refund ref_970 submitted to the billing system."
+      },
+      {
+        "evidenceId": "evd_00000000000000000000000000000075",
+        "sequence": 5,
+        "type": "SOURCE_READBACK",
+        "trustLevel": "INDEPENDENT_READBACK",
+        "source": "billing-sandbox",
+        "sourceReference": "pay_74007",
+        "occurredAtUtc": "2026-07-12T09:31:00Z",
+        "recordedAtUtc": "2026-07-12T09:31:00Z",
+        "summary": "Independent billing read-back found 0 refund(s) for the payment (0 succeeded)."
+      },
+      {
+        "evidenceId": "evd_00000000000000000000000000000076",
+        "sequence": 6,
+        "type": "VERIFICATION_RESULT",
+        "trustLevel": "PRUVZ_DERIVED",
+        "source": "pruvz-worker",
+        "sourceReference": null,
+        "occurredAtUtc": "2026-07-12T09:31:00Z",
+        "recordedAtUtc": "2026-07-12T09:31:00Z",
+        "summary": "OUTCOME_MISMATCH: the expected refund never appeared and the resolved verification deadline passed."
+      },
+      {
+        "evidenceId": "evd_00000000000000000000000000000077",
+        "sequence": 7,
+        "type": "HUMAN_REVIEW_DECISION",
+        "trustLevel": "PRUVZ_DERIVED",
+        "source": "pruvz-review",
+        "sourceReference": null,
+        "occurredAtUtc": "2026-07-13T08:00:00Z",
+        "recordedAtUtc": "2026-07-13T08:00:00Z",
+        "summary": "Human review decision: RESOLVED_EXTERNALLY by finance-reviewer"
+      },
+      {
+        "evidenceId": "evd_00000000000000000000000000000078",
+        "sequence": 8,
+        "type": "FOLLOW_UP_INDEPENDENT_READBACK",
+        "trustLevel": "INDEPENDENT_READBACK",
+        "source": "billing-sandbox",
+        "sourceReference": "pay_74007",
+        "occurredAtUtc": "2026-07-15T08:00:01Z",
+        "recordedAtUtc": "2026-07-15T08:00:01Z",
+        "summary": "Follow-up independent billing read-back found 0 refund(s) for the payment (0 succeeded)."
+      },
+      {
+        "evidenceId": "evd_00000000000000000000000000000079",
+        "sequence": 9,
+        "type": "VERIFICATION_RESULT",
+        "trustLevel": "PRUVZ_DERIVED",
+        "source": "pruvz-worker",
+        "sourceReference": null,
+        "occurredAtUtc": "2026-07-15T08:00:02Z",
+        "recordedAtUtc": "2026-07-15T08:00:02Z",
+        "summary": "Re-verification derived OUTCOME_MISMATCH: the reported manual refund never appeared before the fresh deadline passed; the review returns to PENDING_REVIEW."
+      }
+    ]
+  }
+}

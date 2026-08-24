@@ -20,8 +20,10 @@ const loadPacket = (name) =>
 test('composing the two API responses reproduces the packet exactly', () => {
   const dir = mkdtempSync(path.join(tmpdir(), 'pruvz-compose-'))
   try {
-    // Decompose a known-good packet into the two documented API responses…
-    const original = loadPacket('verified-refund.packet.json')
+    // Decompose a known-good packet of the newest format into the two
+    // documented API responses… (compose stamps the newest format version, so
+    // only a newest-format example can round-trip byte-equivalently)
+    const original = loadPacket('reverified-confirmed.packet.json')
     const actionFile = path.join(dir, 'action.json')
     const evidenceFile = path.join(dir, 'evidence.json')
     const outFile = path.join(dir, 'out.packet.json')
@@ -44,8 +46,8 @@ test('composing the two API responses reproduces the packet exactly', () => {
 test('composing responses of two different actions is refused', () => {
   const dir = mkdtempSync(path.join(tmpdir(), 'pruvz-compose-'))
   try {
-    const verified = loadPacket('verified-refund.packet.json')
-    const mismatch = loadPacket('outcome-mismatch-decided.packet.json')
+    const verified = loadPacket('reverified-confirmed.packet.json')
+    const mismatch = loadPacket('reverified-mismatch.packet.json')
     const actionFile = path.join(dir, 'action.json')
     const evidenceFile = path.join(dir, 'evidence.json')
     writeFileSync(actionFile, JSON.stringify(verified.action))

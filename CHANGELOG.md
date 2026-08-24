@@ -2,6 +2,19 @@
 
 All notable changes to the Public Evidence Packet format and this repository are recorded here. Format releases follow the policy in [`docs/VERSIONING.md`](docs/VERSIONING.md).
 
+## 1.3.0 — 2026-08-24
+
+**MINOR** — additive human-triggered re-verification fields (product PRUVZ-51, Customer #1 re-verification after `RESOLVED_EXTERNALLY` with fact supersession). Consumers reading `1.2.0` packets keep working on `1.3.0` packets if they ignore fields they do not recognize and treat the closed enums as open to widening; `1.3.0` packets do not validate against the `1.2.0` schema (the schemas are strict by design).
+
+- `schema/v1.3.0/` — new format release:
+  - `evidence.items[].type` gains `FOLLOW_UP_INDEPENDENT_READBACK` (trust `INDEPENDENT_READBACK`): an independent read-back performed during a human-triggered re-verification, after a `RESOLVED_EXTERNALLY` review event.
+  - `action.reverificationTiming` (new, nullable object, same shape as `verificationTiming`): the fresh verification window of the latest re-verification, resolved through the same precedence chain but anchored to the moment the correction was reported. Null while no `RESOLVED_EXTERNALLY` event ever triggered one; required (non-null) while `reviewState` is `AWAITING_REVERIFICATION`. `verificationTiming` stays the immutable record of the original window.
+  - `action.review.independentlyConfirmed` (new, required boolean): true exactly when Pruvz's own re-verification confirmed the externally-reported resolution and closed the review — the packet's human-resolved versus independently-confirmed-resolved distinction.
+  - A `VERIFIED` action may now carry `reviewState: "DECIDED"` and a review block with `independentlyConfirmed: true` (a confirmed external resolution); a first-pass `VERIFIED` still auto-clears to `NOT_REQUIRED` with a null review. No human decision produces `VERIFIED` — only Pruvz's re-verification can.
+  - The terminal status taxonomy, review decision vocabulary and trust levels are unchanged.
+- New packet-level consistency rules for `1.3.0`: the Worker's re-verification transitions are the only legal gaps in the review-state chain — after a `RESOLVED_EXTERNALLY` decision the review may sit at `DECIDED` (action `VERIFIED`, independently confirmed) or return to `PENDING_REVIEW` (a new non-verified ruling) without a decision entry; `FOLLOW_UP_INDEPENDENT_READBACK` evidence requires a `RESOLVED_EXTERNALLY` decision in the review history and a recorded `reverificationTiming`; a recorded (non-null) `reverificationTiming` itself requires a `RESOLVED_EXTERNALLY` decision — only that event opens a fresh window; `independentlyConfirmed: true` and a review on a `VERIFIED` action both require the latest decision to be `RESOLVED_EXTERNALLY`. Packets of formats `1.2.0` and earlier keep their strict chain rules.
+- The five synthetic valid examples now declare format `1.3.0` and carry the new fields; two new examples show the re-verification outcomes: `reverified-confirmed.packet.json` (mismatch → correction reported → follow-up read-back → `VERIFIED`, review `DECIDED`, independently confirmed) and `reverified-mismatch.packet.json` (the reported correction never appeared → `OUTCOME_MISMATCH` again, review back to `PENDING_REVIEW`). A new invalid example, `independently-confirmed-not-verified.packet.json`, shows the marker rejected on a non-verified action. The captured `1.0.0` conformance proof is unchanged. The validator supports all four formats and picks the release matching each packet's declaration.
+
 ## 1.2.0 — 2026-08-23
 
 **MINOR** — additive human-review lifecycle fields (product PRUVZ-49, Customer #1 review lifecycle). Consumers reading `1.1.0` packets keep working on `1.2.0` packets if they ignore fields they do not recognize and treat the closed enums as open to widening; `1.2.0` packets do not validate against the `1.1.0` schema (the schemas are strict by design).
