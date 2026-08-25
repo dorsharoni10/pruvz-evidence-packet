@@ -32,6 +32,28 @@ const invalidExpectations = {
   'fabricated-zero-discrepancy.packet.json': /businessDiscrepancy\/amount/,
   'unsupported-format-version.packet.json': /packetFormatVersion/,
   'independently-confirmed-not-verified.packet.json': /independentlyConfirmed/,
+  'disagreeing-exact-amount.packet.json': /amountExact.*must denote the same amount/,
+}
+
+/**
+ * Strips everything format 1.4.0 added, so a packet can be re-read as an
+ * earlier release whose strict schema rejects undeclared fields.
+ */
+const withoutExactAmounts = (value) => {
+  if (Array.isArray(value)) {
+    return value.map(withoutExactAmounts)
+  }
+  if (value === null || typeof value !== 'object') {
+    return value
+  }
+  const out = {}
+  for (const [key, member] of Object.entries(value)) {
+    if (key === 'amountExact' && typeof value.currency === 'string') {
+      continue
+    }
+    out[key] = withoutExactAmounts(member)
+  }
+  return out
 }
 
 test('every valid example conforms to the published schema', () => {
@@ -237,6 +259,16 @@ const consistencyScenarios = [
     expect: /reverificationTiming.*requires a RESOLVED_EXTERNALLY decision/,
   },
   {
+    name: 'a money value deeper in the record whose two representations disagree (format 1.4.0)',
+    base: 'verified-refund.packet.json',
+    mutate: (p) => {
+      // Not the headline decision amount this time: the rule has to bind every
+      // money value in the record, including the Policy Snapshot's limits.
+      p.action.policySnapshot.rules.maxRefundAmount.amountExact = '1000'
+    },
+    expect: /policySnapshot\/rules\/maxRefundAmount\/amountExact.*must denote the same amount/,
+  },
+  {
     name: 'a VERIFIED review closed by a human disposition instead of a re-verification (format 1.3.0)',
     base: 'reverified-confirmed.packet.json',
     mutate: (p) => {
@@ -271,6 +303,31 @@ test('self-contradictory packets are rejected by the consistency layer', () => {
   }
 })
 
+test('the exact amount admits every value an exact decimal type can hold', () => {
+  // The contract must be able to express any amount a producer can produce: a
+  // rule narrower than the product's decimal type — in the grammar or in the
+  // consistency layer — would turn a legal amount into an unexportable packet.
+  //
+  // The middle case is the one that matters: it is larger than a double can
+  // hold exactly but still prints as plain decimal text, so a rule that
+  // compared printed forms would reject it. The number is the nearest double
+  // to the exact amount, which is all a JSON number can ever be, and the
+  // string carries the value.
+  const extremes = [
+    ['79228162514264337593543950335', 7.922816251426434e28],
+    ['100000000000000001', 100000000000000000],
+    ['0.0000000000000000000000000001', 1e-28],
+  ]
+
+  for (const [amountExact, amount] of extremes) {
+    const packet = loadPacket(validDir, 'verified-refund.packet.json')
+    packet.action.decision.amount = { amount, amountExact, currency: 'USD' }
+
+    const { valid, errors } = validatePacket(packet)
+    assert.ok(valid, `${amountExact} should be expressible: ${JSON.stringify(errors, null, 2)}`)
+  }
+})
+
 test('a legacy record without verification timing keeps its historical mismatch valid', () => {
   // The schema admits verificationTiming: null exactly for action records
   // that predate the timing model — and such records may carry historical
@@ -293,7 +350,7 @@ test('formats before 1.3.0 keep the strict review-state chain (no Worker transit
   // latest decision moved the review to AWAITING_REVERIFICATION — must still
   // be rejected by the 1.2.0 consistency rules. Derived from the 1.3.0
   // re-mismatch example by removing everything 1.3.0 added.
-  const packet = loadPacket(validDir, 'reverified-mismatch.packet.json')
+  const packet = withoutExactAmounts(loadPacket(validDir, 'reverified-mismatch.packet.json'))
   packet.packetFormatVersion = '1.2.0'
   delete packet.action.reverificationTiming
   delete packet.action.review.independentlyConfirmed
@@ -314,7 +371,7 @@ test('formats before 1.2.0 keep the DECIDED-implies-decision-evidence rule', () 
   // A 1.1.0 packet has no review block; its only review rule couples DECIDED
   // with HUMAN_REVIEW_DECISION evidence both ways. Derived from the 1.2.0
   // decided example by removing what 1.2.0 added.
-  const packet = loadPacket(validDir, 'outcome-mismatch-decided.packet.json')
+  const packet = withoutExactAmounts(loadPacket(validDir, 'outcome-mismatch-decided.packet.json'))
   packet.packetFormatVersion = '1.1.0'
   delete packet.action.review
   delete packet.action.reverificationTiming
@@ -346,7 +403,7 @@ test('valid and invalid examples stay internally consistent on actionId', () => 
 
 test('an unsupported explicit version is refused, not silently accepted', () => {
   assert.throws(() => createValidator('2.0.0'), /Unsupported packet format version/)
-  assert.deepEqual(SUPPORTED_VERSIONS, ['1.3.0', '1.2.0', '1.1.0', '1.0.0'])
+  assert.deepEqual(SUPPORTED_VERSIONS, ['1.4.0', '1.3.0', '1.2.0', '1.1.0', '1.0.0'])
 })
 
 test('the documented CLI command validates without any network access', () => {

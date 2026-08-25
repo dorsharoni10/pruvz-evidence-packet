@@ -1,12 +1,12 @@
-# Field and enum reference — packet format v1.3.0
+# Field and enum reference — packet format v1.4.0
 
-Every field of the Public Evidence Packet, what it means, and every closed enum value. The authoritative structural rules are the schemas themselves; this document explains intent and semantics. Fields new in formats `1.3.0`, `1.2.0` and `1.1.0` are marked; everything else is unchanged from `1.0.0`.
+Every field of the Public Evidence Packet, what it means, and every closed enum value. The authoritative structural rules are the schemas themselves; this document explains intent and semantics. Fields new in formats `1.4.0`, `1.3.0`, `1.2.0` and `1.1.0` are marked; everything else is unchanged from `1.0.0`.
 
 ## Envelope
 
 | Field | Meaning |
 |---|---|
-| `packetFormatVersion` | The packet format release this document conforms to. Fixed to `"1.3.0"` in this release. Metadata of the file, not a product field. |
+| `packetFormatVersion` | The packet format release this document conforms to. Fixed to `"1.4.0"` in this release. Metadata of the file, not a product field. |
 | `action` | The action record — see below. |
 | `evidence` | The ordered evidence timeline — see below. |
 
@@ -217,4 +217,10 @@ Trust levels — four provenance classes. `CLAIMED`, `EXECUTION_RECEIPT` and `IN
 
 ## Money
 
-Every monetary value is `{ "amount": <non-negative number>, "currency": "<three-letter uppercase ISO 4217 code>" }`. Whether an amount is a decision amount, an expected amount, or a discrepancy is determined by where it appears — the packet never mixes them.
+Every monetary value is `{ "amount": <non-negative number>, "amountExact": "<canonical decimal string>", "currency": "<three-letter uppercase ISO 4217 code>" }`. Whether an amount is a decision amount, an expected amount, or a discrepancy is determined by where it appears — the packet never mixes them.
+
+`amountExact` is **new in 1.4.0**: the same amount stated exactly, as text. A JSON number is read through IEEE-754 double semantics, which cannot hold every decimal value exactly and need not print the same way in every runtime — so the number is what a consumer displays, and the string is what the value *is*. Canonical decimal form gives one value exactly one spelling: no exponent, no plus sign, no leading zeros (zero is a bare `0`), no trailing zeros in the fraction. `25.00` is written `25`, `25.50` is written `25.5`. The digit bounds (29 integer, 28 fraction) admit every value the product's exact decimal type can hold — the contract can express any amount the product can produce.
+
+The two representations must denote the same amount, and the bundled validator rejects a packet where they disagree. This matters because cryptographic commitments bind `amountExact` and never the number (see [`COMMITMENT.md`](COMMITMENT.md)): without that rule a packet could display one figure and commit another while still satisfying both.
+
+"Denote the same amount" means `amount` is the JSON number a parser produces from `amountExact` — the nearest double to the exact value, which is all a JSON number can ever be. Above double precision the number is therefore approximate by construction: an amount of `100000000000000001` is displayed as `100000000000000000` and stated exactly as `"100000000000000001"`. Requiring the two *printed* forms to match instead would make the digit bounds a lie, rejecting amounts this contract explicitly admits. A consumer that needs the value rather than a display figure reads `amountExact`.

@@ -1,5 +1,5 @@
 {
-  "packetFormatVersion": "1.3.0",
+  "packetFormatVersion": "1.4.0",
   "action": {
     "actionId": "act_00000000000000000000000000000004",
     "agentId": "billing-refunds-agent",
@@ -14,6 +14,7 @@
       "decisionType": "REFUND_APPROVED",
       "amount": {
         "amount": 75,
+        "amountExact": "75",
         "currency": "EUR"
       }
     },
@@ -26,6 +27,7 @@
       "outcomeType": "REFUND_SUCCEEDED",
       "amount": {
         "amount": 75,
+        "amountExact": "75",
         "currency": "EUR"
       }
     },
@@ -52,6 +54,7 @@
         "maxPurchaseAgeDays": 30,
         "maxRefundAmount": {
           "amount": 100,
+          "amountExact": "100",
           "currency": "EUR"
         },
         "allowedPaymentStates": [
@@ -68,6 +71,7 @@
         "evaluatedAtUtc": "2026-07-10T09:52:01Z",
         "refundAmount": {
           "amount": 75,
+          "amountExact": "75",
           "currency": "EUR"
         },
         "paymentState": "SETTLED",

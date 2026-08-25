@@ -22,13 +22,13 @@ The packet's parts:
 | `evidence` | The ordered evidence timeline (`GET /api/actions/{actionId}/evidence`): every append-only evidence item in sequence order, each with its server-assigned trust level. |
 | `packetFormatVersion` | Metadata of the packet file itself — the format release it conforms to. |
 
-Schemas live in [`schema/v1.3.0/`](schema/v1.3.0/) (current release; [`schema/v1.2.0/`](schema/v1.2.0/), [`schema/v1.1.0/`](schema/v1.1.0/) and [`schema/v1.0.0/`](schema/v1.0.0/) remain published and immutable):
+Schemas live in [`schema/v1.4.0/`](schema/v1.4.0/) (current release; [`schema/v1.3.0/`](schema/v1.3.0/), [`schema/v1.2.0/`](schema/v1.2.0/), [`schema/v1.1.0/`](schema/v1.1.0/) and [`schema/v1.0.0/`](schema/v1.0.0/) remain published and immutable):
 
-- [`evidence-packet.schema.json`](schema/v1.3.0/evidence-packet.schema.json) — the packet envelope
-- [`action.schema.json`](schema/v1.3.0/action.schema.json) — the action record
-- [`evidence.schema.json`](schema/v1.3.0/evidence.schema.json) — the evidence timeline
+- [`evidence-packet.schema.json`](schema/v1.4.0/evidence-packet.schema.json) — the packet envelope
+- [`action.schema.json`](schema/v1.4.0/action.schema.json) — the action record
+- [`evidence.schema.json`](schema/v1.4.0/evidence.schema.json) — the evidence timeline
 
-Field-by-field meaning, every enum value, and the type-to-trust mapping are documented in [`docs/FIELDS.md`](docs/FIELDS.md). Versioning and compatibility rules are in [`docs/VERSIONING.md`](docs/VERSIONING.md).
+Field-by-field meaning, every enum value, and the type-to-trust mapping are documented in [`docs/FIELDS.md`](docs/FIELDS.md). Versioning and compatibility rules are in [`docs/VERSIONING.md`](docs/VERSIONING.md). How one logical record becomes one deterministic byte string — the canonical commitment and its cross-runtime golden vectors — is specified in [`docs/COMMITMENT.md`](docs/COMMITMENT.md).
 
 ## Validate a packet locally
 
@@ -65,8 +65,8 @@ The authored examples are synthetic — every identifier, amount and timestamp i
 
 - [`examples/captured/`](examples/captured/) — a packet composed from the two API responses of a live demo run with `npm run compose`: the conformance proof that real product output fits this schema. See [`docs/CONFORMANCE.md`](docs/CONFORMANCE.md).
 
-- [`examples/valid/`](examples/valid/) — one packet per verification path: [verified](examples/valid/verified-refund.packet.json), [outcome mismatch with a recorded human review decision](examples/valid/outcome-mismatch-decided.packet.json), [technical verification failure awaiting review](examples/valid/verification-failed.packet.json), [technical verification failure driven through the correction loop](examples/valid/verification-failed-resolved-externally.packet.json) (two recorded decisions, awaiting re-verification), and [verification still pending](examples/valid/verification-pending.packet.json).
-- [`examples/invalid/`](examples/invalid/) — ten packets, each broken by exactly one documented defect (a fabricated outcome on a mismatch, an evidence item claiming a trust level its type cannot carry, a fabricated zero where "no amount" belongs, and so on). See [`examples/invalid/README.md`](examples/invalid/README.md).
+- [`examples/valid/`](examples/valid/) — one packet per verification path: [verified](examples/valid/verified-refund.packet.json), [outcome mismatch with a recorded human review decision](examples/valid/outcome-mismatch-decided.packet.json), [technical verification failure awaiting review](examples/valid/verification-failed.packet.json), [technical verification failure driven through the correction loop](examples/valid/verification-failed-resolved-externally.packet.json) (two recorded decisions, awaiting re-verification), [a reported correction independently confirmed](examples/valid/reverified-confirmed.packet.json), [a reported correction that re-mismatched](examples/valid/reverified-mismatch.packet.json), and [verification still pending](examples/valid/verification-pending.packet.json).
+- [`examples/invalid/`](examples/invalid/) — twelve packets, each broken by exactly one documented defect (a fabricated outcome on a mismatch, an evidence item claiming a trust level its type cannot carry, a fabricated zero where "no amount" belongs, a displayed amount that disagrees with the exact one, and so on). See [`examples/invalid/README.md`](examples/invalid/README.md).
 
 ## What successful validation proves — and what it does not
 
@@ -78,7 +78,9 @@ It does **not** prove:
 - **Business accuracy** — that the recorded observations match what actually happened in any real system.
 - **Cryptographic integrity or non-tampering** — that the packet was not modified after it was produced.
 
-Packet format v1.0.0 deliberately contains no content hashes, no signed manifests, no hash chaining and no external anchoring, because the current product demonstration does not implement them — and this repository does not claim otherwise. Inside the product, evidence integrity rests on append-only, atomically-sequenced, server-assigned-trust storage; those properties belong to the running system and cannot be established after the fact from a JSON file alone.
+A packet still contains no signature, no signed manifest, no hash chaining and no external anchoring, because the product does not implement them yet — and this repository does not claim otherwise. Inside the product, evidence integrity rests on append-only, atomically-sequenced, server-assigned-trust storage; those properties belong to the running system and cannot be established after the fact from a JSON file alone.
+
+What format `1.4.0` does add is the raw material for the first of those capabilities: every money value now states its amount exactly, as text, so that one logical record has one deterministic byte representation in every runtime. [`docs/COMMITMENT.md`](docs/COMMITMENT.md) specifies that representation and its digest, with published cross-runtime golden vectors. A commitment answers *are these the exact values Pruvz committed to* — never *is what Pruvz recorded true*. Signing, key lifecycle, append-only proofs and external anchoring are later, separately released capabilities; a packet that carries none of them proves none of them.
 
 ## Related material
 
