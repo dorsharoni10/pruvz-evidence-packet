@@ -1,0 +1,683 @@
+{
+  "commitmentVersion": "1",
+  "digestSuite": "sha-256",
+  "domainSeparation": {
+    "tag": "pruvz.ai/commitment",
+    "separator": "U+0000",
+    "format": "<tag> NUL <commitmentVersion> NUL <kind> NUL <canonical JSON>",
+    "kinds": [
+      "evidence-item",
+      "evidence-packet"
+    ]
+  },
+  "decimals": [
+    {
+      "input": "25.00",
+      "canonical": "25",
+      "note": "trailing zeros carry no value"
+    },
+    {
+      "input": "0.500",
+      "canonical": "0.5"
+    },
+    {
+      "input": "0",
+      "canonical": "0"
+    },
+    {
+      "input": "0.0",
+      "canonical": "0",
+      "note": "one spelling of zero"
+    },
+    {
+      "input": "-3.10",
+      "canonical": "-3.1"
+    },
+    {
+      "input": "1000",
+      "canonical": "1000"
+    },
+    {
+      "input": "123456789012345678.123456789",
+      "canonical": "123456789012345678.123456789",
+      "note": "far beyond what a double can hold exactly — the string is the value"
+    }
+  ],
+  "timestamps": [
+    {
+      "input": "2026-07-10T09:15:41.1230000Z",
+      "canonical": "2026-07-10T09:15:41.123Z"
+    },
+    {
+      "input": "2026-07-10T09:15:41.000Z",
+      "canonical": "2026-07-10T09:15:41Z"
+    },
+    {
+      "input": "2026-07-10T09:15:41Z",
+      "canonical": "2026-07-10T09:15:41Z"
+    },
+    {
+      "input": "2026-07-10T09:15:41.120Z",
+      "canonical": "2026-07-10T09:15:41.12Z"
+    }
+  ],
+  "canonicalization": [
+    {
+      "id": "member-order-and-nesting",
+      "description": "Members are ordered by UTF-16 code unit at every level, so uppercase sorts before lowercase and nesting is ordered independently. Authoring order never reaches the bytes.",
+      "document": {
+        "b": 1,
+        "a": {
+          "d": 2,
+          "c": 3
+        },
+        "A": 4
+      },
+      "canonical": "{\"A\":4,\"a\":{\"c\":3,\"d\":2},\"b\":1}"
+    },
+    {
+      "id": "arrays-keep-their-order",
+      "description": "Array order is data and is never sorted; objects inside an array are still ordered by member name.",
+      "document": {
+        "items": [
+          3,
+          1,
+          2,
+          {
+            "z": 1,
+            "a": 2
+          },
+          [
+            true,
+            false,
+            null
+          ]
+        ]
+      },
+      "canonical": "{\"items\":[3,1,2,{\"a\":2,\"z\":1},[true,false,null]]}"
+    },
+    {
+      "id": "unicode-and-escaping",
+      "description": "Only the two mandatory escapes, the five short forms and \\u00xx for the remaining C0 controls. Every other code point — including non-ASCII text and astral characters — is emitted literally as UTF-8, and member names sort by code unit across scripts.",
+      "document": {
+        "z": "plain",
+        "ä": "latin-1 supplement",
+        "a": "quote \" backslash \\ newline \n tab \t control \u0001",
+        "A": "uppercase sorts first",
+        "🧾": "astral member name",
+        "hebrew": "החזר של 42.50 ש\"ח",
+        "receipt": "🧾 receipt"
+      },
+      "canonical": "{\"A\":\"uppercase sorts first\",\"a\":\"quote \\\" backslash \\\\ newline \\n tab \\t control \\u0001\",\"hebrew\":\"החזר של 42.50 ש\\\"ח\",\"receipt\":\"🧾 receipt\",\"z\":\"plain\",\"ä\":\"latin-1 supplement\",\"🧾\":\"astral member name\"}"
+    },
+    {
+      "id": "null-and-empty-values",
+      "description": "Optional fields are committed as null rather than omitted, and empty containers are values in their own right — absent and empty are different commitments.",
+      "document": {
+        "sourceReference": null,
+        "clientOperationId": null,
+        "payloadMetadata": {},
+        "tags": [],
+        "summary": "",
+        "required": false
+      },
+      "canonical": "{\"clientOperationId\":null,\"payloadMetadata\":{},\"required\":false,\"sourceReference\":null,\"summary\":\"\",\"tags\":[]}"
+    },
+    {
+      "id": "safe-integers",
+      "description": "The only numbers a commitment may carry: exact integers within the safe range, written without a plus sign, leading zeros or exponent.",
+      "document": {
+        "zero": 0,
+        "one": 1,
+        "negative": -1,
+        "maxSafe": 9007199254740991,
+        "minSafe": -9007199254740991
+      },
+      "canonical": "{\"maxSafe\":9007199254740991,\"minSafe\":-9007199254740991,\"negative\":-1,\"one\":1,\"zero\":0}"
+    },
+    {
+      "id": "integer-spellings",
+      "description": "What is committed is a number's value, never its spelling. An integer written 5.0, 5e2 or 1E+2 in the JSON text commits as the plain integer it denotes, so re-serializing a document with a different-but-equal spelling cannot change its digest. Published as text because a parsed vector file can no longer tell 5.0 from 5.",
+      "documentJson": "{\"fraction\":5.0,\"exponent\":5e2,\"upperExponent\":1E+2,\"zero\":0.0}",
+      "canonical": "{\"exponent\":500,\"fraction\":5,\"upperExponent\":100,\"zero\":0}"
+    },
+    {
+      "id": "trust-domain-binding",
+      "description": "The binding block every commitment carries: evidence is only meaningful inside its trust domain, so the tenant and the action are committed alongside the content.",
+      "document": {
+        "binding": {
+          "actionId": "act_0123456789abcdef0123456789abcdef",
+          "tenantId": "tenant-demo"
+        },
+        "content": {
+          "note": "binding shape only"
+        }
+      },
+      "canonical": "{\"binding\":{\"actionId\":\"act_0123456789abcdef0123456789abcdef\",\"tenantId\":\"tenant-demo\"},\"content\":{\"note\":\"binding shape only\"}}"
+    }
+  ],
+  "commitments": [
+    {
+      "id": "evidence-item-source-readback",
+      "description": "An independent read-back item: every covered field, a fractional-second timestamp normalized to its shortest exact form, and payload metadata ordered by member name.",
+      "kind": "evidence-item",
+      "source": {
+        "tenantId": "tenant-demo",
+        "actionId": "act_0123456789abcdef0123456789abcdef",
+        "item": {
+          "evidenceId": "evd_9f2c1d7e4b8a4c3d9e0f1a2b3c4d5e6f",
+          "schemaVersion": 1,
+          "sequence": 5,
+          "runId": "run_sample_001",
+          "type": "SOURCE_READBACK",
+          "trustLevel": "INDEPENDENT_READBACK",
+          "source": "billing-system",
+          "sourceReference": "re_3Nk1Qa2eZvKYlo2C0kZ8Xy9L",
+          "occurredAtUtc": "2026-07-10T09:15:40.5000000Z",
+          "recordedAtUtc": "2026-07-10T09:15:41.1230000Z",
+          "summary": "Refund of USD 42.50 recorded as succeeded for payment pay_74001.",
+          "payloadMetadata": {
+            "refundCount": "1",
+            "paymentId": "pay_74001",
+            "succeededRefundCount": "1"
+          },
+          "clientOperationId": null
+        }
+      },
+      "canonical": "{\"binding\":{\"actionId\":\"act_0123456789abcdef0123456789abcdef\",\"tenantId\":\"tenant-demo\"},\"content\":{\"clientOperationId\":null,\"evidenceId\":\"evd_9f2c1d7e4b8a4c3d9e0f1a2b3c4d5e6f\",\"occurredAtUtc\":\"2026-07-10T09:15:40.5Z\",\"payloadMetadata\":{\"paymentId\":\"pay_74001\",\"refundCount\":\"1\",\"succeededRefundCount\":\"1\"},\"recordedAtUtc\":\"2026-07-10T09:15:41.123Z\",\"runId\":\"run_sample_001\",\"schemaVersion\":1,\"sequence\":5,\"source\":\"billing-system\",\"sourceReference\":\"re_3Nk1Qa2eZvKYlo2C0kZ8Xy9L\",\"summary\":\"Refund of USD 42.50 recorded as succeeded for payment pay_74001.\",\"trustLevel\":\"INDEPENDENT_READBACK\",\"type\":\"SOURCE_READBACK\"}}",
+      "digest": "sha256:a169792a3a1d2e98f35ca24cbbc61a24769fdaa9ffb91d4267574a62465e37cd"
+    },
+    {
+      "id": "evidence-item-human-review-decision",
+      "description": "A human decision item: a client operation id, non-ASCII summary text, and two timestamps that denote the same instant written differently — .000Z and no fraction commit identically.",
+      "kind": "evidence-item",
+      "source": {
+        "tenantId": "tenant-demo",
+        "actionId": "act_0123456789abcdef0123456789abcdef",
+        "item": {
+          "evidenceId": "evd_1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d",
+          "schemaVersion": 1,
+          "sequence": 9,
+          "runId": "run_sample_001",
+          "type": "HUMAN_REVIEW_DECISION",
+          "trustLevel": "PRUVZ_DERIVED",
+          "source": "pruvz-api",
+          "sourceReference": null,
+          "occurredAtUtc": "2026-07-11T08:00:00.000Z",
+          "recordedAtUtc": "2026-07-11T08:00:00Z",
+          "summary": "Reviewer accepted the exception — החזר אושר ידנית.",
+          "payloadMetadata": {
+            "decision": "APPROVED_EXCEPTION",
+            "previousReviewState": "PENDING_REVIEW",
+            "newReviewState": "DECIDED",
+            "reviewCategory": "BUSINESS_MISMATCH"
+          },
+          "clientOperationId": "op_review_0001"
+        }
+      },
+      "canonical": "{\"binding\":{\"actionId\":\"act_0123456789abcdef0123456789abcdef\",\"tenantId\":\"tenant-demo\"},\"content\":{\"clientOperationId\":\"op_review_0001\",\"evidenceId\":\"evd_1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d\",\"occurredAtUtc\":\"2026-07-11T08:00:00Z\",\"payloadMetadata\":{\"decision\":\"APPROVED_EXCEPTION\",\"newReviewState\":\"DECIDED\",\"previousReviewState\":\"PENDING_REVIEW\",\"reviewCategory\":\"BUSINESS_MISMATCH\"},\"recordedAtUtc\":\"2026-07-11T08:00:00Z\",\"runId\":\"run_sample_001\",\"schemaVersion\":1,\"sequence\":9,\"source\":\"pruvz-api\",\"sourceReference\":null,\"summary\":\"Reviewer accepted the exception — החזר אושר ידנית.\",\"trustLevel\":\"PRUVZ_DERIVED\",\"type\":\"HUMAN_REVIEW_DECISION\"}}",
+      "digest": "sha256:0738c3ad1d2bb954b515ee4daa7cd3c16f1a1237ad0406e83315f605eef5fb2c"
+    },
+    {
+      "id": "evidence-packet-verified-refund",
+      "description": "A complete exported Evidence Packet (format 1.4.0). Every money value commits as its exact decimal string and never as the JSON number beside it; every *AtUtc member commits in canonical UTC form.",
+      "kind": "evidence-packet",
+      "source": {
+        "tenantId": "tenant-demo",
+        "packet": {
+          "packetFormatVersion": "1.4.0",
+          "action": {
+            "actionId": "act_0123456789abcdef0123456789abcdef",
+            "agentId": "billing-refunds-agent",
+            "runId": "run_sample_001",
+            "correlationId": "pay_74001",
+            "actionType": "refund",
+            "subject": {
+              "subjectType": "payment",
+              "subjectId": "pay_74001"
+            },
+            "decision": {
+              "decisionType": "REFUND_APPROVED",
+              "amount": {
+                "amount": 42.5,
+                "amountExact": "42.5",
+                "currency": "USD"
+              }
+            },
+            "crmTicketId": "TICKET-1001",
+            "claim": {
+              "claimedOutcome": "REFUND_SUCCEEDED",
+              "claimedAtUtc": "2026-07-10T09:15:12Z"
+            },
+            "expectedOutcome": {
+              "outcomeType": "REFUND_SUCCEEDED",
+              "amount": {
+                "amount": 42.5,
+                "amountExact": "42.5",
+                "currency": "USD"
+              }
+            },
+            "observed": {
+              "source": "billing-system",
+              "sourceReference": "ref_555",
+              "occurredAtUtc": "2026-07-10T09:15:40Z",
+              "recordedAtUtc": "2026-07-10T09:15:41Z",
+              "summary": "Refund of USD 42.50 recorded as succeeded for payment pay_74001."
+            },
+            "executionStatus": "COMPLETED",
+            "verificationStatus": "VERIFIED",
+            "finalOutcome": "REFUND_SUCCEEDED",
+            "verificationFailure": null,
+            "reviewState": "NOT_REQUIRED",
+            "review": null,
+            "mismatch": null,
+            "verificationTiming": {
+              "initialCheckAfterSeconds": 10,
+              "readbackIntervalSeconds": 900,
+              "deadlineAtUtc": "2026-07-12T09:14:58Z",
+              "deadlineSource": "PRODUCT_SPEC",
+              "resolvedAtUtc": "2026-07-10T09:14:58Z"
+            },
+            "reverificationTiming": null,
+            "policySnapshot": {
+              "policyId": "demo-refund-policy",
+              "policyVersion": "1",
+              "rules": {
+                "maxPurchaseAgeDays": 30,
+                "maxRefundAmount": {
+                  "amount": 100,
+                  "amountExact": "100",
+                  "currency": "USD"
+                },
+                "allowedPaymentStates": [
+                  "SETTLED"
+                ],
+                "ticket": {
+                  "ticketRequired": true,
+                  "allowedTicketStatuses": [
+                    "OPEN",
+                    "APPROVED"
+                  ]
+                },
+                "verificationDeadlineSeconds": null
+              },
+              "input": {
+                "purchasedAtUtc": "2026-06-25T08:00:00Z",
+                "evaluatedAtUtc": "2026-07-10T09:14:59Z",
+                "refundAmount": {
+                  "amount": 42.5,
+                  "amountExact": "42.5",
+                  "currency": "USD"
+                },
+                "paymentState": "SETTLED",
+                "ticketStatus": "OPEN"
+              },
+              "evaluation": {
+                "policyPassed": true,
+                "ruleResults": [
+                  {
+                    "ruleId": "purchase-age",
+                    "passed": true,
+                    "explanation": "Purchase is 15 days old, within the 30-day limit."
+                  },
+                  {
+                    "ruleId": "refund-amount",
+                    "passed": true,
+                    "explanation": "USD 42.50 is within the USD 100.00 limit."
+                  },
+                  {
+                    "ruleId": "payment-state",
+                    "passed": true,
+                    "explanation": "Payment state SETTLED is allowed."
+                  },
+                  {
+                    "ruleId": "support-ticket",
+                    "passed": true,
+                    "explanation": "Ticket TICKET-1001 is OPEN, which satisfies the requirement."
+                  }
+                ]
+              }
+            },
+            "createdAtUtc": "2026-07-10T09:14:58Z",
+            "updatedAtUtc": "2026-07-10T09:15:45Z",
+            "executionStartedAtUtc": "2026-07-10T09:15:05Z",
+            "executionCompletedAtUtc": "2026-07-10T09:15:20Z",
+            "verificationCompletedAtUtc": "2026-07-10T09:15:45Z"
+          },
+          "evidence": {
+            "actionId": "act_0123456789abcdef0123456789abcdef",
+            "items": [
+              {
+                "evidenceId": "evd_00000000000000000000000000000001",
+                "sequence": 1,
+                "type": "ACTION_REQUEST",
+                "trustLevel": "CLAIMED",
+                "source": "billing-refunds-agent",
+                "sourceReference": null,
+                "occurredAtUtc": "2026-07-10T09:14:58Z",
+                "recordedAtUtc": "2026-07-10T09:14:58Z",
+                "summary": "Refund requested for payment pay_74001."
+              },
+              {
+                "evidenceId": "evd_00000000000000000000000000000002",
+                "sequence": 2,
+                "type": "POLICY_SNAPSHOT_CAPTURE",
+                "trustLevel": "PRUVZ_DERIVED",
+                "source": "pruvz-api",
+                "sourceReference": "demo-refund-policy",
+                "occurredAtUtc": "2026-07-10T09:14:59Z",
+                "recordedAtUtc": "2026-07-10T09:14:59Z",
+                "summary": "Decision-time policy snapshot captured: demo-refund-policy v1, policy passed."
+              },
+              {
+                "evidenceId": "evd_00000000000000000000000000000003",
+                "sequence": 3,
+                "type": "AGENT_CLAIM",
+                "trustLevel": "CLAIMED",
+                "source": "billing-refunds-agent",
+                "sourceReference": null,
+                "occurredAtUtc": "2026-07-10T09:15:12Z",
+                "recordedAtUtc": "2026-07-10T09:15:13Z",
+                "summary": "Agent claims refund of USD 42.50 succeeded (REFUND_SUCCEEDED)."
+              },
+              {
+                "evidenceId": "evd_00000000000000000000000000000004",
+                "sequence": 4,
+                "type": "EXECUTION_RECEIPT",
+                "trustLevel": "EXECUTION_RECEIPT",
+                "source": "billing-refunds-agent",
+                "sourceReference": "ref_555",
+                "occurredAtUtc": "2026-07-10T09:15:19Z",
+                "recordedAtUtc": "2026-07-10T09:15:20Z",
+                "summary": "Execution receipt relayed: refund ref_555 submitted to the billing system."
+              },
+              {
+                "evidenceId": "evd_00000000000000000000000000000005",
+                "sequence": 5,
+                "type": "SOURCE_READBACK",
+                "trustLevel": "INDEPENDENT_READBACK",
+                "source": "billing-system",
+                "sourceReference": "ref_555",
+                "occurredAtUtc": "2026-07-10T09:15:40Z",
+                "recordedAtUtc": "2026-07-10T09:15:41Z",
+                "summary": "Refund of USD 42.50 recorded as succeeded for payment pay_74001."
+              },
+              {
+                "evidenceId": "evd_00000000000000000000000000000006",
+                "sequence": 6,
+                "type": "VERIFICATION_RESULT",
+                "trustLevel": "PRUVZ_DERIVED",
+                "source": "pruvz-worker",
+                "sourceReference": null,
+                "occurredAtUtc": "2026-07-10T09:15:45Z",
+                "recordedAtUtc": "2026-07-10T09:15:45Z",
+                "summary": "VERIFIED: exactly one succeeded refund of USD 42.50 matched payment pay_74001."
+              }
+            ]
+          }
+        }
+      },
+      "canonical": "{\"binding\":{\"actionId\":\"act_0123456789abcdef0123456789abcdef\",\"tenantId\":\"tenant-demo\"},\"content\":{\"action\":{\"actionId\":\"act_0123456789abcdef0123456789abcdef\",\"actionType\":\"refund\",\"agentId\":\"billing-refunds-agent\",\"claim\":{\"claimedAtUtc\":\"2026-07-10T09:15:12Z\",\"claimedOutcome\":\"REFUND_SUCCEEDED\"},\"correlationId\":\"pay_74001\",\"createdAtUtc\":\"2026-07-10T09:14:58Z\",\"crmTicketId\":\"TICKET-1001\",\"decision\":{\"amount\":{\"amount\":\"42.5\",\"currency\":\"USD\"},\"decisionType\":\"REFUND_APPROVED\"},\"executionCompletedAtUtc\":\"2026-07-10T09:15:20Z\",\"executionStartedAtUtc\":\"2026-07-10T09:15:05Z\",\"executionStatus\":\"COMPLETED\",\"expectedOutcome\":{\"amount\":{\"amount\":\"42.5\",\"currency\":\"USD\"},\"outcomeType\":\"REFUND_SUCCEEDED\"},\"finalOutcome\":\"REFUND_SUCCEEDED\",\"mismatch\":null,\"observed\":{\"occurredAtUtc\":\"2026-07-10T09:15:40Z\",\"recordedAtUtc\":\"2026-07-10T09:15:41Z\",\"source\":\"billing-system\",\"sourceReference\":\"ref_555\",\"summary\":\"Refund of USD 42.50 recorded as succeeded for payment pay_74001.\"},\"policySnapshot\":{\"evaluation\":{\"policyPassed\":true,\"ruleResults\":[{\"explanation\":\"Purchase is 15 days old, within the 30-day limit.\",\"passed\":true,\"ruleId\":\"purchase-age\"},{\"explanation\":\"USD 42.50 is within the USD 100.00 limit.\",\"passed\":true,\"ruleId\":\"refund-amount\"},{\"explanation\":\"Payment state SETTLED is allowed.\",\"passed\":true,\"ruleId\":\"payment-state\"},{\"explanation\":\"Ticket TICKET-1001 is OPEN, which satisfies the requirement.\",\"passed\":true,\"ruleId\":\"support-ticket\"}]},\"input\":{\"evaluatedAtUtc\":\"2026-07-10T09:14:59Z\",\"paymentState\":\"SETTLED\",\"purchasedAtUtc\":\"2026-06-25T08:00:00Z\",\"refundAmount\":{\"amount\":\"42.5\",\"currency\":\"USD\"},\"ticketStatus\":\"OPEN\"},\"policyId\":\"demo-refund-policy\",\"policyVersion\":\"1\",\"rules\":{\"allowedPaymentStates\":[\"SETTLED\"],\"maxPurchaseAgeDays\":30,\"maxRefundAmount\":{\"amount\":\"100\",\"currency\":\"USD\"},\"ticket\":{\"allowedTicketStatuses\":[\"OPEN\",\"APPROVED\"],\"ticketRequired\":true},\"verificationDeadlineSeconds\":null}},\"reverificationTiming\":null,\"review\":null,\"reviewState\":\"NOT_REQUIRED\",\"runId\":\"run_sample_001\",\"subject\":{\"subjectId\":\"pay_74001\",\"subjectType\":\"payment\"},\"updatedAtUtc\":\"2026-07-10T09:15:45Z\",\"verificationCompletedAtUtc\":\"2026-07-10T09:15:45Z\",\"verificationFailure\":null,\"verificationStatus\":\"VERIFIED\",\"verificationTiming\":{\"deadlineAtUtc\":\"2026-07-12T09:14:58Z\",\"deadlineSource\":\"PRODUCT_SPEC\",\"initialCheckAfterSeconds\":10,\"readbackIntervalSeconds\":900,\"resolvedAtUtc\":\"2026-07-10T09:14:58Z\"}},\"evidence\":{\"actionId\":\"act_0123456789abcdef0123456789abcdef\",\"items\":[{\"evidenceId\":\"evd_00000000000000000000000000000001\",\"occurredAtUtc\":\"2026-07-10T09:14:58Z\",\"recordedAtUtc\":\"2026-07-10T09:14:58Z\",\"sequence\":1,\"source\":\"billing-refunds-agent\",\"sourceReference\":null,\"summary\":\"Refund requested for payment pay_74001.\",\"trustLevel\":\"CLAIMED\",\"type\":\"ACTION_REQUEST\"},{\"evidenceId\":\"evd_00000000000000000000000000000002\",\"occurredAtUtc\":\"2026-07-10T09:14:59Z\",\"recordedAtUtc\":\"2026-07-10T09:14:59Z\",\"sequence\":2,\"source\":\"pruvz-api\",\"sourceReference\":\"demo-refund-policy\",\"summary\":\"Decision-time policy snapshot captured: demo-refund-policy v1, policy passed.\",\"trustLevel\":\"PRUVZ_DERIVED\",\"type\":\"POLICY_SNAPSHOT_CAPTURE\"},{\"evidenceId\":\"evd_00000000000000000000000000000003\",\"occurredAtUtc\":\"2026-07-10T09:15:12Z\",\"recordedAtUtc\":\"2026-07-10T09:15:13Z\",\"sequence\":3,\"source\":\"billing-refunds-agent\",\"sourceReference\":null,\"summary\":\"Agent claims refund of USD 42.50 succeeded (REFUND_SUCCEEDED).\",\"trustLevel\":\"CLAIMED\",\"type\":\"AGENT_CLAIM\"},{\"evidenceId\":\"evd_00000000000000000000000000000004\",\"occurredAtUtc\":\"2026-07-10T09:15:19Z\",\"recordedAtUtc\":\"2026-07-10T09:15:20Z\",\"sequence\":4,\"source\":\"billing-refunds-agent\",\"sourceReference\":\"ref_555\",\"summary\":\"Execution receipt relayed: refund ref_555 submitted to the billing system.\",\"trustLevel\":\"EXECUTION_RECEIPT\",\"type\":\"EXECUTION_RECEIPT\"},{\"evidenceId\":\"evd_00000000000000000000000000000005\",\"occurredAtUtc\":\"2026-07-10T09:15:40Z\",\"recordedAtUtc\":\"2026-07-10T09:15:41Z\",\"sequence\":5,\"source\":\"billing-system\",\"sourceReference\":\"ref_555\",\"summary\":\"Refund of USD 42.50 recorded as succeeded for payment pay_74001.\",\"trustLevel\":\"INDEPENDENT_READBACK\",\"type\":\"SOURCE_READBACK\"},{\"evidenceId\":\"evd_00000000000000000000000000000006\",\"occurredAtUtc\":\"2026-07-10T09:15:45Z\",\"recordedAtUtc\":\"2026-07-10T09:15:45Z\",\"sequence\":6,\"source\":\"pruvz-worker\",\"sourceReference\":null,\"summary\":\"VERIFIED: exactly one succeeded refund of USD 42.50 matched payment pay_74001.\",\"trustLevel\":\"PRUVZ_DERIVED\",\"type\":\"VERIFICATION_RESULT\"}]},\"packetFormatVersion\":\"1.4.0\"}}",
+      "digest": "sha256:be858c7af98a1853f5746183904a0ff508e4ab1c47882f895758df377f5aecb2"
+    }
+  ],
+  "rejected": [
+    {
+      "id": "decimal-exponent",
+      "layer": "decimal",
+      "input": "1e3",
+      "code": "NON_CANONICAL_DECIMAL"
+    },
+    {
+      "id": "decimal-plus-sign",
+      "layer": "decimal",
+      "input": "+5",
+      "code": "NON_CANONICAL_DECIMAL"
+    },
+    {
+      "id": "decimal-leading-zeros",
+      "layer": "decimal",
+      "input": "007",
+      "code": "NON_CANONICAL_DECIMAL"
+    },
+    {
+      "id": "decimal-comma-separator",
+      "layer": "decimal",
+      "input": "42,50",
+      "code": "NON_CANONICAL_DECIMAL"
+    },
+    {
+      "id": "decimal-empty",
+      "layer": "decimal",
+      "input": "",
+      "code": "NON_CANONICAL_DECIMAL"
+    },
+    {
+      "id": "decimal-negative-zero",
+      "layer": "decimal",
+      "input": "-0",
+      "code": "NEGATIVE_ZERO"
+    },
+    {
+      "id": "timestamp-local-offset",
+      "layer": "timestamp",
+      "input": "2026-07-10T12:15:45+03:00",
+      "code": "NON_UTC_TIMESTAMP"
+    },
+    {
+      "id": "timestamp-without-zone",
+      "layer": "timestamp",
+      "input": "2026-07-10T09:15:41",
+      "code": "NON_UTC_TIMESTAMP"
+    },
+    {
+      "id": "timestamp-not-rfc3339",
+      "layer": "timestamp",
+      "input": "10/07/2026 09:14",
+      "code": "NON_UTC_TIMESTAMP"
+    },
+    {
+      "id": "canonicalization-fractional-number",
+      "layer": "canonicalization",
+      "description": "A precision-sensitive value left as a JSON number is refused, never rounded.",
+      "document": {
+        "amount": 42.5
+      },
+      "code": "NON_INTEGER_NUMBER"
+    },
+    {
+      "id": "canonicalization-integer-out-of-range",
+      "layer": "canonicalization",
+      "description": "Beyond the safe integer range a number is not reliably the same in every runtime.",
+      "document": {
+        "sequence": 9007199254740992
+      },
+      "code": "INTEGER_OUT_OF_RANGE"
+    },
+    {
+      "id": "canonicalization-negative-zero-number",
+      "layer": "canonicalization",
+      "description": "Zero has one spelling. A number written -0 or -0.0 is refused rather than committed as 0, which would make two different documents one commitment.",
+      "documentJson": "{\"amount\":-0.0}",
+      "code": "NON_INTEGER_NUMBER"
+    },
+    {
+      "id": "canonicalization-exponent-out-of-range",
+      "layer": "canonicalization",
+      "description": "An integer value is judged by its value, not its spelling — including when the spelling hides how large it is.",
+      "documentJson": "{\"sequence\":1e30}",
+      "code": "INTEGER_OUT_OF_RANGE"
+    },
+    {
+      "id": "commitment-unknown-kind",
+      "layer": "commitment",
+      "description": "Domain separation is closed: an unknown kind has no defined commitment.",
+      "kind": "evidence-bundle",
+      "document": {
+        "binding": {
+          "actionId": "act_1",
+          "tenantId": "tenant-demo"
+        },
+        "content": {}
+      },
+      "code": "UNKNOWN_KIND"
+    },
+    {
+      "id": "digest-unknown-suite",
+      "layer": "digest",
+      "description": "A future digest suite is a decision, never a silent default.",
+      "suite": "sha3-256",
+      "kind": "evidence-item",
+      "document": {
+        "binding": {
+          "actionId": "act_1",
+          "tenantId": "tenant-demo"
+        },
+        "content": {}
+      },
+      "code": "UNKNOWN_DIGEST_SUITE"
+    },
+    {
+      "id": "unsupported-commitment-version",
+      "layer": "supported",
+      "description": "A commitment declaring another version is refused before any of it is trusted — never read as if it were version 1.",
+      "commitmentVersion": "2",
+      "suite": "sha-256",
+      "code": "UNKNOWN_COMMITMENT_VERSION"
+    },
+    {
+      "id": "unsupported-digest-suite-declaration",
+      "layer": "supported",
+      "description": "A declared digest suite this version does not define is refused, not defaulted.",
+      "commitmentVersion": "1",
+      "suite": "sha3-256",
+      "code": "UNKNOWN_DIGEST_SUITE"
+    },
+    {
+      "id": "packet-money-without-exact-amount",
+      "layer": "evidence-packet-document",
+      "description": "A pre-1.4.0 money value carries only the JSON number, so its exact value cannot be committed at all.",
+      "source": {
+        "tenantId": "tenant-demo",
+        "packet": {
+          "packetFormatVersion": "1.3.0",
+          "action": {
+            "actionId": "act_0123456789abcdef0123456789abcdef",
+            "decision": {
+              "decisionType": "REFUND_APPROVED",
+              "amount": {
+                "amount": 42.5,
+                "currency": "USD"
+              }
+            }
+          }
+        }
+      },
+      "code": "MONEY_WITHOUT_EXACT_AMOUNT"
+    },
+    {
+      "id": "packet-lowercase-currency",
+      "layer": "evidence-packet-document",
+      "description": "Currency codes are uppercase ISO 4217; \"usd\" and \"USD\" must never be two commitments of one value.",
+      "source": {
+        "tenantId": "tenant-demo",
+        "packet": {
+          "packetFormatVersion": "1.4.0",
+          "action": {
+            "actionId": "act_0123456789abcdef0123456789abcdef",
+            "decision": {
+              "decisionType": "REFUND_APPROVED",
+              "amount": {
+                "amount": 42.5,
+                "amountExact": "42.5",
+                "currency": "usd"
+              }
+            }
+          }
+        }
+      },
+      "code": "INVALID_CURRENCY"
+    },
+    {
+      "id": "packet-money-with-unknown-member",
+      "layer": "evidence-packet-document",
+      "description": "A money value carries exactly amount, amountExact and currency, and only the exact amount and the currency are committed. An object carrying more is refused rather than committed with the extra member silently missing from the digest.",
+      "source": {
+        "tenantId": "tenant-demo",
+        "packet": {
+          "packetFormatVersion": "1.4.0",
+          "action": {
+            "actionId": "act_0123456789abcdef0123456789abcdef",
+            "decision": {
+              "decisionType": "REFUND_APPROVED",
+              "amount": {
+                "amount": 42.5,
+                "amountExact": "42.5",
+                "amountMinor": 4250,
+                "currency": "USD"
+              }
+            }
+          }
+        }
+      },
+      "code": "INVALID_MONEY"
+    },
+    {
+      "id": "evidence-item-missing-field",
+      "layer": "evidence-item-document",
+      "description": "Every covered field must be present: an absent field would silently shrink what the commitment protects.",
+      "source": {
+        "tenantId": "tenant-demo",
+        "actionId": "act_0123456789abcdef0123456789abcdef",
+        "item": {
+          "evidenceId": "evd_9f2c1d7e4b8a4c3d9e0f1a2b3c4d5e6f",
+          "schemaVersion": 1,
+          "sequence": 5,
+          "runId": "run_sample_001",
+          "type": "SOURCE_READBACK",
+          "trustLevel": "INDEPENDENT_READBACK",
+          "source": "billing-system",
+          "sourceReference": "re_3Nk1Qa2eZvKYlo2C0kZ8Xy9L",
+          "occurredAtUtc": "2026-07-10T09:15:40.5000000Z",
+          "recordedAtUtc": "2026-07-10T09:15:41.1230000Z",
+          "payloadMetadata": {
+            "refundCount": "1",
+            "paymentId": "pay_74001",
+            "succeededRefundCount": "1"
+          },
+          "clientOperationId": null
+        }
+      },
+      "code": "MISSING_FIELD"
+    },
+    {
+      "id": "evidence-item-without-tenant-binding",
+      "layer": "evidence-item-document",
+      "description": "A commitment that does not bind its trust domain is not a commitment.",
+      "source": {
+        "tenantId": "",
+        "actionId": "act_1",
+        "item": {
+          "evidenceId": "evd_9f2c1d7e4b8a4c3d9e0f1a2b3c4d5e6f",
+          "schemaVersion": 1,
+          "sequence": 5,
+          "runId": "run_sample_001",
+          "type": "SOURCE_READBACK",
+          "trustLevel": "INDEPENDENT_READBACK",
+          "source": "billing-system",
+          "sourceReference": "re_3Nk1Qa2eZvKYlo2C0kZ8Xy9L",
+          "occurredAtUtc": "2026-07-10T09:15:40.5000000Z",
+          "recordedAtUtc": "2026-07-10T09:15:41.1230000Z",
+          "summary": "Refund of USD 42.50 recorded as succeeded for payment pay_74001.",
+          "payloadMetadata": {
+            "refundCount": "1",
+            "paymentId": "pay_74001",
+            "succeededRefundCount": "1"
+          },
+          "clientOperationId": null
+        }
+      },
+      "code": "MISSING_BINDING"
+    }
+  ]
+}

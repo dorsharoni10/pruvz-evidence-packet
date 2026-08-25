@@ -1,6 +1,6 @@
 # Versioning and compatibility policy
 
-The Public Evidence Packet format is versioned independently of the Pruvz product, using semantic versioning: `MAJOR.MINOR.PATCH`. The current release is **1.3.0**.
+The Public Evidence Packet format is versioned independently of the Pruvz product, using semantic versioning: `MAJOR.MINOR.PATCH`. The current release is **1.4.0**.
 
 ## What each part means
 
@@ -14,7 +14,8 @@ The Public Evidence Packet format is versioned independently of the Pruvz produc
 2. **Released schema directories are immutable — fully.** Once `schema/v1.0.0/` is released, no file in it changes, not even `description` text. Corrections and clarifications go into the documentation under `docs/`, or into the next format version's directory.
 3. **Within a MAJOR version, fields never disappear or change meaning.** Code written to read a `1.x` packet keeps working on every later `1.y ≥ 1.x` packet if it ignores fields it does not recognize.
 4. **Two fields are open by contract**, and consumers must treat unknown values as valid there: `mismatch.reasonCode` (fall back to `explanation`) and free-form business strings such as `actionType`, `decisionType`, `finalOutcome` and outcome types. Everything declared as a closed enum in the schema (statuses, review states, evidence types, trust levels, severity) only widens with a MINOR release and only narrows with a MAJOR release.
-5. **The schema follows the product, never the reverse.** A field appears in this contract only after the product demonstration actually exports it. Roadmap capabilities (for example content hashing or signed manifests) enter the schema only when they are really implemented — never speculatively.
+5. **The schema follows the product, never the reverse.** A field appears in this contract only after the product actually exports it, in the same release cycle in which the product's conformance guard proves the export. Roadmap capabilities (for example signed manifests or external anchors) enter the schema only when they are really implemented — never speculatively.
+6. **The commitment specification is versioned separately from the packet format.** [`docs/COMMITMENT.md`](COMMITMENT.md) and `commitment/vN/` define how a record is turned into deterministic bytes and a digest. That directory is immutable exactly like a released schema directory: changing the rules means a new commitment version, never an edit in place. A packet format release and a commitment version release are independent — `1.4.0` carries the exact values a commitment needs, and carries no commitment itself.
 
 ## Release process
 
