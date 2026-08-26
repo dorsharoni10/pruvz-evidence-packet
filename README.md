@@ -28,7 +28,7 @@ Schemas live in [`schema/v1.4.0/`](schema/v1.4.0/) (current release; [`schema/v1
 - [`action.schema.json`](schema/v1.4.0/action.schema.json) — the action record
 - [`evidence.schema.json`](schema/v1.4.0/evidence.schema.json) — the evidence timeline
 
-Field-by-field meaning, every enum value, and the type-to-trust mapping are documented in [`docs/FIELDS.md`](docs/FIELDS.md). Versioning and compatibility rules are in [`docs/VERSIONING.md`](docs/VERSIONING.md). How one logical record becomes one deterministic byte string — the canonical commitment and its cross-runtime golden vectors — is specified in [`docs/COMMITMENT.md`](docs/COMMITMENT.md).
+Field-by-field meaning, every enum value, and the type-to-trust mapping are documented in [`docs/FIELDS.md`](docs/FIELDS.md). Versioning and compatibility rules are in [`docs/VERSIONING.md`](docs/VERSIONING.md). How one logical record becomes one deterministic byte string — the canonical commitment and its cross-runtime golden vectors — is specified in [`docs/COMMITMENT.md`](docs/COMMITMENT.md). How a signing key is recognized without asking the Pruvz deployment — the pinned root, the signed key history, rotation and time-aware revocation — is specified in [`docs/TRUST-REGISTRY.md`](docs/TRUST-REGISTRY.md).
 
 ## Validate a packet locally
 
@@ -78,9 +78,14 @@ It does **not** prove:
 - **Business accuracy** — that the recorded observations match what actually happened in any real system.
 - **Cryptographic integrity or non-tampering** — that the packet was not modified after it was produced.
 
-A packet still contains no signature, no signed manifest, no hash chaining and no external anchoring, because the product does not implement them yet — and this repository does not claim otherwise. Inside the product, evidence integrity rests on append-only, atomically-sequenced, server-assigned-trust storage; those properties belong to the running system and cannot be established after the fact from a JSON file alone.
+**A packet carries no signature, no hash chaining and no external anchor**, and validating one therefore proves none of them. Inside the product, evidence integrity rests on append-only, atomically-sequenced, server-assigned-trust storage; those properties belong to the running system and cannot be established after the fact from a JSON file alone.
 
-What format `1.4.0` does add is the raw material for the first of those capabilities: every money value now states its amount exactly, as text, so that one logical record has one deterministic byte representation in every runtime. [`docs/COMMITMENT.md`](docs/COMMITMENT.md) specifies that representation and its digest, with published cross-runtime golden vectors. A commitment answers *are these the exact values Pruvz committed to* — never *is what Pruvz recorded true*. Signing, key lifecycle, append-only proofs and external anchoring are later, separately released capabilities; a packet that carries none of them proves none of them.
+Two of the pieces those capabilities need are now specified here, and both are deliberately separate from the packet format:
+
+- **The canonical commitment** — [`docs/COMMITMENT.md`](docs/COMMITMENT.md). One logical record becomes one deterministic byte string and one digest, in every runtime; format `1.4.0` states every money amount exactly, as text, so that this is possible at all. A commitment answers *are these the exact values Pruvz committed to* — never *is what Pruvz recorded true*.
+- **The public trust registry** — [`docs/TRUST-REGISTRY.md`](docs/TRUST-REGISTRY.md). A signed, versioned, hash-linked key history with a pinned out-of-band root, so that a signing key can be recognized without asking the Pruvz deployment whether its own key is genuine. It defines key rotation and time-aware revocation, and the rules that make a rolled-back, forked or substituted key history a refusal.
+
+What that adds up to today, stated exactly: the product signs evidence commitments and publishes the key history that identifies the signer, and a seal fetched from a deployment can be checked offline against a pinned registry. **Append-only inclusion proofs and external anchoring are not implemented**, so nothing is proven about records that were never sealed, about ordering, or about a commitment having existed at a claimed time. Absolute language such as *tamper-proof* is never accurate here and is not used.
 
 ## Related material
 

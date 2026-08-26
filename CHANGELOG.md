@@ -2,6 +2,18 @@
 
 All notable changes to the Public Evidence Packet format and this repository are recorded here. Format releases follow the policy in [`docs/VERSIONING.md`](docs/VERSIONING.md).
 
+## 1.4.1 — 2026-08-26
+
+**PATCH** — the packet format is unchanged and packets keep declaring `packetFormatVersion: "1.4.0"`. This release adds a specification, a reference implementation and golden vectors that sit beside the packet format rather than inside it (product PRUVZ-95, signing-key lifecycle and public trust registry).
+
+- **New: the public trust registry specification** — [`docs/TRUST-REGISTRY.md`](docs/TRUST-REGISTRY.md), the reference implementation [`lib/trust-registry.mjs`](lib/trust-registry.mjs) and the published cross-runtime golden vectors [`trust-registry/v1/golden-vectors.json`](trust-registry/v1/golden-vectors.json). It defines a signed, versioned, hash-linked key history: key entries with `use` (`trust-root` or `evidence-signing`, never interchangeable), RFC 7638 thumbprints that are recomputed rather than believed, a closed public-JWK member set that refuses private material outright, a NUL-separated domain-separation header naming the registry format version, and RFC 8785 serialization shared with the commitment layer. `trust-registry/v1/` is immutable exactly like a released schema directory.
+- **Bootstrap trust is explicit and mandatory.** Verification requires a pinned `{ issuer, root }` obtained out of band; there is no pinless or permissive mode, because a verifier with no anchor can only believe whatever key history it is handed. A deployment's own API and website are distribution channels and never the root channel.
+- **Rotation preserves history; revocation is time-aware.** A seal is judged against the state of its key *at the moment it signed*, not the status the latest manifest declares. A retired key still fully verifies everything it signed while active; a revoked key yields a weakened result before its declared compromise boundary and an invalid one at or after it — and the weakened result says why, because the boundary is compared against a time Pruvz asserted about itself.
+- **Rolled-back, forked and substituted key histories are refusals**, with distinct reason codes, including for a stale manifest that is correctly signed and structurally perfect. Verifier state records the `{ issuer, root }` it was established under and may only be continued under that same anchor: two roots are two histories, and their version numbers say nothing about each other.
+- **Seal verification is dimensional, never a boolean** — key identity, signature, key lifecycle, subject and content are reported separately, and a result that is `PARTIAL` may never be presented as full verification.
+- **A packet still carries no seal, no signature and no trust metadata.** Seals are fetched from the deployment that issued them and checked against a pinned registry; the schema releases are untouched by this release.
+- The `README.md` statement that the product "does not implement" signing was corrected: it does, and the packet format's independence from it is stated precisely instead. Append-only inclusion proofs and external anchoring remain unimplemented and unclaimed.
+
 ## 1.4.0 — 2026-08-25
 
 **MINOR** — every money value gains its exact decimal representation (product PRUVZ-26, canonical signed evidence representation). Consumers reading `1.3.0` packets keep working on `1.4.0` packets if they ignore fields they do not recognize; `1.4.0` packets do not validate against the `1.3.0` schema (the schemas are strict by design).
