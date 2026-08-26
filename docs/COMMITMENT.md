@@ -10,11 +10,15 @@ established by independent system-of-record read-back inside the product;
 post-capture integrity is established here. The two are separate assurance
 dimensions and neither substitutes for the other.
 
-This release publishes the **format and its golden vectors only**. Nothing in
-the packet is signed yet: no signature envelope, no key material, no
-append-only log, no external anchor. Those are later, separately released
-capabilities. A packet of format `1.4.0` carries the exact values a commitment
-needs; it does not carry a commitment.
+This specification publishes the **format and its golden vectors only**. Nothing
+in the packet is signed: it carries no signature envelope, no key material, no
+inclusion proof and no external anchor. A packet of format `1.4.0` carries the
+exact values a commitment needs; it does not carry a commitment.
+
+What sits beside it, separately versioned and never inside the packet: the
+signing key history and its pinned root are specified in
+[`TRUST-REGISTRY.md`](TRUST-REGISTRY.md). Append-only inclusion proofs and
+external anchoring are not implemented anywhere and are not claimed.
 
 - Reference implementation: [`lib/canonical.mjs`](../lib/canonical.mjs)
 - Golden vectors: [`commitment/v1/golden-vectors.json`](../commitment/v1/golden-vectors.json)

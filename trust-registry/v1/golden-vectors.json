@@ -1,0 +1,1527 @@
+{
+  "trustRegistryFormatVersion": "1",
+  "sealEnvelopeVersion": "1",
+  "domainSeparation": {
+    "registry": {
+      "tag": "pruvz.ai/trust-registry",
+      "separator": "U+0000",
+      "format": "<tag> NUL <formatVersion> NUL <canonical JSON of manifest>",
+      "signedMember": "manifest"
+    },
+    "seal": {
+      "tag": "pruvz.ai/evidence-signature",
+      "separator": "U+0000",
+      "format": "<tag> NUL <version> NUL <canonical JSON of envelope>",
+      "signedMember": "envelope"
+    }
+  },
+  "howTheseWereProduced": {
+    "keys": "Ephemeral NIST P-256 key pairs generated once; the private halves were never written anywhere and no longer exist.",
+    "immutability": "trust-registry/v1/ is immutable exactly like a released schema directory and commitment/v1/. ECDSA is randomized, so regenerating would produce different signatures; these are the published bytes and they are what both runtimes must agree on.",
+    "twoLayers": "The deterministic material (thumbprints, canonical bytes, digests) must be reproduced byte for byte by any runtime. The signed material must be accepted or refused identically, with the same reason code."
+  },
+  "pin": {
+    "issuer": "pruvz.ai",
+    "root": "sha256:2A7ZGclH-8L7JIDz0YUHjYglAqsbs1_ugmLkP8tfMqQ"
+  },
+  "thumbprints": [
+    {
+      "id": "trust-root",
+      "jwk": {
+        "crv": "P-256",
+        "kty": "EC",
+        "x": "OrwxCwbE4fHMKNFRySxf-xI1dTaKhq23AccBHpA8uss",
+        "y": "jwn2k4SR4nuLtA7xL3czT6cyKiA3z9TmAJkivlQ2YGs"
+      },
+      "thumbprint": "sha256:2A7ZGclH-8L7JIDz0YUHjYglAqsbs1_ugmLkP8tfMqQ"
+    },
+    {
+      "id": "evidence-signing-1",
+      "jwk": {
+        "crv": "P-256",
+        "kty": "EC",
+        "x": "xAHHUILIS8V162_ekTkWlrrz1OqI5wtqnAKm88xgLpk",
+        "y": "dDsBZpWN1hhcRKBe6k008Coa1VSv8cp6JTdmx9GSGOY"
+      },
+      "thumbprint": "sha256:4_u504FXPc3aAlCuF9h6EsSxQr7rHkc0uNMICtENykQ"
+    },
+    {
+      "id": "evidence-signing-2",
+      "jwk": {
+        "crv": "P-256",
+        "kty": "EC",
+        "x": "8m042OgLe7Kjw-ySOb7X0PYp0AyWP_PgTFix8qzD454",
+        "y": "kIKTJdGwkFqsfg7GX4cHNFLSqXU1HBECl7RZCv8-u2s"
+      },
+      "thumbprint": "sha256:6yMMNvgn6afa2y7kmrj6olAEfKqIOtfzMgy6VSu357A"
+    }
+  ],
+  "canonical": {
+    "note": "The canonical JSON of registry version 1, i.e. the signing input with its NUL-separated header removed. Published in full as the readable anchor; every other manifest is pinned by its digest, and a digest match is a byte match.",
+    "manifestV1": "{\"formatVersion\":\"1\",\"issuedAtUtc\":\"2026-08-01T00:00:00Z\",\"issuer\":\"pruvz.ai\",\"keys\":[{\"keyId\":\"https://pruvz-kv-example.vault.azure.net/keys/pruvz-trust-root/9f1c0a2b7d4e4f0a8b5c6d7e8f901234\",\"predecessorKeyId\":null,\"provider\":\"azure-key-vault\",\"publicKey\":{\"crv\":\"P-256\",\"kty\":\"EC\",\"x\":\"OrwxCwbE4fHMKNFRySxf-xI1dTaKhq23AccBHpA8uss\",\"y\":\"jwn2k4SR4nuLtA7xL3czT6cyKiA3z9TmAJkivlQ2YGs\"},\"retiredAtUtc\":null,\"revocationReason\":null,\"revokedAtUtc\":null,\"status\":\"ACTIVE\",\"suite\":\"ES256\",\"thumbprint\":\"sha256:2A7ZGclH-8L7JIDz0YUHjYglAqsbs1_ugmLkP8tfMqQ\",\"use\":\"trust-root\",\"validFromUtc\":\"2026-08-01T00:00:00Z\"},{\"keyId\":\"https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/1a2b3c4d5e6f708192a3b4c5d6e7f801\",\"predecessorKeyId\":null,\"provider\":\"azure-key-vault\",\"publicKey\":{\"crv\":\"P-256\",\"kty\":\"EC\",\"x\":\"xAHHUILIS8V162_ekTkWlrrz1OqI5wtqnAKm88xgLpk\",\"y\":\"dDsBZpWN1hhcRKBe6k008Coa1VSv8cp6JTdmx9GSGOY\"},\"retiredAtUtc\":null,\"revocationReason\":null,\"revokedAtUtc\":null,\"status\":\"ACTIVE\",\"suite\":\"ES256\",\"thumbprint\":\"sha256:4_u504FXPc3aAlCuF9h6EsSxQr7rHkc0uNMICtENykQ\",\"use\":\"evidence-signing\",\"validFromUtc\":\"2026-08-01T00:00:00Z\"}],\"previous\":null,\"registryVersion\":1}",
+    "manifestV1SigningInputByteLength": 1203,
+    "sealS1SigningInputBase64": "cHJ1dnouYWkvZXZpZGVuY2Utc2lnbmF0dXJlADEAeyJhc3N1cmFuY2VQcm9maWxlIjoiUFJFX0NVU1RPTUVSX0RFRkFVTFQiLCJjb21taXRtZW50Ijp7ImRpZ2VzdCI6InNoYTI1Njo5ZTYwMmY2OGQ3NmE3ZDVhZGNmZjlhM2FhODBkYTVjZTFlZTFhNDdkMmY1YTIyY2RmYTQ3M2M4MDBiMTU5Y2Y1IiwiZGlnZXN0U3VpdGUiOiJzaGEtMjU2Iiwia2luZCI6ImV2aWRlbmNlLWl0ZW0iLCJ2ZXJzaW9uIjoiMSJ9LCJjb21taXR0ZWRBdCI6IjIwMjYtMDgtMDJUMTA6MDA6MDBaIiwic2lnbmVyIjp7ImtleUlkIjoiaHR0cHM6Ly9wcnV2ei1rdi1leGFtcGxlLnZhdWx0LmF6dXJlLm5ldC9rZXlzL3BydXZ6LWV2aWRlbmNlLXNpZ25pbmcvMWEyYjNjNGQ1ZTZmNzA4MTkyYTNiNGM1ZDZlN2Y4MDEiLCJwcm92aWRlciI6ImF6dXJlLWtleS12YXVsdCIsInN1aXRlIjoiRVMyNTYifSwic3ViamVjdCI6eyJhY3Rpb25JZCI6ImFjdF80ZjJjMWQ5YThiN2U0YzNkOWExYjJjM2Q0ZTVmNjA3MSIsImV2aWRlbmNlSWQiOiJldmRfN2E2YjVjNGQzZTJmMTAxOTJhM2I0YzVkNmU3ZjgwOTEiLCJzZXF1ZW5jZSI6MSwidGVuYW50SWQiOiJ0ZW5hbnQtZGVtbyJ9LCJ2ZXJzaW9uIjoiMSJ9",
+    "sealS1SigningInputByteLength": 603
+  },
+  "digests": {
+    "v1": "sha256:1eca1b63c8ed6a4f846924bae24f141006f9d40e6a760d7121ef35b4c3517b48",
+    "v2": "sha256:0ce70d6044c75acd189c4984493b05231703a0513e8d9674162dd30a30a87102",
+    "v3": "sha256:fd195b7035f29d3f84f72969f8356e53761310cba16915fe9dcde367f1f17cf2",
+    "v4": "sha256:f8467768c8c638547df76ca25cafdffd84638312926423e951a87f6fe8ca6f7c",
+    "v5": "sha256:620bb3b4862e3aa2321bf39c4cf71258eee374227e3f6d4f089f3c5d83d1cf10",
+    "forkV2": "sha256:30b0ed092f5ea5fb7b9603477f1c04db456da580db2dbf8f1665dce0eec94a59"
+  },
+  "timeline": {
+    "v1": "2026-08-01T00:00:00Z",
+    "s1": "2026-08-02T10:00:00Z",
+    "v2": "2026-08-03T00:00:00Z",
+    "k2Revoked": "2026-08-04T00:00:00Z",
+    "s2": "2026-08-04T10:00:00Z",
+    "v3": "2026-08-05T00:00:00Z",
+    "k1Revoked": "2026-08-05T12:00:00Z",
+    "v4": "2026-08-06T00:00:00Z",
+    "v5": "2026-08-07T00:00:00Z"
+  },
+  "documents": {
+    "v1": {
+      "manifest": {
+        "formatVersion": "1",
+        "issuedAtUtc": "2026-08-01T00:00:00Z",
+        "issuer": "pruvz.ai",
+        "keys": [
+          {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-trust-root/9f1c0a2b7d4e4f0a8b5c6d7e8f901234",
+            "predecessorKeyId": null,
+            "provider": "azure-key-vault",
+            "publicKey": {
+              "crv": "P-256",
+              "kty": "EC",
+              "x": "OrwxCwbE4fHMKNFRySxf-xI1dTaKhq23AccBHpA8uss",
+              "y": "jwn2k4SR4nuLtA7xL3czT6cyKiA3z9TmAJkivlQ2YGs"
+            },
+            "retiredAtUtc": null,
+            "revocationReason": null,
+            "revokedAtUtc": null,
+            "status": "ACTIVE",
+            "suite": "ES256",
+            "thumbprint": "sha256:2A7ZGclH-8L7JIDz0YUHjYglAqsbs1_ugmLkP8tfMqQ",
+            "use": "trust-root",
+            "validFromUtc": "2026-08-01T00:00:00Z"
+          },
+          {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/1a2b3c4d5e6f708192a3b4c5d6e7f801",
+            "predecessorKeyId": null,
+            "provider": "azure-key-vault",
+            "publicKey": {
+              "crv": "P-256",
+              "kty": "EC",
+              "x": "xAHHUILIS8V162_ekTkWlrrz1OqI5wtqnAKm88xgLpk",
+              "y": "dDsBZpWN1hhcRKBe6k008Coa1VSv8cp6JTdmx9GSGOY"
+            },
+            "retiredAtUtc": null,
+            "revocationReason": null,
+            "revokedAtUtc": null,
+            "status": "ACTIVE",
+            "suite": "ES256",
+            "thumbprint": "sha256:4_u504FXPc3aAlCuF9h6EsSxQr7rHkc0uNMICtENykQ",
+            "use": "evidence-signing",
+            "validFromUtc": "2026-08-01T00:00:00Z"
+          }
+        ],
+        "previous": null,
+        "registryVersion": 1
+      },
+      "signatures": [
+        {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-trust-root/9f1c0a2b7d4e4f0a8b5c6d7e8f901234",
+          "signature": "s0UWAWIp4t4yK5uGJBGgfL3LsRnnrzBDPxw257eTy3avMbB4GKAx-UJ0ndrRiBxYoil9bk4F_nIz9SlhB2K5VA",
+          "suite": "ES256"
+        }
+      ],
+      "attestations": {
+        "publications": [
+          {
+            "channel": "git",
+            "location": "https://github.com/dorsharoni10/pruvz-evidence-packet",
+            "reference": "refs/tags/example-trust-v1",
+            "digest": "sha256:1eca1b63c8ed6a4f846924bae24f141006f9d40e6a760d7121ef35b4c3517b48"
+          }
+        ],
+        "witnesses": []
+      }
+    },
+    "v2": {
+      "manifest": {
+        "formatVersion": "1",
+        "issuedAtUtc": "2026-08-03T00:00:00Z",
+        "issuer": "pruvz.ai",
+        "keys": [
+          {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-trust-root/9f1c0a2b7d4e4f0a8b5c6d7e8f901234",
+            "predecessorKeyId": null,
+            "provider": "azure-key-vault",
+            "publicKey": {
+              "crv": "P-256",
+              "kty": "EC",
+              "x": "OrwxCwbE4fHMKNFRySxf-xI1dTaKhq23AccBHpA8uss",
+              "y": "jwn2k4SR4nuLtA7xL3czT6cyKiA3z9TmAJkivlQ2YGs"
+            },
+            "retiredAtUtc": null,
+            "revocationReason": null,
+            "revokedAtUtc": null,
+            "status": "ACTIVE",
+            "suite": "ES256",
+            "thumbprint": "sha256:2A7ZGclH-8L7JIDz0YUHjYglAqsbs1_ugmLkP8tfMqQ",
+            "use": "trust-root",
+            "validFromUtc": "2026-08-01T00:00:00Z"
+          },
+          {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/1a2b3c4d5e6f708192a3b4c5d6e7f801",
+            "predecessorKeyId": null,
+            "provider": "azure-key-vault",
+            "publicKey": {
+              "crv": "P-256",
+              "kty": "EC",
+              "x": "xAHHUILIS8V162_ekTkWlrrz1OqI5wtqnAKm88xgLpk",
+              "y": "dDsBZpWN1hhcRKBe6k008Coa1VSv8cp6JTdmx9GSGOY"
+            },
+            "retiredAtUtc": null,
+            "revocationReason": null,
+            "revokedAtUtc": null,
+            "status": "ACTIVE",
+            "suite": "ES256",
+            "thumbprint": "sha256:4_u504FXPc3aAlCuF9h6EsSxQr7rHkc0uNMICtENykQ",
+            "use": "evidence-signing",
+            "validFromUtc": "2026-08-01T00:00:00Z"
+          },
+          {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/2b3c4d5e6f708192a3b4c5d6e7f80192",
+            "predecessorKeyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/1a2b3c4d5e6f708192a3b4c5d6e7f801",
+            "provider": "azure-key-vault",
+            "publicKey": {
+              "crv": "P-256",
+              "kty": "EC",
+              "x": "8m042OgLe7Kjw-ySOb7X0PYp0AyWP_PgTFix8qzD454",
+              "y": "kIKTJdGwkFqsfg7GX4cHNFLSqXU1HBECl7RZCv8-u2s"
+            },
+            "retiredAtUtc": null,
+            "revocationReason": null,
+            "revokedAtUtc": null,
+            "status": "ACTIVE",
+            "suite": "ES256",
+            "thumbprint": "sha256:6yMMNvgn6afa2y7kmrj6olAEfKqIOtfzMgy6VSu357A",
+            "use": "evidence-signing",
+            "validFromUtc": "2026-08-03T00:00:00Z"
+          }
+        ],
+        "previous": {
+          "digest": "sha256:1eca1b63c8ed6a4f846924bae24f141006f9d40e6a760d7121ef35b4c3517b48",
+          "registryVersion": 1
+        },
+        "registryVersion": 2
+      },
+      "signatures": [
+        {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-trust-root/9f1c0a2b7d4e4f0a8b5c6d7e8f901234",
+          "signature": "z4rFcPW1g3CERjZ2bjsy-fFSvbWTF2HBiClzvcdXNLvg3cO0JfOpvnQFejWGnnxVuxncSjYzF2hv2NeKVFKQtg",
+          "suite": "ES256"
+        }
+      ],
+      "attestations": {
+        "publications": [],
+        "witnesses": []
+      }
+    },
+    "v3": {
+      "manifest": {
+        "formatVersion": "1",
+        "issuedAtUtc": "2026-08-05T00:00:00Z",
+        "issuer": "pruvz.ai",
+        "keys": [
+          {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-trust-root/9f1c0a2b7d4e4f0a8b5c6d7e8f901234",
+            "predecessorKeyId": null,
+            "provider": "azure-key-vault",
+            "publicKey": {
+              "crv": "P-256",
+              "kty": "EC",
+              "x": "OrwxCwbE4fHMKNFRySxf-xI1dTaKhq23AccBHpA8uss",
+              "y": "jwn2k4SR4nuLtA7xL3czT6cyKiA3z9TmAJkivlQ2YGs"
+            },
+            "retiredAtUtc": null,
+            "revocationReason": null,
+            "revokedAtUtc": null,
+            "status": "ACTIVE",
+            "suite": "ES256",
+            "thumbprint": "sha256:2A7ZGclH-8L7JIDz0YUHjYglAqsbs1_ugmLkP8tfMqQ",
+            "use": "trust-root",
+            "validFromUtc": "2026-08-01T00:00:00Z"
+          },
+          {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/1a2b3c4d5e6f708192a3b4c5d6e7f801",
+            "predecessorKeyId": null,
+            "provider": "azure-key-vault",
+            "publicKey": {
+              "crv": "P-256",
+              "kty": "EC",
+              "x": "xAHHUILIS8V162_ekTkWlrrz1OqI5wtqnAKm88xgLpk",
+              "y": "dDsBZpWN1hhcRKBe6k008Coa1VSv8cp6JTdmx9GSGOY"
+            },
+            "retiredAtUtc": "2026-08-05T00:00:00Z",
+            "revocationReason": null,
+            "revokedAtUtc": null,
+            "status": "RETIRED",
+            "suite": "ES256",
+            "thumbprint": "sha256:4_u504FXPc3aAlCuF9h6EsSxQr7rHkc0uNMICtENykQ",
+            "use": "evidence-signing",
+            "validFromUtc": "2026-08-01T00:00:00Z"
+          },
+          {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/2b3c4d5e6f708192a3b4c5d6e7f80192",
+            "predecessorKeyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/1a2b3c4d5e6f708192a3b4c5d6e7f801",
+            "provider": "azure-key-vault",
+            "publicKey": {
+              "crv": "P-256",
+              "kty": "EC",
+              "x": "8m042OgLe7Kjw-ySOb7X0PYp0AyWP_PgTFix8qzD454",
+              "y": "kIKTJdGwkFqsfg7GX4cHNFLSqXU1HBECl7RZCv8-u2s"
+            },
+            "retiredAtUtc": null,
+            "revocationReason": null,
+            "revokedAtUtc": null,
+            "status": "ACTIVE",
+            "suite": "ES256",
+            "thumbprint": "sha256:6yMMNvgn6afa2y7kmrj6olAEfKqIOtfzMgy6VSu357A",
+            "use": "evidence-signing",
+            "validFromUtc": "2026-08-03T00:00:00Z"
+          }
+        ],
+        "previous": {
+          "digest": "sha256:0ce70d6044c75acd189c4984493b05231703a0513e8d9674162dd30a30a87102",
+          "registryVersion": 2
+        },
+        "registryVersion": 3
+      },
+      "signatures": [
+        {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-trust-root/9f1c0a2b7d4e4f0a8b5c6d7e8f901234",
+          "signature": "TL3Mo99I3JSpdl7BoiqPlvop6q3Iw8vZASrlrwaMo5m-MswLaqcGVcV3KFgdr2uqZG1xH8hPv7mtsrzMqg5rnQ",
+          "suite": "ES256"
+        }
+      ],
+      "attestations": {
+        "publications": [],
+        "witnesses": []
+      }
+    },
+    "v4": {
+      "manifest": {
+        "formatVersion": "1",
+        "issuedAtUtc": "2026-08-06T00:00:00Z",
+        "issuer": "pruvz.ai",
+        "keys": [
+          {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-trust-root/9f1c0a2b7d4e4f0a8b5c6d7e8f901234",
+            "predecessorKeyId": null,
+            "provider": "azure-key-vault",
+            "publicKey": {
+              "crv": "P-256",
+              "kty": "EC",
+              "x": "OrwxCwbE4fHMKNFRySxf-xI1dTaKhq23AccBHpA8uss",
+              "y": "jwn2k4SR4nuLtA7xL3czT6cyKiA3z9TmAJkivlQ2YGs"
+            },
+            "retiredAtUtc": null,
+            "revocationReason": null,
+            "revokedAtUtc": null,
+            "status": "ACTIVE",
+            "suite": "ES256",
+            "thumbprint": "sha256:2A7ZGclH-8L7JIDz0YUHjYglAqsbs1_ugmLkP8tfMqQ",
+            "use": "trust-root",
+            "validFromUtc": "2026-08-01T00:00:00Z"
+          },
+          {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/1a2b3c4d5e6f708192a3b4c5d6e7f801",
+            "predecessorKeyId": null,
+            "provider": "azure-key-vault",
+            "publicKey": {
+              "crv": "P-256",
+              "kty": "EC",
+              "x": "xAHHUILIS8V162_ekTkWlrrz1OqI5wtqnAKm88xgLpk",
+              "y": "dDsBZpWN1hhcRKBe6k008Coa1VSv8cp6JTdmx9GSGOY"
+            },
+            "retiredAtUtc": "2026-08-05T00:00:00Z",
+            "revocationReason": "Suspected exposure of the signing identity during a support session.",
+            "revokedAtUtc": "2026-08-05T12:00:00Z",
+            "status": "REVOKED",
+            "suite": "ES256",
+            "thumbprint": "sha256:4_u504FXPc3aAlCuF9h6EsSxQr7rHkc0uNMICtENykQ",
+            "use": "evidence-signing",
+            "validFromUtc": "2026-08-01T00:00:00Z"
+          },
+          {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/2b3c4d5e6f708192a3b4c5d6e7f80192",
+            "predecessorKeyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/1a2b3c4d5e6f708192a3b4c5d6e7f801",
+            "provider": "azure-key-vault",
+            "publicKey": {
+              "crv": "P-256",
+              "kty": "EC",
+              "x": "8m042OgLe7Kjw-ySOb7X0PYp0AyWP_PgTFix8qzD454",
+              "y": "kIKTJdGwkFqsfg7GX4cHNFLSqXU1HBECl7RZCv8-u2s"
+            },
+            "retiredAtUtc": null,
+            "revocationReason": null,
+            "revokedAtUtc": null,
+            "status": "ACTIVE",
+            "suite": "ES256",
+            "thumbprint": "sha256:6yMMNvgn6afa2y7kmrj6olAEfKqIOtfzMgy6VSu357A",
+            "use": "evidence-signing",
+            "validFromUtc": "2026-08-03T00:00:00Z"
+          }
+        ],
+        "previous": {
+          "digest": "sha256:fd195b7035f29d3f84f72969f8356e53761310cba16915fe9dcde367f1f17cf2",
+          "registryVersion": 3
+        },
+        "registryVersion": 4
+      },
+      "signatures": [
+        {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-trust-root/9f1c0a2b7d4e4f0a8b5c6d7e8f901234",
+          "signature": "ks7hXIh3PDgJ7NjgV92Yp2kwSOEWIthK1dZu8HSb0rjuDjp3AN9OnRUq-kHSGuC9-uKlqaALeZSexQAy6dF0Qg",
+          "suite": "ES256"
+        }
+      ],
+      "attestations": {
+        "publications": [],
+        "witnesses": []
+      }
+    },
+    "v5": {
+      "manifest": {
+        "formatVersion": "1",
+        "issuedAtUtc": "2026-08-07T00:00:00Z",
+        "issuer": "pruvz.ai",
+        "keys": [
+          {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-trust-root/9f1c0a2b7d4e4f0a8b5c6d7e8f901234",
+            "predecessorKeyId": null,
+            "provider": "azure-key-vault",
+            "publicKey": {
+              "crv": "P-256",
+              "kty": "EC",
+              "x": "OrwxCwbE4fHMKNFRySxf-xI1dTaKhq23AccBHpA8uss",
+              "y": "jwn2k4SR4nuLtA7xL3czT6cyKiA3z9TmAJkivlQ2YGs"
+            },
+            "retiredAtUtc": null,
+            "revocationReason": null,
+            "revokedAtUtc": null,
+            "status": "ACTIVE",
+            "suite": "ES256",
+            "thumbprint": "sha256:2A7ZGclH-8L7JIDz0YUHjYglAqsbs1_ugmLkP8tfMqQ",
+            "use": "trust-root",
+            "validFromUtc": "2026-08-01T00:00:00Z"
+          },
+          {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/1a2b3c4d5e6f708192a3b4c5d6e7f801",
+            "predecessorKeyId": null,
+            "provider": "azure-key-vault",
+            "publicKey": {
+              "crv": "P-256",
+              "kty": "EC",
+              "x": "xAHHUILIS8V162_ekTkWlrrz1OqI5wtqnAKm88xgLpk",
+              "y": "dDsBZpWN1hhcRKBe6k008Coa1VSv8cp6JTdmx9GSGOY"
+            },
+            "retiredAtUtc": "2026-08-05T00:00:00Z",
+            "revocationReason": "Suspected exposure of the signing identity during a support session.",
+            "revokedAtUtc": "2026-08-05T12:00:00Z",
+            "status": "REVOKED",
+            "suite": "ES256",
+            "thumbprint": "sha256:4_u504FXPc3aAlCuF9h6EsSxQr7rHkc0uNMICtENykQ",
+            "use": "evidence-signing",
+            "validFromUtc": "2026-08-01T00:00:00Z"
+          },
+          {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/2b3c4d5e6f708192a3b4c5d6e7f80192",
+            "predecessorKeyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/1a2b3c4d5e6f708192a3b4c5d6e7f801",
+            "provider": "azure-key-vault",
+            "publicKey": {
+              "crv": "P-256",
+              "kty": "EC",
+              "x": "8m042OgLe7Kjw-ySOb7X0PYp0AyWP_PgTFix8qzD454",
+              "y": "kIKTJdGwkFqsfg7GX4cHNFLSqXU1HBECl7RZCv8-u2s"
+            },
+            "retiredAtUtc": null,
+            "revocationReason": "Key material assumed compromised from the stated time onward.",
+            "revokedAtUtc": "2026-08-04T00:00:00Z",
+            "status": "REVOKED",
+            "suite": "ES256",
+            "thumbprint": "sha256:6yMMNvgn6afa2y7kmrj6olAEfKqIOtfzMgy6VSu357A",
+            "use": "evidence-signing",
+            "validFromUtc": "2026-08-03T00:00:00Z"
+          }
+        ],
+        "previous": {
+          "digest": "sha256:f8467768c8c638547df76ca25cafdffd84638312926423e951a87f6fe8ca6f7c",
+          "registryVersion": 4
+        },
+        "registryVersion": 5
+      },
+      "signatures": [
+        {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-trust-root/9f1c0a2b7d4e4f0a8b5c6d7e8f901234",
+          "signature": "lC8MJH-fFTnKVgquPMhwU16lNzqD2mPyKomrqIfgpG5qEUsGGNPDgZphYo-6CXbp9HNdjRbfEkeN66BH4soTlQ",
+          "suite": "ES256"
+        }
+      ],
+      "attestations": {
+        "publications": [],
+        "witnesses": []
+      }
+    }
+  },
+  "badDocuments": {
+    "forkV2": {
+      "manifest": {
+        "formatVersion": "1",
+        "issuedAtUtc": "2026-08-03T00:00:01Z",
+        "issuer": "pruvz.ai",
+        "keys": [
+          {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-trust-root/9f1c0a2b7d4e4f0a8b5c6d7e8f901234",
+            "predecessorKeyId": null,
+            "provider": "azure-key-vault",
+            "publicKey": {
+              "crv": "P-256",
+              "kty": "EC",
+              "x": "OrwxCwbE4fHMKNFRySxf-xI1dTaKhq23AccBHpA8uss",
+              "y": "jwn2k4SR4nuLtA7xL3czT6cyKiA3z9TmAJkivlQ2YGs"
+            },
+            "retiredAtUtc": null,
+            "revocationReason": null,
+            "revokedAtUtc": null,
+            "status": "ACTIVE",
+            "suite": "ES256",
+            "thumbprint": "sha256:2A7ZGclH-8L7JIDz0YUHjYglAqsbs1_ugmLkP8tfMqQ",
+            "use": "trust-root",
+            "validFromUtc": "2026-08-01T00:00:00Z"
+          },
+          {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/1a2b3c4d5e6f708192a3b4c5d6e7f801",
+            "predecessorKeyId": null,
+            "provider": "azure-key-vault",
+            "publicKey": {
+              "crv": "P-256",
+              "kty": "EC",
+              "x": "xAHHUILIS8V162_ekTkWlrrz1OqI5wtqnAKm88xgLpk",
+              "y": "dDsBZpWN1hhcRKBe6k008Coa1VSv8cp6JTdmx9GSGOY"
+            },
+            "retiredAtUtc": null,
+            "revocationReason": null,
+            "revokedAtUtc": null,
+            "status": "ACTIVE",
+            "suite": "ES256",
+            "thumbprint": "sha256:4_u504FXPc3aAlCuF9h6EsSxQr7rHkc0uNMICtENykQ",
+            "use": "evidence-signing",
+            "validFromUtc": "2026-08-01T00:00:00Z"
+          },
+          {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/2b3c4d5e6f708192a3b4c5d6e7f80192",
+            "predecessorKeyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/1a2b3c4d5e6f708192a3b4c5d6e7f801",
+            "provider": "azure-key-vault",
+            "publicKey": {
+              "crv": "P-256",
+              "kty": "EC",
+              "x": "8m042OgLe7Kjw-ySOb7X0PYp0AyWP_PgTFix8qzD454",
+              "y": "kIKTJdGwkFqsfg7GX4cHNFLSqXU1HBECl7RZCv8-u2s"
+            },
+            "retiredAtUtc": null,
+            "revocationReason": null,
+            "revokedAtUtc": null,
+            "status": "ACTIVE",
+            "suite": "ES256",
+            "thumbprint": "sha256:6yMMNvgn6afa2y7kmrj6olAEfKqIOtfzMgy6VSu357A",
+            "use": "evidence-signing",
+            "validFromUtc": "2026-08-03T00:00:00Z"
+          }
+        ],
+        "previous": {
+          "digest": "sha256:1eca1b63c8ed6a4f846924bae24f141006f9d40e6a760d7121ef35b4c3517b48",
+          "registryVersion": 1
+        },
+        "registryVersion": 2
+      },
+      "signatures": [
+        {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-trust-root/9f1c0a2b7d4e4f0a8b5c6d7e8f901234",
+          "signature": "0uQ4c8Bj02jN1VNmWCdlPvsStSVCzeF4g1G4xncsEUdpGiAHwoNGRtmhDitMxlfArq-z7yTB9I9Dz71BP3B-PQ",
+          "suite": "ES256"
+        }
+      ],
+      "attestations": {
+        "publications": [],
+        "witnesses": []
+      }
+    },
+    "brokenLinkV2": {
+      "manifest": {
+        "formatVersion": "1",
+        "issuedAtUtc": "2026-08-03T00:00:00Z",
+        "issuer": "pruvz.ai",
+        "keys": [
+          {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-trust-root/9f1c0a2b7d4e4f0a8b5c6d7e8f901234",
+            "predecessorKeyId": null,
+            "provider": "azure-key-vault",
+            "publicKey": {
+              "crv": "P-256",
+              "kty": "EC",
+              "x": "OrwxCwbE4fHMKNFRySxf-xI1dTaKhq23AccBHpA8uss",
+              "y": "jwn2k4SR4nuLtA7xL3czT6cyKiA3z9TmAJkivlQ2YGs"
+            },
+            "retiredAtUtc": null,
+            "revocationReason": null,
+            "revokedAtUtc": null,
+            "status": "ACTIVE",
+            "suite": "ES256",
+            "thumbprint": "sha256:2A7ZGclH-8L7JIDz0YUHjYglAqsbs1_ugmLkP8tfMqQ",
+            "use": "trust-root",
+            "validFromUtc": "2026-08-01T00:00:00Z"
+          },
+          {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/1a2b3c4d5e6f708192a3b4c5d6e7f801",
+            "predecessorKeyId": null,
+            "provider": "azure-key-vault",
+            "publicKey": {
+              "crv": "P-256",
+              "kty": "EC",
+              "x": "xAHHUILIS8V162_ekTkWlrrz1OqI5wtqnAKm88xgLpk",
+              "y": "dDsBZpWN1hhcRKBe6k008Coa1VSv8cp6JTdmx9GSGOY"
+            },
+            "retiredAtUtc": null,
+            "revocationReason": null,
+            "revokedAtUtc": null,
+            "status": "ACTIVE",
+            "suite": "ES256",
+            "thumbprint": "sha256:4_u504FXPc3aAlCuF9h6EsSxQr7rHkc0uNMICtENykQ",
+            "use": "evidence-signing",
+            "validFromUtc": "2026-08-01T00:00:00Z"
+          },
+          {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/2b3c4d5e6f708192a3b4c5d6e7f80192",
+            "predecessorKeyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/1a2b3c4d5e6f708192a3b4c5d6e7f801",
+            "provider": "azure-key-vault",
+            "publicKey": {
+              "crv": "P-256",
+              "kty": "EC",
+              "x": "8m042OgLe7Kjw-ySOb7X0PYp0AyWP_PgTFix8qzD454",
+              "y": "kIKTJdGwkFqsfg7GX4cHNFLSqXU1HBECl7RZCv8-u2s"
+            },
+            "retiredAtUtc": null,
+            "revocationReason": null,
+            "revokedAtUtc": null,
+            "status": "ACTIVE",
+            "suite": "ES256",
+            "thumbprint": "sha256:6yMMNvgn6afa2y7kmrj6olAEfKqIOtfzMgy6VSu357A",
+            "use": "evidence-signing",
+            "validFromUtc": "2026-08-03T00:00:00Z"
+          }
+        ],
+        "previous": {
+          "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+          "registryVersion": 1
+        },
+        "registryVersion": 2
+      },
+      "signatures": [
+        {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-trust-root/9f1c0a2b7d4e4f0a8b5c6d7e8f901234",
+          "signature": "Qv5hRsiWBcIVDaAetHcnp-X3AbIxT4QaE9gBldtpQyzWqI7TPODakk494_0SaICjqZy9XtEmobRPpFyhZkERog",
+          "suite": "ES256"
+        }
+      ],
+      "attestations": {
+        "publications": [],
+        "witnesses": []
+      }
+    },
+    "foreignRoot": {
+      "manifest": {
+        "formatVersion": "1",
+        "issuedAtUtc": "2026-08-01T00:00:00Z",
+        "issuer": "pruvz.ai",
+        "keys": [
+          {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-trust-root/00000000000000000000000000000000",
+            "predecessorKeyId": null,
+            "provider": "azure-key-vault",
+            "publicKey": {
+              "crv": "P-256",
+              "kty": "EC",
+              "x": "4c_YJxUr-Ri4lbqNE_yWntSqIYG98G7QpC_iZ1gFpI8",
+              "y": "C2SuXAn6-3wTW0sF0MKHfJ7W6KtLJKMKDlsj4wJ5XtI"
+            },
+            "retiredAtUtc": null,
+            "revocationReason": null,
+            "revokedAtUtc": null,
+            "status": "ACTIVE",
+            "suite": "ES256",
+            "thumbprint": "sha256:cYc-grvD-IGldEo_SYtZvaS1NJ_31ygr3J3dkVHBowY",
+            "use": "trust-root",
+            "validFromUtc": "2026-08-01T00:00:00Z"
+          },
+          {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/1a2b3c4d5e6f708192a3b4c5d6e7f801",
+            "predecessorKeyId": null,
+            "provider": "azure-key-vault",
+            "publicKey": {
+              "crv": "P-256",
+              "kty": "EC",
+              "x": "xAHHUILIS8V162_ekTkWlrrz1OqI5wtqnAKm88xgLpk",
+              "y": "dDsBZpWN1hhcRKBe6k008Coa1VSv8cp6JTdmx9GSGOY"
+            },
+            "retiredAtUtc": null,
+            "revocationReason": null,
+            "revokedAtUtc": null,
+            "status": "ACTIVE",
+            "suite": "ES256",
+            "thumbprint": "sha256:4_u504FXPc3aAlCuF9h6EsSxQr7rHkc0uNMICtENykQ",
+            "use": "evidence-signing",
+            "validFromUtc": "2026-08-01T00:00:00Z"
+          }
+        ],
+        "previous": null,
+        "registryVersion": 1
+      },
+      "signatures": [
+        {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-trust-root/00000000000000000000000000000000",
+          "signature": "OQQu03-8w-VzFQg0G4zj7h7VyeZ7TIrZ9g4XQgs59mh9MH2ammtRqelVWF6EG1aHfXlisGdhMb2AhnqLIo0TBQ",
+          "suite": "ES256"
+        }
+      ],
+      "attestations": {
+        "publications": [],
+        "witnesses": []
+      }
+    },
+    "tamperedAfterSigning": {
+      "manifest": {
+        "formatVersion": "1",
+        "issuedAtUtc": "2026-08-01T00:00:01Z",
+        "issuer": "pruvz.ai",
+        "keys": [
+          {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-trust-root/9f1c0a2b7d4e4f0a8b5c6d7e8f901234",
+            "predecessorKeyId": null,
+            "provider": "azure-key-vault",
+            "publicKey": {
+              "crv": "P-256",
+              "kty": "EC",
+              "x": "OrwxCwbE4fHMKNFRySxf-xI1dTaKhq23AccBHpA8uss",
+              "y": "jwn2k4SR4nuLtA7xL3czT6cyKiA3z9TmAJkivlQ2YGs"
+            },
+            "retiredAtUtc": null,
+            "revocationReason": null,
+            "revokedAtUtc": null,
+            "status": "ACTIVE",
+            "suite": "ES256",
+            "thumbprint": "sha256:2A7ZGclH-8L7JIDz0YUHjYglAqsbs1_ugmLkP8tfMqQ",
+            "use": "trust-root",
+            "validFromUtc": "2026-08-01T00:00:00Z"
+          },
+          {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/1a2b3c4d5e6f708192a3b4c5d6e7f801",
+            "predecessorKeyId": null,
+            "provider": "azure-key-vault",
+            "publicKey": {
+              "crv": "P-256",
+              "kty": "EC",
+              "x": "xAHHUILIS8V162_ekTkWlrrz1OqI5wtqnAKm88xgLpk",
+              "y": "dDsBZpWN1hhcRKBe6k008Coa1VSv8cp6JTdmx9GSGOY"
+            },
+            "retiredAtUtc": null,
+            "revocationReason": null,
+            "revokedAtUtc": null,
+            "status": "ACTIVE",
+            "suite": "ES256",
+            "thumbprint": "sha256:4_u504FXPc3aAlCuF9h6EsSxQr7rHkc0uNMICtENykQ",
+            "use": "evidence-signing",
+            "validFromUtc": "2026-08-01T00:00:00Z"
+          }
+        ],
+        "previous": null,
+        "registryVersion": 1
+      },
+      "signatures": [
+        {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-trust-root/9f1c0a2b7d4e4f0a8b5c6d7e8f901234",
+          "signature": "s0UWAWIp4t4yK5uGJBGgfL3LsRnnrzBDPxw257eTy3avMbB4GKAx-UJ0ndrRiBxYoil9bk4F_nIz9SlhB2K5VA",
+          "suite": "ES256"
+        }
+      ],
+      "attestations": {
+        "publications": [
+          {
+            "channel": "git",
+            "location": "https://github.com/dorsharoni10/pruvz-evidence-packet",
+            "reference": "refs/tags/example-trust-v1",
+            "digest": "sha256:1eca1b63c8ed6a4f846924bae24f141006f9d40e6a760d7121ef35b4c3517b48"
+          }
+        ],
+        "witnesses": []
+      }
+    },
+    "privateKeyMaterial": {
+      "manifest": {
+        "formatVersion": "1",
+        "issuedAtUtc": "2026-08-01T00:00:00Z",
+        "issuer": "pruvz.ai",
+        "keys": [
+          {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-trust-root/9f1c0a2b7d4e4f0a8b5c6d7e8f901234",
+            "predecessorKeyId": null,
+            "provider": "azure-key-vault",
+            "publicKey": {
+              "crv": "P-256",
+              "kty": "EC",
+              "x": "OrwxCwbE4fHMKNFRySxf-xI1dTaKhq23AccBHpA8uss",
+              "y": "jwn2k4SR4nuLtA7xL3czT6cyKiA3z9TmAJkivlQ2YGs"
+            },
+            "retiredAtUtc": null,
+            "revocationReason": null,
+            "revokedAtUtc": null,
+            "status": "ACTIVE",
+            "suite": "ES256",
+            "thumbprint": "sha256:2A7ZGclH-8L7JIDz0YUHjYglAqsbs1_ugmLkP8tfMqQ",
+            "use": "trust-root",
+            "validFromUtc": "2026-08-01T00:00:00Z"
+          },
+          {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/1a2b3c4d5e6f708192a3b4c5d6e7f801",
+            "predecessorKeyId": null,
+            "provider": "azure-key-vault",
+            "publicKey": {
+              "crv": "P-256",
+              "kty": "EC",
+              "x": "xAHHUILIS8V162_ekTkWlrrz1OqI5wtqnAKm88xgLpk",
+              "y": "dDsBZpWN1hhcRKBe6k008Coa1VSv8cp6JTdmx9GSGOY",
+              "d": "AAAA"
+            },
+            "retiredAtUtc": null,
+            "revocationReason": null,
+            "revokedAtUtc": null,
+            "status": "ACTIVE",
+            "suite": "ES256",
+            "thumbprint": "sha256:4_u504FXPc3aAlCuF9h6EsSxQr7rHkc0uNMICtENykQ",
+            "use": "evidence-signing",
+            "validFromUtc": "2026-08-01T00:00:00Z"
+          }
+        ],
+        "previous": null,
+        "registryVersion": 1
+      },
+      "signatures": [
+        {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-trust-root/9f1c0a2b7d4e4f0a8b5c6d7e8f901234",
+          "signature": "Z77J4_iKJkciC2JVMBKn0M1ZJjMf7Ijknagx_mDiYCr4XisvZ2I_DDWwNcTgkd8WyojRtmIfjGC9OR2F2HCbzQ",
+          "suite": "ES256"
+        }
+      ],
+      "attestations": {
+        "publications": [],
+        "witnesses": []
+      }
+    },
+    "thumbprintMismatch": {
+      "manifest": {
+        "formatVersion": "1",
+        "issuedAtUtc": "2026-08-01T00:00:00Z",
+        "issuer": "pruvz.ai",
+        "keys": [
+          {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-trust-root/9f1c0a2b7d4e4f0a8b5c6d7e8f901234",
+            "predecessorKeyId": null,
+            "provider": "azure-key-vault",
+            "publicKey": {
+              "crv": "P-256",
+              "kty": "EC",
+              "x": "OrwxCwbE4fHMKNFRySxf-xI1dTaKhq23AccBHpA8uss",
+              "y": "jwn2k4SR4nuLtA7xL3czT6cyKiA3z9TmAJkivlQ2YGs"
+            },
+            "retiredAtUtc": null,
+            "revocationReason": null,
+            "revokedAtUtc": null,
+            "status": "ACTIVE",
+            "suite": "ES256",
+            "thumbprint": "sha256:2A7ZGclH-8L7JIDz0YUHjYglAqsbs1_ugmLkP8tfMqQ",
+            "use": "trust-root",
+            "validFromUtc": "2026-08-01T00:00:00Z"
+          },
+          {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/1a2b3c4d5e6f708192a3b4c5d6e7f801",
+            "predecessorKeyId": null,
+            "provider": "azure-key-vault",
+            "publicKey": {
+              "crv": "P-256",
+              "kty": "EC",
+              "x": "xAHHUILIS8V162_ekTkWlrrz1OqI5wtqnAKm88xgLpk",
+              "y": "dDsBZpWN1hhcRKBe6k008Coa1VSv8cp6JTdmx9GSGOY"
+            },
+            "retiredAtUtc": null,
+            "revocationReason": null,
+            "revokedAtUtc": null,
+            "status": "ACTIVE",
+            "suite": "ES256",
+            "thumbprint": "sha256:2A7ZGclH-8L7JIDz0YUHjYglAqsbs1_ugmLkP8tfMqQ",
+            "use": "evidence-signing",
+            "validFromUtc": "2026-08-01T00:00:00Z"
+          }
+        ],
+        "previous": null,
+        "registryVersion": 1
+      },
+      "signatures": [
+        {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-trust-root/9f1c0a2b7d4e4f0a8b5c6d7e8f901234",
+          "signature": "NehR0W9WuV43JiHZVUbvKXaXAKG77wjse-KEx4tP2IvmXLknwGD1eWMoOiSiH-_Pd1qu0XUcTU56TIffVMmiFQ",
+          "suite": "ES256"
+        }
+      ],
+      "attestations": {
+        "publications": [],
+        "witnesses": []
+      }
+    },
+    "statusInconsistent": {
+      "manifest": {
+        "formatVersion": "1",
+        "issuedAtUtc": "2026-08-01T00:00:00Z",
+        "issuer": "pruvz.ai",
+        "keys": [
+          {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-trust-root/9f1c0a2b7d4e4f0a8b5c6d7e8f901234",
+            "predecessorKeyId": null,
+            "provider": "azure-key-vault",
+            "publicKey": {
+              "crv": "P-256",
+              "kty": "EC",
+              "x": "OrwxCwbE4fHMKNFRySxf-xI1dTaKhq23AccBHpA8uss",
+              "y": "jwn2k4SR4nuLtA7xL3czT6cyKiA3z9TmAJkivlQ2YGs"
+            },
+            "retiredAtUtc": null,
+            "revocationReason": null,
+            "revokedAtUtc": null,
+            "status": "ACTIVE",
+            "suite": "ES256",
+            "thumbprint": "sha256:2A7ZGclH-8L7JIDz0YUHjYglAqsbs1_ugmLkP8tfMqQ",
+            "use": "trust-root",
+            "validFromUtc": "2026-08-01T00:00:00Z"
+          },
+          {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/1a2b3c4d5e6f708192a3b4c5d6e7f801",
+            "predecessorKeyId": null,
+            "provider": "azure-key-vault",
+            "publicKey": {
+              "crv": "P-256",
+              "kty": "EC",
+              "x": "xAHHUILIS8V162_ekTkWlrrz1OqI5wtqnAKm88xgLpk",
+              "y": "dDsBZpWN1hhcRKBe6k008Coa1VSv8cp6JTdmx9GSGOY"
+            },
+            "retiredAtUtc": null,
+            "revocationReason": "Labelled active while carrying a revocation date in the past.",
+            "revokedAtUtc": "2026-07-01T00:00:00Z",
+            "status": "ACTIVE",
+            "suite": "ES256",
+            "thumbprint": "sha256:4_u504FXPc3aAlCuF9h6EsSxQr7rHkc0uNMICtENykQ",
+            "use": "evidence-signing",
+            "validFromUtc": "2026-08-01T00:00:00Z"
+          }
+        ],
+        "previous": null,
+        "registryVersion": 1
+      },
+      "signatures": [
+        {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-trust-root/9f1c0a2b7d4e4f0a8b5c6d7e8f901234",
+          "signature": "4JmTyjpZk_zmmurmyom6r9OeszdqcTvMLYIehYxvfesV67r2UD7BxE1pKZxuEPYtEo6pnwypNmVt-nQg6R-vNA",
+          "suite": "ES256"
+        }
+      ],
+      "attestations": {
+        "publications": [],
+        "witnesses": []
+      }
+    },
+    "signedByEvidenceKey": {
+      "manifest": {
+        "formatVersion": "1",
+        "issuedAtUtc": "2026-08-01T00:00:00Z",
+        "issuer": "pruvz.ai",
+        "keys": [
+          {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-trust-root/9f1c0a2b7d4e4f0a8b5c6d7e8f901234",
+            "predecessorKeyId": null,
+            "provider": "azure-key-vault",
+            "publicKey": {
+              "crv": "P-256",
+              "kty": "EC",
+              "x": "OrwxCwbE4fHMKNFRySxf-xI1dTaKhq23AccBHpA8uss",
+              "y": "jwn2k4SR4nuLtA7xL3czT6cyKiA3z9TmAJkivlQ2YGs"
+            },
+            "retiredAtUtc": null,
+            "revocationReason": null,
+            "revokedAtUtc": null,
+            "status": "ACTIVE",
+            "suite": "ES256",
+            "thumbprint": "sha256:2A7ZGclH-8L7JIDz0YUHjYglAqsbs1_ugmLkP8tfMqQ",
+            "use": "trust-root",
+            "validFromUtc": "2026-08-01T00:00:00Z"
+          },
+          {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/1a2b3c4d5e6f708192a3b4c5d6e7f801",
+            "predecessorKeyId": null,
+            "provider": "azure-key-vault",
+            "publicKey": {
+              "crv": "P-256",
+              "kty": "EC",
+              "x": "xAHHUILIS8V162_ekTkWlrrz1OqI5wtqnAKm88xgLpk",
+              "y": "dDsBZpWN1hhcRKBe6k008Coa1VSv8cp6JTdmx9GSGOY"
+            },
+            "retiredAtUtc": null,
+            "revocationReason": null,
+            "revokedAtUtc": null,
+            "status": "ACTIVE",
+            "suite": "ES256",
+            "thumbprint": "sha256:4_u504FXPc3aAlCuF9h6EsSxQr7rHkc0uNMICtENykQ",
+            "use": "evidence-signing",
+            "validFromUtc": "2026-08-01T00:00:00Z"
+          }
+        ],
+        "previous": null,
+        "registryVersion": 1
+      },
+      "signatures": [
+        {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/1a2b3c4d5e6f708192a3b4c5d6e7f801",
+          "signature": "m0f_jPf7kurcSzOiz1GrRTtFsep4kdXDAhrv13yL_7iSl8EPmqB5za2oJZ_Fvig8UfbavW6nRtyw82xrcRTf8w",
+          "suite": "ES256"
+        }
+      ],
+      "attestations": {
+        "publications": [],
+        "witnesses": []
+      }
+    }
+  },
+  "seals": {
+    "s1": {
+      "envelope": {
+        "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+        "commitment": {
+          "digest": "sha256:9e602f68d76a7d5adcff9a3aa80da5ce1ee1a47d2f5a22cdfa473c800b159cf5",
+          "digestSuite": "sha-256",
+          "kind": "evidence-item",
+          "version": "1"
+        },
+        "committedAt": "2026-08-02T10:00:00Z",
+        "signer": {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/1a2b3c4d5e6f708192a3b4c5d6e7f801",
+          "provider": "azure-key-vault",
+          "suite": "ES256"
+        },
+        "subject": {
+          "actionId": "act_4f2c1d9a8b7e4c3d9a1b2c3d4e5f6071",
+          "evidenceId": "evd_7a6b5c4d3e2f10192a3b4c5d6e7f8091",
+          "sequence": 1,
+          "tenantId": "tenant-demo"
+        },
+        "version": "1"
+      },
+      "signature": "coBGdwZ5RTLZLhkYqZAUlo1kABRZbFxdMBqLIsNIygKj74XKYLsVCo8vgIuyRfruh_s_1mkIJOnoemS9ePfA0g"
+    },
+    "s2": {
+      "envelope": {
+        "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+        "commitment": {
+          "digest": "sha256:409ec4b3d4fa393903461feabb329d6d8158639e08cde8f1d937c4888dc440a6",
+          "digestSuite": "sha-256",
+          "kind": "evidence-item",
+          "version": "1"
+        },
+        "committedAt": "2026-08-04T10:00:00Z",
+        "signer": {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/2b3c4d5e6f708192a3b4c5d6e7f80192",
+          "provider": "azure-key-vault",
+          "suite": "ES256"
+        },
+        "subject": {
+          "actionId": "act_9b8a7c6d5e4f30291a2b3c4d5e6f7081",
+          "evidenceId": "evd_1c2d3e4f50617283a4b5c6d7e8f90123",
+          "sequence": 3,
+          "tenantId": "tenant-demo"
+        },
+        "version": "1"
+      },
+      "signature": "MVaqrP2-aMJIm09yDwrCWGl8rkDtxinLby7y783ICuW3FQIHxsOKWSTe1gKSE4Qn9FlVhsvhaneexOlvRx-ZcA"
+    },
+    "s1ProfileRaised": {
+      "envelope": {
+        "assuranceProfile": "CUSTOMER_PRODUCTION",
+        "commitment": {
+          "digest": "sha256:9e602f68d76a7d5adcff9a3aa80da5ce1ee1a47d2f5a22cdfa473c800b159cf5",
+          "digestSuite": "sha-256",
+          "kind": "evidence-item",
+          "version": "1"
+        },
+        "committedAt": "2026-08-02T10:00:00Z",
+        "signer": {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/1a2b3c4d5e6f708192a3b4c5d6e7f801",
+          "provider": "azure-key-vault",
+          "suite": "ES256"
+        },
+        "subject": {
+          "actionId": "act_4f2c1d9a8b7e4c3d9a1b2c3d4e5f6071",
+          "evidenceId": "evd_7a6b5c4d3e2f10192a3b4c5d6e7f8091",
+          "sequence": 1,
+          "tenantId": "tenant-demo"
+        },
+        "version": "1"
+      },
+      "signature": "coBGdwZ5RTLZLhkYqZAUlo1kABRZbFxdMBqLIsNIygKj74XKYLsVCo8vgIuyRfruh_s_1mkIJOnoemS9ePfA0g"
+    },
+    "s1BadSignature": {
+      "envelope": {
+        "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+        "commitment": {
+          "digest": "sha256:9e602f68d76a7d5adcff9a3aa80da5ce1ee1a47d2f5a22cdfa473c800b159cf5",
+          "digestSuite": "sha-256",
+          "kind": "evidence-item",
+          "version": "1"
+        },
+        "committedAt": "2026-08-02T10:00:00Z",
+        "signer": {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/1a2b3c4d5e6f708192a3b4c5d6e7f801",
+          "provider": "azure-key-vault",
+          "suite": "ES256"
+        },
+        "subject": {
+          "actionId": "act_4f2c1d9a8b7e4c3d9a1b2c3d4e5f6071",
+          "evidenceId": "evd_7a6b5c4d3e2f10192a3b4c5d6e7f8091",
+          "sequence": 1,
+          "tenantId": "tenant-demo"
+        },
+        "version": "1"
+      },
+      "signature": "c4BGdwZ5RTLZLhkYqZAUlo1kABRZbFxdMBqLIsNIygKj74XKYLsVCo8vgIuyRfruh_s_1mkIJOnoemS9ePfA0g"
+    },
+    "sealSignedByRoot": {
+      "envelope": {
+        "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+        "commitment": {
+          "digest": "sha256:9e602f68d76a7d5adcff9a3aa80da5ce1ee1a47d2f5a22cdfa473c800b159cf5",
+          "digestSuite": "sha-256",
+          "kind": "evidence-item",
+          "version": "1"
+        },
+        "committedAt": "2026-08-02T10:00:00Z",
+        "signer": {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-trust-root/9f1c0a2b7d4e4f0a8b5c6d7e8f901234",
+          "provider": "azure-key-vault",
+          "suite": "ES256"
+        },
+        "subject": {
+          "actionId": "act_4f2c1d9a8b7e4c3d9a1b2c3d4e5f6071",
+          "evidenceId": "evd_7a6b5c4d3e2f10192a3b4c5d6e7f8091",
+          "sequence": 1,
+          "tenantId": "tenant-demo"
+        },
+        "version": "1"
+      },
+      "signature": "3Gb2bgDrWr4J_DMpIc-8tdjDjlbFcM0qD56P-gAGcARX2lc2wEOhzWjvYTXmElsRDdhVp85JFqKYXP0DxmKTYQ"
+    },
+    "sealNamingUnknownKey": {
+      "envelope": {
+        "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+        "commitment": {
+          "digest": "sha256:9e602f68d76a7d5adcff9a3aa80da5ce1ee1a47d2f5a22cdfa473c800b159cf5",
+          "digestSuite": "sha-256",
+          "kind": "evidence-item",
+          "version": "1"
+        },
+        "committedAt": "2026-08-02T10:00:00Z",
+        "signer": {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/ffffffffffffffffffffffffffffffff",
+          "provider": "azure-key-vault",
+          "suite": "ES256"
+        },
+        "subject": {
+          "actionId": "act_4f2c1d9a8b7e4c3d9a1b2c3d4e5f6071",
+          "evidenceId": "evd_7a6b5c4d3e2f10192a3b4c5d6e7f8091",
+          "sequence": 1,
+          "tenantId": "tenant-demo"
+        },
+        "version": "1"
+      },
+      "signature": "AUGbb14dqbTjUX5AfKg5H4aU9kKlBqKahStc3j9LGInaZlTijMJ1oO8jAf2QJo7rb00G9qwCRpJfVNKKyL4Mig"
+    }
+  },
+  "expectedCommitmentDigests": {
+    "s1": "sha256:9e602f68d76a7d5adcff9a3aa80da5ce1ee1a47d2f5a22cdfa473c800b159cf5",
+    "s2": "sha256:409ec4b3d4fa393903461feabb329d6d8158639e08cde8f1d937c4888dc440a6"
+  },
+  "subjects": {
+    "s1": {
+      "actionId": "act_4f2c1d9a8b7e4c3d9a1b2c3d4e5f6071",
+      "evidenceId": "evd_7a6b5c4d3e2f10192a3b4c5d6e7f8091",
+      "sequence": 1,
+      "tenantId": "tenant-demo"
+    },
+    "s2": {
+      "actionId": "act_9b8a7c6d5e4f30291a2b3c4d5e6f7081",
+      "evidenceId": "evd_1c2d3e4f50617283a4b5c6d7e8f90123",
+      "sequence": 3,
+      "tenantId": "tenant-demo"
+    }
+  },
+  "chainCases": [
+    {
+      "id": "full-chain",
+      "description": "The published history, accepted in order: publish, rotate in, retire out, revoke late, revoke early.",
+      "establish": [],
+      "attempt": [
+        "v1",
+        "v2",
+        "v3",
+        "v4",
+        "v5"
+      ],
+      "expect": "ACCEPT",
+      "expectedRegistryVersion": 5,
+      "expectedDigest": "sha256:620bb3b4862e3aa2321bf39c4cf71258eee374227e3f6d4f089f3c5d83d1cf10"
+    },
+    {
+      "id": "first-manifest",
+      "description": "A verifier with no state accepts the first manifest and remembers it.",
+      "establish": [],
+      "attempt": [
+        "v1"
+      ],
+      "expect": "ACCEPT",
+      "expectedRegistryVersion": 1,
+      "expectedDigest": "sha256:1eca1b63c8ed6a4f846924bae24f141006f9d40e6a760d7121ef35b4c3517b48"
+    },
+    {
+      "id": "replay-current",
+      "description": "Being handed the manifest already held is not an attack and not a change; the state does not move.",
+      "establish": [
+        "v1",
+        "v2"
+      ],
+      "attempt": [
+        "v2"
+      ],
+      "expect": "ACCEPT",
+      "expectedRegistryVersion": 2,
+      "expectedDigest": "sha256:0ce70d6044c75acd189c4984493b05231703a0513e8d9674162dd30a30a87102"
+    },
+    {
+      "id": "rollback",
+      "description": "An older, still perfectly signed manifest. This is how a revocation is hidden, so it is refused rather than merely ignored.",
+      "establish": [
+        "v1",
+        "v2",
+        "v3",
+        "v4",
+        "v5"
+      ],
+      "attempt": [
+        "v1"
+      ],
+      "expect": "REGISTRY_ROLLBACK"
+    },
+    {
+      "id": "skipped-version",
+      "description": "Jumping a version would accept key history nobody checked, even though the manifest itself is valid.",
+      "establish": [
+        "v1"
+      ],
+      "attempt": [
+        "v3"
+      ],
+      "expect": "REGISTRY_CHAIN_BROKEN"
+    },
+    {
+      "id": "fork",
+      "description": "Two different manifests at one registry version. Both verify; one version has one history, and no rule can pick the honest side.",
+      "establish": [
+        "v1",
+        "v2"
+      ],
+      "attempt": [
+        "forkV2"
+      ],
+      "expect": "REGISTRY_FORK"
+    },
+    {
+      "id": "broken-predecessor-link",
+      "description": "Correctly signed, but its predecessor digest names a document this verifier never saw.",
+      "establish": [
+        "v1"
+      ],
+      "attempt": [
+        "brokenLinkV2"
+      ],
+      "expect": "REGISTRY_CHAIN_BROKEN"
+    },
+    {
+      "id": "root-substitution",
+      "description": "A complete, self-consistent registry issued by somebody else. A pinned verifier refuses it instead of offering to trust the new root.",
+      "establish": [],
+      "attempt": [
+        "foreignRoot"
+      ],
+      "expect": "ROOT_MISMATCH"
+    },
+    {
+      "id": "tampered-after-signing",
+      "description": "One character of the issue time changed after the root signed it.",
+      "establish": [],
+      "attempt": [
+        "tamperedAfterSigning"
+      ],
+      "expect": "REGISTRY_SIGNATURE_INVALID"
+    },
+    {
+      "id": "no-pin",
+      "description": "Verification with no anchor at all. Refused: it would trust whatever key history it was given.",
+      "establish": [],
+      "attempt": [
+        "v1"
+      ],
+      "pinOverride": null,
+      "expect": "NO_TRUST_ANCHOR"
+    },
+    {
+      "id": "issuer-mismatch",
+      "description": "The right root thumbprint under the wrong issuer name.",
+      "establish": [],
+      "attempt": [
+        "v1"
+      ],
+      "pinOverride": {
+        "issuer": "not-pruvz.example",
+        "root": "sha256:2A7ZGclH-8L7JIDz0YUHjYglAqsbs1_ugmLkP8tfMqQ"
+      },
+      "expect": "ISSUER_MISMATCH"
+    }
+  ],
+  "refusalCases": [
+    {
+      "id": "private-key-material",
+      "document": "privateKeyMaterial",
+      "expect": "PRIVATE_KEY_MATERIAL",
+      "description": "A published key entry carrying a private component. Node would build a working public key from it and nothing would look wrong."
+    },
+    {
+      "id": "thumbprint-mismatch",
+      "document": "thumbprintMismatch",
+      "expect": "THUMBPRINT_MISMATCH",
+      "description": "A declared thumbprint that is not the thumbprint of the key beside it. The thumbprint is what a pin is taken over, so it is recomputed and never believed."
+    },
+    {
+      "id": "status-inconsistent",
+      "document": "statusInconsistent",
+      "expect": "KEY_STATUS_INCONSISTENT",
+      "description": "A key labelled ACTIVE while carrying a revocation date in the past. A reader who trusted the label would trust a revoked key."
+    },
+    {
+      "id": "signed-by-evidence-key",
+      "document": "signedByEvidenceKey",
+      "expect": "UNKNOWN_SIGNER",
+      "description": "A valid signature, made by a key whose published use is signing evidence. If it counted, whoever could seal a record could rewrite which keys are trusted."
+    }
+  ],
+  "sealCases": [
+    {
+      "id": "s1-active-key",
+      "seal": "s1",
+      "registry": "v1",
+      "subject": "s1",
+      "commitmentDigest": "s1",
+      "expectedVerdict": "VALID",
+      "expectedReasonCodes": [],
+      "expectedDimensions": {
+        "content": "MATCHES",
+        "keyIdentity": "TRUSTED",
+        "keyLifecycle": "ACTIVE",
+        "signature": "VALID",
+        "subject": "MATCHES"
+      },
+      "description": "The ordinary case: an active key, the right record, the right content."
+    },
+    {
+      "id": "s1-content-not-checked",
+      "seal": "s1",
+      "registry": "v1",
+      "subject": "s1",
+      "commitmentDigest": null,
+      "expectedVerdict": "PARTIAL",
+      "expectedReasonCodes": [
+        "COMMITMENT_NOT_CHECKED"
+      ],
+      "expectedDimensions": {
+        "content": "NOT_CHECKED",
+        "keyIdentity": "TRUSTED",
+        "keyLifecycle": "ACTIVE",
+        "signature": "VALID",
+        "subject": "MATCHES"
+      },
+      "description": "No independently computed digest was supplied, so the content dimension is honestly unchecked and the verdict can never be the strongest one."
+    },
+    {
+      "id": "s1-content-mismatch",
+      "seal": "s1",
+      "registry": "v1",
+      "subject": "s1",
+      "commitmentDigest": "s2",
+      "expectedVerdict": "INVALID",
+      "expectedReasonCodes": [
+        "COMMITMENT_MISMATCH"
+      ],
+      "description": "The seal is signed correctly but commits to different content."
+    },
+    {
+      "id": "s1-survives-rotation",
+      "seal": "s1",
+      "registry": "v3",
+      "subject": "s1",
+      "commitmentDigest": "s1",
+      "expectedVerdict": "VALID",
+      "expectedReasonCodes": [
+        "KEY_RETIRED_AFTER_SIGNING"
+      ],
+      "expectedDimensions": {
+        "content": "MATCHES",
+        "keyIdentity": "TRUSTED",
+        "keyLifecycle": "ACTIVE",
+        "signature": "VALID",
+        "subject": "MATCHES"
+      },
+      "description": "The signing key has since been retired by an ordinary rotation. Historical verification is unaffected: the key was active when it signed."
+    },
+    {
+      "id": "s1-before-revocation-boundary",
+      "seal": "s1",
+      "registry": "v4",
+      "subject": "s1",
+      "commitmentDigest": "s1",
+      "expectedVerdict": "PARTIAL",
+      "expectedReasonCodes": [
+        "COMMITTED_AT_SELF_ASSERTED",
+        "SIGNED_BEFORE_REVOCATION"
+      ],
+      "expectedDimensions": {
+        "content": "MATCHES",
+        "keyIdentity": "TRUSTED",
+        "keyLifecycle": "ACTIVE",
+        "signature": "VALID",
+        "subject": "MATCHES"
+      },
+      "description": "The key was later revoked, with the compromise back-dated to after this seal. Worth something, but the boundary is a time Pruvz asserted about itself."
+    },
+    {
+      "id": "s2-after-revocation-boundary",
+      "seal": "s2",
+      "registry": "v5",
+      "subject": "s2",
+      "commitmentDigest": "s2",
+      "expectedVerdict": "INVALID",
+      "expectedReasonCodes": [
+        "SIGNED_AFTER_REVOCATION"
+      ],
+      "description": "The same key, the same kind of signature — but made after the declared compromise began. Flattening this and the case above into one boolean is exactly what time-aware output exists to prevent."
+    },
+    {
+      "id": "s2-active-key",
+      "seal": "s2",
+      "registry": "v2",
+      "subject": "s2",
+      "commitmentDigest": "s2",
+      "expectedVerdict": "VALID",
+      "expectedReasonCodes": [],
+      "description": "The successor key, verified while it was active."
+    },
+    {
+      "id": "s1-key-not-yet-published",
+      "seal": "s2",
+      "registry": "v1",
+      "subject": "s2",
+      "commitmentDigest": "s2",
+      "expectedVerdict": "INVALID",
+      "expectedReasonCodes": [
+        "UNKNOWN_KEY"
+      ],
+      "description": "A seal presented against an older registry that does not carry its key yet. Unknown is a refusal, never an assumption."
+    },
+    {
+      "id": "wrong-subject",
+      "seal": "s1",
+      "registry": "v1",
+      "subject": "s2",
+      "commitmentDigest": "s1",
+      "expectedVerdict": "INVALID",
+      "expectedReasonCodes": [
+        "SUBJECT_MISMATCH"
+      ],
+      "description": "A perfectly valid signature about a different record. Validity and relevance are separate questions."
+    },
+    {
+      "id": "tampered-signature",
+      "seal": "s1BadSignature",
+      "registry": "v1",
+      "subject": "s1",
+      "commitmentDigest": "s1",
+      "expectedVerdict": "INVALID",
+      "expectedReasonCodes": [
+        "SIGNATURE_INVALID"
+      ],
+      "description": "One bit of the signature flipped."
+    },
+    {
+      "id": "assurance-profile-raised",
+      "seal": "s1ProfileRaised",
+      "registry": "v1",
+      "subject": "s1",
+      "commitmentDigest": "s1",
+      "expectedVerdict": "INVALID",
+      "expectedReasonCodes": [
+        "SIGNATURE_INVALID"
+      ],
+      "description": "The profile is inside the signature, so raising a pre-customer seal to a customer-production one changes the bytes instead of changing what the signature is understood to mean."
+    },
+    {
+      "id": "seal-signed-by-trust-root",
+      "seal": "sealSignedByRoot",
+      "registry": "v1",
+      "subject": "s1",
+      "commitmentDigest": "s1",
+      "expectedVerdict": "INVALID",
+      "expectedReasonCodes": [
+        "KEY_USE_MISMATCH"
+      ],
+      "description": "A genuine signature by the trust root. A root that could also seal evidence would let whoever controls key history mint records."
+    },
+    {
+      "id": "seal-naming-unknown-key",
+      "seal": "sealNamingUnknownKey",
+      "registry": "v5",
+      "subject": "s1",
+      "commitmentDigest": "s1",
+      "expectedVerdict": "INVALID",
+      "expectedReasonCodes": [
+        "UNKNOWN_KEY"
+      ],
+      "description": "A key id the published history has never carried."
+    }
+  ]
+}
