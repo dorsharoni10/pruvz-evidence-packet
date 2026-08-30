@@ -1,0 +1,1630 @@
+{
+  "evidenceLogFormatVersion": "1",
+  "leafEnvelopeVersion": "1",
+  "domainSeparation": {
+    "leaf": {
+      "tag": "pruvz.ai/evidence-log-leaf",
+      "separator": "U+0000",
+      "format": "<tag> NUL <logFormatVersion> NUL <canonical JSON of { envelope, signature }>"
+    },
+    "checkpoint": {
+      "tag": "pruvz.ai/log-checkpoint",
+      "separator": "U+0000",
+      "format": "<tag> NUL <version> NUL <canonical JSON of the checkpoint>",
+      "signedMember": "checkpoint"
+    }
+  },
+  "hashing": {
+    "suite": "sha-256",
+    "leafPrefix": "0x00",
+    "nodePrefix": "0x01",
+    "construction": "RFC 6962 section 2.1 / RFC 9162 section 2.1 — a reuse of the published construction, not a claim of CT protocol compliance",
+    "emptyTreeHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "howTheseWereProduced": {
+    "keys": "One ephemeral NIST P-256 evidence-signing key pair generated once; it signs both the seals and the checkpoints, as the product does. The private half was never written anywhere and no longer exists.",
+    "immutability": "evidence-log/v1/ is immutable exactly like a released schema directory, commitment/v1/ and trust-registry/v1/. ECDSA is randomized, so regenerating would produce different signatures; these are the published bytes and they are what both runtimes must agree on.",
+    "twoLayers": "The deterministic material (leaf hashes, tree heads, proofs) must be reproduced byte for byte by any runtime. The signed material must be accepted or refused identically, with the same reason code.",
+    "identifiers": "Every identifier is synthetic. No real tenant, action or payload identifier appears in these vectors, and a checkpoint carries none by construction."
+  },
+  "verificationRequirement": "treeSize and rootHash are one inseparable pair taken from one signed checkpoint; a verifier never accepts either from the prover. See docs/EVIDENCE-LOG.md section 6.",
+  "rfc6962KnownAnswers": {
+    "note": "The published Certificate Transparency test tree: leaf data as hex, hashed and composed by this format. Proves both runtimes compute the published construction, not a lookalike.",
+    "leafDataHex": [
+      "",
+      "00",
+      "10",
+      "2021",
+      "3031",
+      "40414243",
+      "5051525354555657",
+      "606162636465666768696a6b6c6d6e6f"
+    ],
+    "leafHashes": [
+      "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d",
+      "96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7",
+      "0298d122906dcfc10892cb53a73992fc5b9f493ea4c9badb27b791b4127a7fe7",
+      "07506a85fd9dd2f120eb694f86011e5bb4662e5c415a62917033d4a9624487e7",
+      "bc1a0643b12e4d2d7c77918f44e0f4f79a838b6cf9ec5b5c283e1f4d88599e6b",
+      "4271a26be0d8a84f0bd54c8c302e7cb3a3b5d1fa6780a40bcce2873477dab658",
+      "b08693ec2e721597130641e8211e7eedccb4c26413963eee6c1e2ed16ffb1a5f",
+      "46f6ffadd3d06a09ff3c5860d2755c8b9819db7df44251788c7d8e3180de8eb1"
+    ],
+    "rootsBySize": [
+      "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d",
+      "fac54203e7cc696cf0dfcb42c92a1d9dbaf70ad9e621f4bd8d98662f00e3c125",
+      "aeb6bcfe274b70a14fb067a5e5578264db0fa9b51af5e0ba159158f329e06e77",
+      "d37ee418976dd95753c1c73862b9398fa2a2cf9b4ff0fdfe8b30cd95209614b7",
+      "4e3bbb1f7b478dcfe71fb631631519a3bca12c9aefca1612bfce4c13a86264d4",
+      "76e67dadbcdf1e10e1b74ddc608abd2f98dfb16fbce75277b5232a127f2087ef",
+      "ddb89be403809e325750d3d263cd78929c2942b7942a34b77e122c9594a74c8c",
+      "5dc9da79a70659a9ad559cb701ded9a2ab9d823aad2f4960cfe370eff4604328"
+    ]
+  },
+  "signingKey": {
+    "jwk": {
+      "crv": "P-256",
+      "kty": "EC",
+      "x": "1PNWK0RGuiTKVYmUBe9lUTFcaQ4SpAkrrQEEM587HhU",
+      "y": "VIDdGIliHPHEEKAvyXPCTa0YTQgstISRkfBchu1A0tA"
+    }
+  },
+  "origin": "pruvz.ai/evidence-log/demo",
+  "seals": {
+    "seal-1": {
+      "envelope": {
+        "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+        "commitment": {
+          "digest": "sha256:20a47bf3d969072b78daa722977363f5c65983ff07f6861ab8de37902bd72a54",
+          "digestSuite": "sha-256",
+          "kind": "evidence-item",
+          "version": "1"
+        },
+        "committedAt": "2026-08-10T09:00:00Z",
+        "signer": {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/3c4d5e6f708192a3b4c5d6e7f8019203",
+          "provider": "azure-key-vault",
+          "suite": "ES256"
+        },
+        "subject": {
+          "actionId": "act_8ef7da3db4bfac19354bd755941127f1",
+          "evidenceId": "evd_c1141b27cde2602d810c31a3457ed9f2",
+          "sequence": 1,
+          "tenantId": "tenant-demo"
+        },
+        "version": "1"
+      },
+      "signature": "Mucjp1BI5yPTCGFYLX5I07OMgpssWG_AqhYfPxZoYFRBqbpOPw3fZFDvrsY9jfpXIRo_PlEbyWruiIi4n_X-_w"
+    },
+    "seal-2": {
+      "envelope": {
+        "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+        "commitment": {
+          "digest": "sha256:377e853f7992e36aff7865f58e15387875e283912794533eac82bbbe9ddcc542",
+          "digestSuite": "sha-256",
+          "kind": "evidence-item",
+          "version": "1"
+        },
+        "committedAt": "2026-08-10T09:01:00Z",
+        "signer": {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/3c4d5e6f708192a3b4c5d6e7f8019203",
+          "provider": "azure-key-vault",
+          "suite": "ES256"
+        },
+        "subject": {
+          "actionId": "act_8ef7da3db4bfac19354bd755941127f1",
+          "evidenceId": "evd_96fae88b97d61d0a3bf8779903e40002",
+          "sequence": 2,
+          "tenantId": "tenant-demo"
+        },
+        "version": "1"
+      },
+      "signature": "9wnL-VdXHfbbGnTmcnBcNIhPhUuF8XJ2wfQ_IzRpNTHrCWzo2OIkTSG8b2tjfM2lAQoR2nXGUgeVONOWe7Dp8Q"
+    },
+    "seal-3": {
+      "envelope": {
+        "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+        "commitment": {
+          "digest": "sha256:3cc5ad0e3958d84cbee2fe7f667884021d4c1374f013ec0f426e39ad9be784b6",
+          "digestSuite": "sha-256",
+          "kind": "evidence-item",
+          "version": "1"
+        },
+        "committedAt": "2026-08-10T09:02:00Z",
+        "signer": {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/3c4d5e6f708192a3b4c5d6e7f8019203",
+          "provider": "azure-key-vault",
+          "suite": "ES256"
+        },
+        "subject": {
+          "actionId": "act_8ef7da3db4bfac19354bd755941127f1",
+          "evidenceId": "evd_0917abc77b772515950de9d2eb81b780",
+          "sequence": 3,
+          "tenantId": "tenant-demo"
+        },
+        "version": "1"
+      },
+      "signature": "CRPXg3yMiOWbcwW_3P7FesYY3UngxqS2hE_NYAeGRcjqIZlRf6LSqtZ5-5bm1jEaZhVttO6d6oDbci4B0saNEg"
+    },
+    "seal-4": {
+      "envelope": {
+        "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+        "commitment": {
+          "digest": "sha256:b8dc5f99ac9bcdcb8f41b6232821b7ca714f4eb391832047930f864b5026e874",
+          "digestSuite": "sha-256",
+          "kind": "evidence-item",
+          "version": "1"
+        },
+        "committedAt": "2026-08-10T09:03:00Z",
+        "signer": {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/3c4d5e6f708192a3b4c5d6e7f8019203",
+          "provider": "azure-key-vault",
+          "suite": "ES256"
+        },
+        "subject": {
+          "actionId": "act_8ef7da3db4bfac19354bd755941127f1",
+          "evidenceId": "evd_38c48b4d89f1c408016308ca5af721c9",
+          "sequence": 4,
+          "tenantId": "tenant-demo"
+        },
+        "version": "1"
+      },
+      "signature": "ytly69Dm2FuwiNR7Xeux6pAex-RpX9zRJdgnA9FYoU4j4C8wm4RFcLMJqocOSz4n8JtKyG3LqvroYlzKNr03dw"
+    },
+    "seal-5": {
+      "envelope": {
+        "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+        "commitment": {
+          "digest": "sha256:87a70de2eeb0697a0aa5f98f7b4dbf0fc0f05a1b4df5981385d9918b5e24e562",
+          "digestSuite": "sha-256",
+          "kind": "evidence-item",
+          "version": "1"
+        },
+        "committedAt": "2026-08-10T09:04:00Z",
+        "signer": {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/3c4d5e6f708192a3b4c5d6e7f8019203",
+          "provider": "azure-key-vault",
+          "suite": "ES256"
+        },
+        "subject": {
+          "actionId": "act_65c9e98ba6458d6614638367675ca079",
+          "evidenceId": "evd_d63873f6d73c74bfceb55d62bf785c92",
+          "sequence": 1,
+          "tenantId": "tenant-demo"
+        },
+        "version": "1"
+      },
+      "signature": "AkVBYb2p4P9WjmGbCjfEv0OYyn7NYPLJP7CDK3OOm5xLduJH99fI-rku5QCcphXF8orA3IVwYVHd-oTqTTRGFA"
+    },
+    "seal-6": {
+      "envelope": {
+        "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+        "commitment": {
+          "digest": "sha256:9b2024f695f8402cfd80a5324d31223bc7f0e07f7244a22a45bb765eba36e3e2",
+          "digestSuite": "sha-256",
+          "kind": "evidence-item",
+          "version": "1"
+        },
+        "committedAt": "2026-08-10T09:05:00Z",
+        "signer": {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/3c4d5e6f708192a3b4c5d6e7f8019203",
+          "provider": "azure-key-vault",
+          "suite": "ES256"
+        },
+        "subject": {
+          "actionId": "act_65c9e98ba6458d6614638367675ca079",
+          "evidenceId": "evd_aad078088f75d31c985c30fb1d9bfcf7",
+          "sequence": 2,
+          "tenantId": "tenant-demo"
+        },
+        "version": "1"
+      },
+      "signature": "BlhUN4pykpCUz7lAIeWHnbPH3aThbtn8PqA4JSj4Qpkc_evfIjPivnEkJf9_U2k21zmgLVjIN-cnwfchZ3LcqQ"
+    },
+    "seal-7": {
+      "envelope": {
+        "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+        "commitment": {
+          "digest": "sha256:f4999d067296a795eb93df2749641dc300a4c64a404631d73e73e83812886944",
+          "digestSuite": "sha-256",
+          "kind": "evidence-item",
+          "version": "1"
+        },
+        "committedAt": "2026-08-10T09:06:00Z",
+        "signer": {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/3c4d5e6f708192a3b4c5d6e7f8019203",
+          "provider": "azure-key-vault",
+          "suite": "ES256"
+        },
+        "subject": {
+          "actionId": "act_65c9e98ba6458d6614638367675ca079",
+          "evidenceId": "evd_acb8e2ed9e77cb3fc65b4038fb034c51",
+          "sequence": 3,
+          "tenantId": "tenant-demo"
+        },
+        "version": "1"
+      },
+      "signature": "I74G4-Z3-gF_uzd9aC2V0IGH7ewcjBfgzAgaTUnX5ESHCjlQTu4uuQXK5VG1m12dizvryAOOuTtqk16DLWcVWA"
+    },
+    "seal-8": {
+      "envelope": {
+        "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+        "commitment": {
+          "digest": "sha256:eae8c9136d8ade16d193543ec1bfb1e640d82f01c8163d4ede1c18127621596b",
+          "digestSuite": "sha-256",
+          "kind": "evidence-item",
+          "version": "1"
+        },
+        "committedAt": "2026-08-10T09:07:00Z",
+        "signer": {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/3c4d5e6f708192a3b4c5d6e7f8019203",
+          "provider": "azure-key-vault",
+          "suite": "ES256"
+        },
+        "subject": {
+          "actionId": "act_65c9e98ba6458d6614638367675ca079",
+          "evidenceId": "evd_cc223836b1eed5e0b7dbbff2c09b750b",
+          "sequence": 4,
+          "tenantId": "tenant-demo"
+        },
+        "version": "1"
+      },
+      "signature": "Nd62GEPAuh8YRCMMH64xNoZCZDo6CrdczPweJj4FIUa2uNE5ymZnwJfVr9vBQb9H3G4kXgwg9HNuICwl5o7QxA"
+    }
+  },
+  "canonical": {
+    "note": "The canonical JSON of seal-1 and of checkpoint-1, i.e. each signing/leaf input with its NUL-separated header removed — the readable anchors. Every other value is pinned by hash, and a hash match is a byte match.",
+    "seal1": "{\"envelope\":{\"assuranceProfile\":\"PRE_CUSTOMER_DEFAULT\",\"commitment\":{\"digest\":\"sha256:20a47bf3d969072b78daa722977363f5c65983ff07f6861ab8de37902bd72a54\",\"digestSuite\":\"sha-256\",\"kind\":\"evidence-item\",\"version\":\"1\"},\"committedAt\":\"2026-08-10T09:00:00Z\",\"signer\":{\"keyId\":\"https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/3c4d5e6f708192a3b4c5d6e7f8019203\",\"provider\":\"azure-key-vault\",\"suite\":\"ES256\"},\"subject\":{\"actionId\":\"act_8ef7da3db4bfac19354bd755941127f1\",\"evidenceId\":\"evd_c1141b27cde2602d810c31a3457ed9f2\",\"sequence\":1,\"tenantId\":\"tenant-demo\"},\"version\":\"1\"},\"signature\":\"Mucjp1BI5yPTCGFYLX5I07OMgpssWG_AqhYfPxZoYFRBqbpOPw3fZFDvrsY9jfpXIRo_PlEbyWruiIi4n_X-_w\"}",
+    "checkpoint1": "{\"assuranceProfile\":\"PRE_CUSTOMER_DEFAULT\",\"checkpointSequence\":1,\"issuedAt\":\"2026-08-10T09:03:30Z\",\"origin\":\"pruvz.ai/evidence-log/demo\",\"rootHash\":\"sha256:34a806b9e8da1f82db8edd8d270e9f6d71511b21914bcb304741f310f8d17334\",\"signer\":{\"keyId\":\"https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/3c4d5e6f708192a3b4c5d6e7f8019203\",\"provider\":\"azure-key-vault\",\"suite\":\"ES256\"},\"treeSize\":3,\"version\":\"1\"}"
+  },
+  "leafInputSha256": {
+    "seal-1": "5233c24d5106a8bcf256c9493ec6ff366d84c375be3c3cc01be1674614d06032",
+    "seal-2": "cf1486db2fcbb28afc63e508a5724d7042b42931eeb0f1a47198fbcc8590e520",
+    "seal-3": "28945f42acb5d103167f2b5bb067e9658940c46a76cff50ea3ecbaf9b9b850f4",
+    "seal-4": "be2cd7f9247c6218e72cca02323af7bdece1b9e95dbf26fe29ee7817dc3e81c2",
+    "seal-5": "7c78c5e0e732c5b5ae653e2697b218c711be6e90d1235c60214c9734d6600052",
+    "seal-6": "7a6511c69aef23257681f5e3795a1b810c003837d4dca2797cbe36b684182800",
+    "seal-7": "b68902e214b576f3cdc4b1b7a27fe79d2b5c6c711bb763682a83361d4e3dcf2e",
+    "seal-8": "6a03f4a494b19344adf6159f0dafacab9e7c602b68a0cdabad2c91600e1fd465"
+  },
+  "leafHashes": [
+    "b2e7802b5b90098c69c58fb12aacecc3a2b15472eebdb17fe3ca7cbf407b5bc6",
+    "b3e2cc241a777b722684a447443fb043f99d2b0ef2df22bc176aed176c1ad1f8",
+    "5bef32398d47eacf08d92f4cf2537cb223eb0ca25fcc82552eef10835d9fa6ef",
+    "5a02852deb09e6a2339a276a81e838c9cb7fb007ec27aa48b0f66cff7b551255",
+    "51e522547c8b31728609fd4e6329edbd8be0bd1ce36705ee0e1cdfea4bdc712e",
+    "e9a7cfea7f463dbf62922a48d40eec681da57e4a8a72e88712d92645c2bc138f",
+    "1958b8e21777d44723de3baee209cdedd042429004c87f503e92979b9b5fd077",
+    "736df8c08067d6669094ed1598cf5cb93412d9360c2e32754842a009ecfd7eff"
+  ],
+  "tree": {
+    "rootsBySize": [
+      "b2e7802b5b90098c69c58fb12aacecc3a2b15472eebdb17fe3ca7cbf407b5bc6",
+      "13249d056c8e815c27c203b4510a896d6a9c614bb527237d84e1c39176c646f0",
+      "34a806b9e8da1f82db8edd8d270e9f6d71511b21914bcb304741f310f8d17334",
+      "2d4dd521b2fcbeb85b8d3ff54eb5a2c728da9a094dc545001717e73ef4157e6c",
+      "6f44c370cd15f56784ac2f2473a8ed345f4244043635cf84fb081c25778bdafb",
+      "d16ef97322ff2b09e7213512590176e5a879eb9cdba1719b8eebaaa330b64785",
+      "6f9b648ea462b7fca211fe8f73530fd5b81a9c907e05f4c99e4289f691094d21",
+      "b97260e6e53fcfec0712b80706b7263306b3268e5ef6053ed59852c03b355ebd"
+    ],
+    "inclusion": [
+      {
+        "leafIndex": 0,
+        "treeSize": 1,
+        "path": []
+      },
+      {
+        "leafIndex": 0,
+        "treeSize": 2,
+        "path": [
+          "b3e2cc241a777b722684a447443fb043f99d2b0ef2df22bc176aed176c1ad1f8"
+        ]
+      },
+      {
+        "leafIndex": 1,
+        "treeSize": 2,
+        "path": [
+          "b2e7802b5b90098c69c58fb12aacecc3a2b15472eebdb17fe3ca7cbf407b5bc6"
+        ]
+      },
+      {
+        "leafIndex": 0,
+        "treeSize": 3,
+        "path": [
+          "b3e2cc241a777b722684a447443fb043f99d2b0ef2df22bc176aed176c1ad1f8",
+          "5bef32398d47eacf08d92f4cf2537cb223eb0ca25fcc82552eef10835d9fa6ef"
+        ]
+      },
+      {
+        "leafIndex": 1,
+        "treeSize": 3,
+        "path": [
+          "b2e7802b5b90098c69c58fb12aacecc3a2b15472eebdb17fe3ca7cbf407b5bc6",
+          "5bef32398d47eacf08d92f4cf2537cb223eb0ca25fcc82552eef10835d9fa6ef"
+        ]
+      },
+      {
+        "leafIndex": 2,
+        "treeSize": 3,
+        "path": [
+          "13249d056c8e815c27c203b4510a896d6a9c614bb527237d84e1c39176c646f0"
+        ]
+      },
+      {
+        "leafIndex": 0,
+        "treeSize": 4,
+        "path": [
+          "b3e2cc241a777b722684a447443fb043f99d2b0ef2df22bc176aed176c1ad1f8",
+          "077f4b7b7e8626d5acd75166e642e611a067cace4af829813cda65b21317b153"
+        ]
+      },
+      {
+        "leafIndex": 1,
+        "treeSize": 4,
+        "path": [
+          "b2e7802b5b90098c69c58fb12aacecc3a2b15472eebdb17fe3ca7cbf407b5bc6",
+          "077f4b7b7e8626d5acd75166e642e611a067cace4af829813cda65b21317b153"
+        ]
+      },
+      {
+        "leafIndex": 2,
+        "treeSize": 4,
+        "path": [
+          "5a02852deb09e6a2339a276a81e838c9cb7fb007ec27aa48b0f66cff7b551255",
+          "13249d056c8e815c27c203b4510a896d6a9c614bb527237d84e1c39176c646f0"
+        ]
+      },
+      {
+        "leafIndex": 3,
+        "treeSize": 4,
+        "path": [
+          "5bef32398d47eacf08d92f4cf2537cb223eb0ca25fcc82552eef10835d9fa6ef",
+          "13249d056c8e815c27c203b4510a896d6a9c614bb527237d84e1c39176c646f0"
+        ]
+      },
+      {
+        "leafIndex": 0,
+        "treeSize": 5,
+        "path": [
+          "b3e2cc241a777b722684a447443fb043f99d2b0ef2df22bc176aed176c1ad1f8",
+          "077f4b7b7e8626d5acd75166e642e611a067cace4af829813cda65b21317b153",
+          "51e522547c8b31728609fd4e6329edbd8be0bd1ce36705ee0e1cdfea4bdc712e"
+        ]
+      },
+      {
+        "leafIndex": 1,
+        "treeSize": 5,
+        "path": [
+          "b2e7802b5b90098c69c58fb12aacecc3a2b15472eebdb17fe3ca7cbf407b5bc6",
+          "077f4b7b7e8626d5acd75166e642e611a067cace4af829813cda65b21317b153",
+          "51e522547c8b31728609fd4e6329edbd8be0bd1ce36705ee0e1cdfea4bdc712e"
+        ]
+      },
+      {
+        "leafIndex": 2,
+        "treeSize": 5,
+        "path": [
+          "5a02852deb09e6a2339a276a81e838c9cb7fb007ec27aa48b0f66cff7b551255",
+          "13249d056c8e815c27c203b4510a896d6a9c614bb527237d84e1c39176c646f0",
+          "51e522547c8b31728609fd4e6329edbd8be0bd1ce36705ee0e1cdfea4bdc712e"
+        ]
+      },
+      {
+        "leafIndex": 3,
+        "treeSize": 5,
+        "path": [
+          "5bef32398d47eacf08d92f4cf2537cb223eb0ca25fcc82552eef10835d9fa6ef",
+          "13249d056c8e815c27c203b4510a896d6a9c614bb527237d84e1c39176c646f0",
+          "51e522547c8b31728609fd4e6329edbd8be0bd1ce36705ee0e1cdfea4bdc712e"
+        ]
+      },
+      {
+        "leafIndex": 4,
+        "treeSize": 5,
+        "path": [
+          "2d4dd521b2fcbeb85b8d3ff54eb5a2c728da9a094dc545001717e73ef4157e6c"
+        ]
+      },
+      {
+        "leafIndex": 0,
+        "treeSize": 6,
+        "path": [
+          "b3e2cc241a777b722684a447443fb043f99d2b0ef2df22bc176aed176c1ad1f8",
+          "077f4b7b7e8626d5acd75166e642e611a067cace4af829813cda65b21317b153",
+          "76f98dc0ef295c91af87b12e99d9cbf74b0b4988385780facd1ff329ff43bc53"
+        ]
+      },
+      {
+        "leafIndex": 1,
+        "treeSize": 6,
+        "path": [
+          "b2e7802b5b90098c69c58fb12aacecc3a2b15472eebdb17fe3ca7cbf407b5bc6",
+          "077f4b7b7e8626d5acd75166e642e611a067cace4af829813cda65b21317b153",
+          "76f98dc0ef295c91af87b12e99d9cbf74b0b4988385780facd1ff329ff43bc53"
+        ]
+      },
+      {
+        "leafIndex": 2,
+        "treeSize": 6,
+        "path": [
+          "5a02852deb09e6a2339a276a81e838c9cb7fb007ec27aa48b0f66cff7b551255",
+          "13249d056c8e815c27c203b4510a896d6a9c614bb527237d84e1c39176c646f0",
+          "76f98dc0ef295c91af87b12e99d9cbf74b0b4988385780facd1ff329ff43bc53"
+        ]
+      },
+      {
+        "leafIndex": 3,
+        "treeSize": 6,
+        "path": [
+          "5bef32398d47eacf08d92f4cf2537cb223eb0ca25fcc82552eef10835d9fa6ef",
+          "13249d056c8e815c27c203b4510a896d6a9c614bb527237d84e1c39176c646f0",
+          "76f98dc0ef295c91af87b12e99d9cbf74b0b4988385780facd1ff329ff43bc53"
+        ]
+      },
+      {
+        "leafIndex": 4,
+        "treeSize": 6,
+        "path": [
+          "e9a7cfea7f463dbf62922a48d40eec681da57e4a8a72e88712d92645c2bc138f",
+          "2d4dd521b2fcbeb85b8d3ff54eb5a2c728da9a094dc545001717e73ef4157e6c"
+        ]
+      },
+      {
+        "leafIndex": 5,
+        "treeSize": 6,
+        "path": [
+          "51e522547c8b31728609fd4e6329edbd8be0bd1ce36705ee0e1cdfea4bdc712e",
+          "2d4dd521b2fcbeb85b8d3ff54eb5a2c728da9a094dc545001717e73ef4157e6c"
+        ]
+      },
+      {
+        "leafIndex": 0,
+        "treeSize": 7,
+        "path": [
+          "b3e2cc241a777b722684a447443fb043f99d2b0ef2df22bc176aed176c1ad1f8",
+          "077f4b7b7e8626d5acd75166e642e611a067cace4af829813cda65b21317b153",
+          "25e7b8abaf8c424fe9389c40f9e894f2242b913e273356627c76d09b2c374dd2"
+        ]
+      },
+      {
+        "leafIndex": 1,
+        "treeSize": 7,
+        "path": [
+          "b2e7802b5b90098c69c58fb12aacecc3a2b15472eebdb17fe3ca7cbf407b5bc6",
+          "077f4b7b7e8626d5acd75166e642e611a067cace4af829813cda65b21317b153",
+          "25e7b8abaf8c424fe9389c40f9e894f2242b913e273356627c76d09b2c374dd2"
+        ]
+      },
+      {
+        "leafIndex": 2,
+        "treeSize": 7,
+        "path": [
+          "5a02852deb09e6a2339a276a81e838c9cb7fb007ec27aa48b0f66cff7b551255",
+          "13249d056c8e815c27c203b4510a896d6a9c614bb527237d84e1c39176c646f0",
+          "25e7b8abaf8c424fe9389c40f9e894f2242b913e273356627c76d09b2c374dd2"
+        ]
+      },
+      {
+        "leafIndex": 3,
+        "treeSize": 7,
+        "path": [
+          "5bef32398d47eacf08d92f4cf2537cb223eb0ca25fcc82552eef10835d9fa6ef",
+          "13249d056c8e815c27c203b4510a896d6a9c614bb527237d84e1c39176c646f0",
+          "25e7b8abaf8c424fe9389c40f9e894f2242b913e273356627c76d09b2c374dd2"
+        ]
+      },
+      {
+        "leafIndex": 4,
+        "treeSize": 7,
+        "path": [
+          "e9a7cfea7f463dbf62922a48d40eec681da57e4a8a72e88712d92645c2bc138f",
+          "1958b8e21777d44723de3baee209cdedd042429004c87f503e92979b9b5fd077",
+          "2d4dd521b2fcbeb85b8d3ff54eb5a2c728da9a094dc545001717e73ef4157e6c"
+        ]
+      },
+      {
+        "leafIndex": 5,
+        "treeSize": 7,
+        "path": [
+          "51e522547c8b31728609fd4e6329edbd8be0bd1ce36705ee0e1cdfea4bdc712e",
+          "1958b8e21777d44723de3baee209cdedd042429004c87f503e92979b9b5fd077",
+          "2d4dd521b2fcbeb85b8d3ff54eb5a2c728da9a094dc545001717e73ef4157e6c"
+        ]
+      },
+      {
+        "leafIndex": 6,
+        "treeSize": 7,
+        "path": [
+          "76f98dc0ef295c91af87b12e99d9cbf74b0b4988385780facd1ff329ff43bc53",
+          "2d4dd521b2fcbeb85b8d3ff54eb5a2c728da9a094dc545001717e73ef4157e6c"
+        ]
+      },
+      {
+        "leafIndex": 0,
+        "treeSize": 8,
+        "path": [
+          "b3e2cc241a777b722684a447443fb043f99d2b0ef2df22bc176aed176c1ad1f8",
+          "077f4b7b7e8626d5acd75166e642e611a067cace4af829813cda65b21317b153",
+          "58dd401b74f4986f26a302afca870ea5d2b0bcddf548471b39e4d362da427ec5"
+        ]
+      },
+      {
+        "leafIndex": 1,
+        "treeSize": 8,
+        "path": [
+          "b2e7802b5b90098c69c58fb12aacecc3a2b15472eebdb17fe3ca7cbf407b5bc6",
+          "077f4b7b7e8626d5acd75166e642e611a067cace4af829813cda65b21317b153",
+          "58dd401b74f4986f26a302afca870ea5d2b0bcddf548471b39e4d362da427ec5"
+        ]
+      },
+      {
+        "leafIndex": 2,
+        "treeSize": 8,
+        "path": [
+          "5a02852deb09e6a2339a276a81e838c9cb7fb007ec27aa48b0f66cff7b551255",
+          "13249d056c8e815c27c203b4510a896d6a9c614bb527237d84e1c39176c646f0",
+          "58dd401b74f4986f26a302afca870ea5d2b0bcddf548471b39e4d362da427ec5"
+        ]
+      },
+      {
+        "leafIndex": 3,
+        "treeSize": 8,
+        "path": [
+          "5bef32398d47eacf08d92f4cf2537cb223eb0ca25fcc82552eef10835d9fa6ef",
+          "13249d056c8e815c27c203b4510a896d6a9c614bb527237d84e1c39176c646f0",
+          "58dd401b74f4986f26a302afca870ea5d2b0bcddf548471b39e4d362da427ec5"
+        ]
+      },
+      {
+        "leafIndex": 4,
+        "treeSize": 8,
+        "path": [
+          "e9a7cfea7f463dbf62922a48d40eec681da57e4a8a72e88712d92645c2bc138f",
+          "648f94ae277c44b0f085084c99616d31a21ca3c974d711bf580b5d769c361d3d",
+          "2d4dd521b2fcbeb85b8d3ff54eb5a2c728da9a094dc545001717e73ef4157e6c"
+        ]
+      },
+      {
+        "leafIndex": 5,
+        "treeSize": 8,
+        "path": [
+          "51e522547c8b31728609fd4e6329edbd8be0bd1ce36705ee0e1cdfea4bdc712e",
+          "648f94ae277c44b0f085084c99616d31a21ca3c974d711bf580b5d769c361d3d",
+          "2d4dd521b2fcbeb85b8d3ff54eb5a2c728da9a094dc545001717e73ef4157e6c"
+        ]
+      },
+      {
+        "leafIndex": 6,
+        "treeSize": 8,
+        "path": [
+          "736df8c08067d6669094ed1598cf5cb93412d9360c2e32754842a009ecfd7eff",
+          "76f98dc0ef295c91af87b12e99d9cbf74b0b4988385780facd1ff329ff43bc53",
+          "2d4dd521b2fcbeb85b8d3ff54eb5a2c728da9a094dc545001717e73ef4157e6c"
+        ]
+      },
+      {
+        "leafIndex": 7,
+        "treeSize": 8,
+        "path": [
+          "1958b8e21777d44723de3baee209cdedd042429004c87f503e92979b9b5fd077",
+          "76f98dc0ef295c91af87b12e99d9cbf74b0b4988385780facd1ff329ff43bc53",
+          "2d4dd521b2fcbeb85b8d3ff54eb5a2c728da9a094dc545001717e73ef4157e6c"
+        ]
+      }
+    ],
+    "consistency": [
+      {
+        "fromSize": 1,
+        "toSize": 1,
+        "proof": []
+      },
+      {
+        "fromSize": 1,
+        "toSize": 2,
+        "proof": [
+          "b3e2cc241a777b722684a447443fb043f99d2b0ef2df22bc176aed176c1ad1f8"
+        ]
+      },
+      {
+        "fromSize": 1,
+        "toSize": 3,
+        "proof": [
+          "b3e2cc241a777b722684a447443fb043f99d2b0ef2df22bc176aed176c1ad1f8",
+          "5bef32398d47eacf08d92f4cf2537cb223eb0ca25fcc82552eef10835d9fa6ef"
+        ]
+      },
+      {
+        "fromSize": 1,
+        "toSize": 4,
+        "proof": [
+          "b3e2cc241a777b722684a447443fb043f99d2b0ef2df22bc176aed176c1ad1f8",
+          "077f4b7b7e8626d5acd75166e642e611a067cace4af829813cda65b21317b153"
+        ]
+      },
+      {
+        "fromSize": 1,
+        "toSize": 5,
+        "proof": [
+          "b3e2cc241a777b722684a447443fb043f99d2b0ef2df22bc176aed176c1ad1f8",
+          "077f4b7b7e8626d5acd75166e642e611a067cace4af829813cda65b21317b153",
+          "51e522547c8b31728609fd4e6329edbd8be0bd1ce36705ee0e1cdfea4bdc712e"
+        ]
+      },
+      {
+        "fromSize": 1,
+        "toSize": 6,
+        "proof": [
+          "b3e2cc241a777b722684a447443fb043f99d2b0ef2df22bc176aed176c1ad1f8",
+          "077f4b7b7e8626d5acd75166e642e611a067cace4af829813cda65b21317b153",
+          "76f98dc0ef295c91af87b12e99d9cbf74b0b4988385780facd1ff329ff43bc53"
+        ]
+      },
+      {
+        "fromSize": 1,
+        "toSize": 7,
+        "proof": [
+          "b3e2cc241a777b722684a447443fb043f99d2b0ef2df22bc176aed176c1ad1f8",
+          "077f4b7b7e8626d5acd75166e642e611a067cace4af829813cda65b21317b153",
+          "25e7b8abaf8c424fe9389c40f9e894f2242b913e273356627c76d09b2c374dd2"
+        ]
+      },
+      {
+        "fromSize": 1,
+        "toSize": 8,
+        "proof": [
+          "b3e2cc241a777b722684a447443fb043f99d2b0ef2df22bc176aed176c1ad1f8",
+          "077f4b7b7e8626d5acd75166e642e611a067cace4af829813cda65b21317b153",
+          "58dd401b74f4986f26a302afca870ea5d2b0bcddf548471b39e4d362da427ec5"
+        ]
+      },
+      {
+        "fromSize": 2,
+        "toSize": 2,
+        "proof": []
+      },
+      {
+        "fromSize": 2,
+        "toSize": 3,
+        "proof": [
+          "5bef32398d47eacf08d92f4cf2537cb223eb0ca25fcc82552eef10835d9fa6ef"
+        ]
+      },
+      {
+        "fromSize": 2,
+        "toSize": 4,
+        "proof": [
+          "077f4b7b7e8626d5acd75166e642e611a067cace4af829813cda65b21317b153"
+        ]
+      },
+      {
+        "fromSize": 2,
+        "toSize": 5,
+        "proof": [
+          "077f4b7b7e8626d5acd75166e642e611a067cace4af829813cda65b21317b153",
+          "51e522547c8b31728609fd4e6329edbd8be0bd1ce36705ee0e1cdfea4bdc712e"
+        ]
+      },
+      {
+        "fromSize": 2,
+        "toSize": 6,
+        "proof": [
+          "077f4b7b7e8626d5acd75166e642e611a067cace4af829813cda65b21317b153",
+          "76f98dc0ef295c91af87b12e99d9cbf74b0b4988385780facd1ff329ff43bc53"
+        ]
+      },
+      {
+        "fromSize": 2,
+        "toSize": 7,
+        "proof": [
+          "077f4b7b7e8626d5acd75166e642e611a067cace4af829813cda65b21317b153",
+          "25e7b8abaf8c424fe9389c40f9e894f2242b913e273356627c76d09b2c374dd2"
+        ]
+      },
+      {
+        "fromSize": 2,
+        "toSize": 8,
+        "proof": [
+          "077f4b7b7e8626d5acd75166e642e611a067cace4af829813cda65b21317b153",
+          "58dd401b74f4986f26a302afca870ea5d2b0bcddf548471b39e4d362da427ec5"
+        ]
+      },
+      {
+        "fromSize": 3,
+        "toSize": 3,
+        "proof": []
+      },
+      {
+        "fromSize": 3,
+        "toSize": 4,
+        "proof": [
+          "5bef32398d47eacf08d92f4cf2537cb223eb0ca25fcc82552eef10835d9fa6ef",
+          "5a02852deb09e6a2339a276a81e838c9cb7fb007ec27aa48b0f66cff7b551255",
+          "13249d056c8e815c27c203b4510a896d6a9c614bb527237d84e1c39176c646f0"
+        ]
+      },
+      {
+        "fromSize": 3,
+        "toSize": 5,
+        "proof": [
+          "5bef32398d47eacf08d92f4cf2537cb223eb0ca25fcc82552eef10835d9fa6ef",
+          "5a02852deb09e6a2339a276a81e838c9cb7fb007ec27aa48b0f66cff7b551255",
+          "13249d056c8e815c27c203b4510a896d6a9c614bb527237d84e1c39176c646f0",
+          "51e522547c8b31728609fd4e6329edbd8be0bd1ce36705ee0e1cdfea4bdc712e"
+        ]
+      },
+      {
+        "fromSize": 3,
+        "toSize": 6,
+        "proof": [
+          "5bef32398d47eacf08d92f4cf2537cb223eb0ca25fcc82552eef10835d9fa6ef",
+          "5a02852deb09e6a2339a276a81e838c9cb7fb007ec27aa48b0f66cff7b551255",
+          "13249d056c8e815c27c203b4510a896d6a9c614bb527237d84e1c39176c646f0",
+          "76f98dc0ef295c91af87b12e99d9cbf74b0b4988385780facd1ff329ff43bc53"
+        ]
+      },
+      {
+        "fromSize": 3,
+        "toSize": 7,
+        "proof": [
+          "5bef32398d47eacf08d92f4cf2537cb223eb0ca25fcc82552eef10835d9fa6ef",
+          "5a02852deb09e6a2339a276a81e838c9cb7fb007ec27aa48b0f66cff7b551255",
+          "13249d056c8e815c27c203b4510a896d6a9c614bb527237d84e1c39176c646f0",
+          "25e7b8abaf8c424fe9389c40f9e894f2242b913e273356627c76d09b2c374dd2"
+        ]
+      },
+      {
+        "fromSize": 3,
+        "toSize": 8,
+        "proof": [
+          "5bef32398d47eacf08d92f4cf2537cb223eb0ca25fcc82552eef10835d9fa6ef",
+          "5a02852deb09e6a2339a276a81e838c9cb7fb007ec27aa48b0f66cff7b551255",
+          "13249d056c8e815c27c203b4510a896d6a9c614bb527237d84e1c39176c646f0",
+          "58dd401b74f4986f26a302afca870ea5d2b0bcddf548471b39e4d362da427ec5"
+        ]
+      },
+      {
+        "fromSize": 4,
+        "toSize": 4,
+        "proof": []
+      },
+      {
+        "fromSize": 4,
+        "toSize": 5,
+        "proof": [
+          "51e522547c8b31728609fd4e6329edbd8be0bd1ce36705ee0e1cdfea4bdc712e"
+        ]
+      },
+      {
+        "fromSize": 4,
+        "toSize": 6,
+        "proof": [
+          "76f98dc0ef295c91af87b12e99d9cbf74b0b4988385780facd1ff329ff43bc53"
+        ]
+      },
+      {
+        "fromSize": 4,
+        "toSize": 7,
+        "proof": [
+          "25e7b8abaf8c424fe9389c40f9e894f2242b913e273356627c76d09b2c374dd2"
+        ]
+      },
+      {
+        "fromSize": 4,
+        "toSize": 8,
+        "proof": [
+          "58dd401b74f4986f26a302afca870ea5d2b0bcddf548471b39e4d362da427ec5"
+        ]
+      },
+      {
+        "fromSize": 5,
+        "toSize": 5,
+        "proof": []
+      },
+      {
+        "fromSize": 5,
+        "toSize": 6,
+        "proof": [
+          "51e522547c8b31728609fd4e6329edbd8be0bd1ce36705ee0e1cdfea4bdc712e",
+          "e9a7cfea7f463dbf62922a48d40eec681da57e4a8a72e88712d92645c2bc138f",
+          "2d4dd521b2fcbeb85b8d3ff54eb5a2c728da9a094dc545001717e73ef4157e6c"
+        ]
+      },
+      {
+        "fromSize": 5,
+        "toSize": 7,
+        "proof": [
+          "51e522547c8b31728609fd4e6329edbd8be0bd1ce36705ee0e1cdfea4bdc712e",
+          "e9a7cfea7f463dbf62922a48d40eec681da57e4a8a72e88712d92645c2bc138f",
+          "1958b8e21777d44723de3baee209cdedd042429004c87f503e92979b9b5fd077",
+          "2d4dd521b2fcbeb85b8d3ff54eb5a2c728da9a094dc545001717e73ef4157e6c"
+        ]
+      },
+      {
+        "fromSize": 5,
+        "toSize": 8,
+        "proof": [
+          "51e522547c8b31728609fd4e6329edbd8be0bd1ce36705ee0e1cdfea4bdc712e",
+          "e9a7cfea7f463dbf62922a48d40eec681da57e4a8a72e88712d92645c2bc138f",
+          "648f94ae277c44b0f085084c99616d31a21ca3c974d711bf580b5d769c361d3d",
+          "2d4dd521b2fcbeb85b8d3ff54eb5a2c728da9a094dc545001717e73ef4157e6c"
+        ]
+      },
+      {
+        "fromSize": 6,
+        "toSize": 6,
+        "proof": []
+      },
+      {
+        "fromSize": 6,
+        "toSize": 7,
+        "proof": [
+          "76f98dc0ef295c91af87b12e99d9cbf74b0b4988385780facd1ff329ff43bc53",
+          "1958b8e21777d44723de3baee209cdedd042429004c87f503e92979b9b5fd077",
+          "2d4dd521b2fcbeb85b8d3ff54eb5a2c728da9a094dc545001717e73ef4157e6c"
+        ]
+      },
+      {
+        "fromSize": 6,
+        "toSize": 8,
+        "proof": [
+          "76f98dc0ef295c91af87b12e99d9cbf74b0b4988385780facd1ff329ff43bc53",
+          "648f94ae277c44b0f085084c99616d31a21ca3c974d711bf580b5d769c361d3d",
+          "2d4dd521b2fcbeb85b8d3ff54eb5a2c728da9a094dc545001717e73ef4157e6c"
+        ]
+      },
+      {
+        "fromSize": 7,
+        "toSize": 7,
+        "proof": []
+      },
+      {
+        "fromSize": 7,
+        "toSize": 8,
+        "proof": [
+          "1958b8e21777d44723de3baee209cdedd042429004c87f503e92979b9b5fd077",
+          "736df8c08067d6669094ed1598cf5cb93412d9360c2e32754842a009ecfd7eff",
+          "76f98dc0ef295c91af87b12e99d9cbf74b0b4988385780facd1ff329ff43bc53",
+          "2d4dd521b2fcbeb85b8d3ff54eb5a2c728da9a094dc545001717e73ef4157e6c"
+        ]
+      },
+      {
+        "fromSize": 8,
+        "toSize": 8,
+        "proof": []
+      }
+    ]
+  },
+  "checkpoints": {
+    "checkpoint-1": {
+      "checkpoint": {
+        "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+        "checkpointSequence": 1,
+        "issuedAt": "2026-08-10T09:03:30Z",
+        "origin": "pruvz.ai/evidence-log/demo",
+        "rootHash": "sha256:34a806b9e8da1f82db8edd8d270e9f6d71511b21914bcb304741f310f8d17334",
+        "signer": {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/3c4d5e6f708192a3b4c5d6e7f8019203",
+          "provider": "azure-key-vault",
+          "suite": "ES256"
+        },
+        "treeSize": 3,
+        "version": "1"
+      },
+      "signature": "f54xRg1ZpoSbIYwI0Qh3hSZF6INrQKL2XpQBE-1ZCTtXmCk3ZGq62uB2tVfGweszsOx1zcL3HlUlxsKQlce2Xw"
+    },
+    "checkpoint-2": {
+      "checkpoint": {
+        "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+        "checkpointSequence": 2,
+        "issuedAt": "2026-08-10T09:05:30Z",
+        "origin": "pruvz.ai/evidence-log/demo",
+        "rootHash": "sha256:6f44c370cd15f56784ac2f2473a8ed345f4244043635cf84fb081c25778bdafb",
+        "signer": {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/3c4d5e6f708192a3b4c5d6e7f8019203",
+          "provider": "azure-key-vault",
+          "suite": "ES256"
+        },
+        "treeSize": 5,
+        "version": "1"
+      },
+      "signature": "dt2TrT_85Yi2Q0SRBVmy0irP_dh7y1NZ31NvzvARwlVdhRnwehsSpuaD-KRGZ-NAiWIdhv8TWVaqCxbjiny6Ww"
+    },
+    "checkpoint-3": {
+      "checkpoint": {
+        "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+        "checkpointSequence": 3,
+        "issuedAt": "2026-08-10T09:08:30Z",
+        "origin": "pruvz.ai/evidence-log/demo",
+        "rootHash": "sha256:b97260e6e53fcfec0712b80706b7263306b3268e5ef6053ed59852c03b355ebd",
+        "signer": {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/3c4d5e6f708192a3b4c5d6e7f8019203",
+          "provider": "azure-key-vault",
+          "suite": "ES256"
+        },
+        "treeSize": 8,
+        "version": "1"
+      },
+      "signature": "211C9W5pVmk6G053zHFLyccZ8uIihFuf0UVRAqhuS3kBa-N30SzfibX5C5cu-Pc9aU9ZM81NMeeBZm0PYCGvbw"
+    }
+  },
+  "checkpointSigningInputSha256": {
+    "checkpoint-1": "f47461fac3176ef011538536c48dd1ef21c9ebf0d738110627b028a3d18a52d2",
+    "checkpoint-2": "618cd3e04519e7af400520437d394bb770275c44411e875eee7e8e48d46abde8",
+    "checkpoint-3": "ace3a0ab53eedbcddd0bae759819ab617afec6901641d9498be58ae879af1593"
+  },
+  "acceptanceChain": {
+    "note": "Accepted in order by a verifier that holds state; growth between accepted checkpoints is connected by a consistency proof. Re-presenting the already accepted checkpoint is idempotent.",
+    "steps": [
+      {
+        "candidate": "checkpoint-1"
+      },
+      {
+        "candidate": "checkpoint-2",
+        "consistencyProof": [
+          "5bef32398d47eacf08d92f4cf2537cb223eb0ca25fcc82552eef10835d9fa6ef",
+          "5a02852deb09e6a2339a276a81e838c9cb7fb007ec27aa48b0f66cff7b551255",
+          "13249d056c8e815c27c203b4510a896d6a9c614bb527237d84e1c39176c646f0",
+          "51e522547c8b31728609fd4e6329edbd8be0bd1ce36705ee0e1cdfea4bdc712e"
+        ]
+      },
+      {
+        "candidate": "checkpoint-3",
+        "consistencyProof": [
+          "51e522547c8b31728609fd4e6329edbd8be0bd1ce36705ee0e1cdfea4bdc712e",
+          "e9a7cfea7f463dbf62922a48d40eec681da57e4a8a72e88712d92645c2bc138f",
+          "648f94ae277c44b0f085084c99616d31a21ca3c974d711bf580b5d769c361d3d",
+          "2d4dd521b2fcbeb85b8d3ff54eb5a2c728da9a094dc545001717e73ef4157e6c"
+        ]
+      },
+      {
+        "candidate": "checkpoint-3",
+        "idempotent": true
+      }
+    ]
+  },
+  "refusals": [
+    {
+      "id": "unknown-version",
+      "kind": "validateCheckpoint",
+      "expect": "UNKNOWN_LOG_VERSION",
+      "description": "a checkpoint declaring a format version this implementation does not speak",
+      "document": {
+        "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+        "checkpointSequence": 3,
+        "issuedAt": "2026-08-10T09:08:30Z",
+        "origin": "pruvz.ai/evidence-log/demo",
+        "rootHash": "sha256:b97260e6e53fcfec0712b80706b7263306b3268e5ef6053ed59852c03b355ebd",
+        "signer": {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/3c4d5e6f708192a3b4c5d6e7f8019203",
+          "provider": "azure-key-vault",
+          "suite": "ES256"
+        },
+        "treeSize": 8,
+        "version": "2"
+      }
+    },
+    {
+      "id": "checkpoint-extra-member",
+      "kind": "validateCheckpoint",
+      "expect": "LOG_MALFORMED",
+      "description": "the checkpoint member set is closed",
+      "document": {
+        "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+        "checkpointSequence": 3,
+        "issuedAt": "2026-08-10T09:08:30Z",
+        "origin": "pruvz.ai/evidence-log/demo",
+        "rootHash": "sha256:b97260e6e53fcfec0712b80706b7263306b3268e5ef6053ed59852c03b355ebd",
+        "signer": {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/3c4d5e6f708192a3b4c5d6e7f8019203",
+          "provider": "azure-key-vault",
+          "suite": "ES256"
+        },
+        "treeSize": 8,
+        "version": "1",
+        "witness": "none"
+      }
+    },
+    {
+      "id": "checkpoint-bad-root-hash",
+      "kind": "validateCheckpoint",
+      "expect": "LOG_MALFORMED",
+      "description": "rootHash must name its suite: \"sha256:\" then 64 lowercase hex digits",
+      "document": {
+        "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+        "checkpointSequence": 3,
+        "issuedAt": "2026-08-10T09:08:30Z",
+        "origin": "pruvz.ai/evidence-log/demo",
+        "rootHash": "b97260e6e53fcfec0712b80706b7263306b3268e5ef6053ed59852c03b355ebd",
+        "signer": {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/3c4d5e6f708192a3b4c5d6e7f8019203",
+          "provider": "azure-key-vault",
+          "suite": "ES256"
+        },
+        "treeSize": 8,
+        "version": "1"
+      }
+    },
+    {
+      "id": "checkpoint-noncanonical-issued-at",
+      "kind": "validateCheckpoint",
+      "expect": "LOG_MALFORMED",
+      "description": "issuedAt must be a canonical UTC timestamp",
+      "document": {
+        "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+        "checkpointSequence": 3,
+        "issuedAt": "2026-08-10T09:08:30+00:00",
+        "origin": "pruvz.ai/evidence-log/demo",
+        "rootHash": "sha256:b97260e6e53fcfec0712b80706b7263306b3268e5ef6053ed59852c03b355ebd",
+        "signer": {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/3c4d5e6f708192a3b4c5d6e7f8019203",
+          "provider": "azure-key-vault",
+          "suite": "ES256"
+        },
+        "treeSize": 8,
+        "version": "1"
+      }
+    },
+    {
+      "id": "leaf-extra-member",
+      "kind": "leaf",
+      "expect": "LOG_MALFORMED",
+      "description": "a leaf holds exactly envelope and signature",
+      "seal": {
+        "envelope": {
+          "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+          "commitment": {
+            "digest": "sha256:20a47bf3d969072b78daa722977363f5c65983ff07f6861ab8de37902bd72a54",
+            "digestSuite": "sha-256",
+            "kind": "evidence-item",
+            "version": "1"
+          },
+          "committedAt": "2026-08-10T09:00:00Z",
+          "signer": {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/3c4d5e6f708192a3b4c5d6e7f8019203",
+            "provider": "azure-key-vault",
+            "suite": "ES256"
+          },
+          "subject": {
+            "actionId": "act_8ef7da3db4bfac19354bd755941127f1",
+            "evidenceId": "evd_c1141b27cde2602d810c31a3457ed9f2",
+            "sequence": 1,
+            "tenantId": "tenant-demo"
+          },
+          "version": "1"
+        },
+        "signature": "Mucjp1BI5yPTCGFYLX5I07OMgpssWG_AqhYfPxZoYFRBqbpOPw3fZFDvrsY9jfpXIRo_PlEbyWruiIi4n_X-_w",
+        "proof": []
+      }
+    },
+    {
+      "id": "leaf-unknown-envelope-version",
+      "kind": "leaf",
+      "expect": "LOG_MALFORMED",
+      "description": "a leaf carries an envelope of version 1",
+      "seal": {
+        "envelope": {
+          "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+          "commitment": {
+            "digest": "sha256:20a47bf3d969072b78daa722977363f5c65983ff07f6861ab8de37902bd72a54",
+            "digestSuite": "sha-256",
+            "kind": "evidence-item",
+            "version": "1"
+          },
+          "committedAt": "2026-08-10T09:00:00Z",
+          "signer": {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/3c4d5e6f708192a3b4c5d6e7f8019203",
+            "provider": "azure-key-vault",
+            "suite": "ES256"
+          },
+          "subject": {
+            "actionId": "act_8ef7da3db4bfac19354bd755941127f1",
+            "evidenceId": "evd_c1141b27cde2602d810c31a3457ed9f2",
+            "sequence": 1,
+            "tenantId": "tenant-demo"
+          },
+          "version": "2"
+        },
+        "signature": "Mucjp1BI5yPTCGFYLX5I07OMgpssWG_AqhYfPxZoYFRBqbpOPw3fZFDvrsY9jfpXIRo_PlEbyWruiIi4n_X-_w"
+      }
+    },
+    {
+      "id": "leaf-signature-not-base64url",
+      "kind": "leaf",
+      "expect": "MALFORMED_SIGNATURE",
+      "description": "a leaf signature must be unpadded base64url",
+      "seal": {
+        "envelope": {
+          "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+          "commitment": {
+            "digest": "sha256:20a47bf3d969072b78daa722977363f5c65983ff07f6861ab8de37902bd72a54",
+            "digestSuite": "sha-256",
+            "kind": "evidence-item",
+            "version": "1"
+          },
+          "committedAt": "2026-08-10T09:00:00Z",
+          "signer": {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/3c4d5e6f708192a3b4c5d6e7f8019203",
+            "provider": "azure-key-vault",
+            "suite": "ES256"
+          },
+          "subject": {
+            "actionId": "act_8ef7da3db4bfac19354bd755941127f1",
+            "evidenceId": "evd_c1141b27cde2602d810c31a3457ed9f2",
+            "sequence": 1,
+            "tenantId": "tenant-demo"
+          },
+          "version": "1"
+        },
+        "signature": "Mucjp1BI5yPTCGFYLX5I07OMgpssWG_AqhYfPxZoYFRBqbpOPw3fZFDvrsY9jfpXIRo_PlEbyWruiIi4n_X-+/"
+      }
+    },
+    {
+      "id": "leaf-signature-wrong-width",
+      "kind": "leaf",
+      "expect": "MALFORMED_SIGNATURE",
+      "description": "an ES256 signature is exactly 64 bytes",
+      "seal": {
+        "envelope": {
+          "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+          "commitment": {
+            "digest": "sha256:20a47bf3d969072b78daa722977363f5c65983ff07f6861ab8de37902bd72a54",
+            "digestSuite": "sha-256",
+            "kind": "evidence-item",
+            "version": "1"
+          },
+          "committedAt": "2026-08-10T09:00:00Z",
+          "signer": {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/3c4d5e6f708192a3b4c5d6e7f8019203",
+            "provider": "azure-key-vault",
+            "suite": "ES256"
+          },
+          "subject": {
+            "actionId": "act_8ef7da3db4bfac19354bd755941127f1",
+            "evidenceId": "evd_c1141b27cde2602d810c31a3457ed9f2",
+            "sequence": 1,
+            "tenantId": "tenant-demo"
+          },
+          "version": "1"
+        },
+        "signature": "BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcH"
+      }
+    },
+    {
+      "id": "inclusion-mutated-record",
+      "kind": "inclusion",
+      "expect": "INCLUSION_PROOF_INVALID",
+      "description": "the checkpointed record was mutated afterwards: its commitment digest changed, so its leaf hash changed, and the original proof no longer leads to any checkpointed root",
+      "tamperedSeal": {
+        "envelope": {
+          "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+          "commitment": {
+            "digest": "sha256:5b47b11ee82366809b0e4626f6308c0427b8bdb01143e2a22c580bd500b1b35d",
+            "digestSuite": "sha-256",
+            "kind": "evidence-item",
+            "version": "1"
+          },
+          "committedAt": "2026-08-10T09:03:00Z",
+          "signer": {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/3c4d5e6f708192a3b4c5d6e7f8019203",
+            "provider": "azure-key-vault",
+            "suite": "ES256"
+          },
+          "subject": {
+            "actionId": "act_8ef7da3db4bfac19354bd755941127f1",
+            "evidenceId": "evd_38c48b4d89f1c408016308ca5af721c9",
+            "sequence": 4,
+            "tenantId": "tenant-demo"
+          },
+          "version": "1"
+        },
+        "signature": "ytly69Dm2FuwiNR7Xeux6pAex-RpX9zRJdgnA9FYoU4j4C8wm4RFcLMJqocOSz4n8JtKyG3LqvroYlzKNr03dw"
+      },
+      "leafIndex": 3,
+      "treeSize": 8,
+      "path": [
+        "5bef32398d47eacf08d92f4cf2537cb223eb0ca25fcc82552eef10835d9fa6ef",
+        "13249d056c8e815c27c203b4510a896d6a9c614bb527237d84e1c39176c646f0",
+        "58dd401b74f4986f26a302afca870ea5d2b0bcddf548471b39e4d362da427ec5"
+      ],
+      "rootHashHex": "b97260e6e53fcfec0712b80706b7263306b3268e5ef6053ed59852c03b355ebd"
+    },
+    {
+      "id": "inclusion-wrong-index",
+      "kind": "inclusion",
+      "expect": "INCLUSION_PROOF_INVALID",
+      "description": "the right leaf presented at the wrong position",
+      "leafHash": "5a02852deb09e6a2339a276a81e838c9cb7fb007ec27aa48b0f66cff7b551255",
+      "leafIndex": 4,
+      "treeSize": 8,
+      "path": [
+        "5bef32398d47eacf08d92f4cf2537cb223eb0ca25fcc82552eef10835d9fa6ef",
+        "13249d056c8e815c27c203b4510a896d6a9c614bb527237d84e1c39176c646f0",
+        "58dd401b74f4986f26a302afca870ea5d2b0bcddf548471b39e4d362da427ec5"
+      ],
+      "rootHashHex": "b97260e6e53fcfec0712b80706b7263306b3268e5ef6053ed59852c03b355ebd"
+    },
+    {
+      "id": "inclusion-wrong-tree-size",
+      "kind": "inclusion",
+      "expect": "INCLUSION_PROOF_INVALID",
+      "description": "a tree size that does not match the signed checkpoint pair (treeSize, rootHash)",
+      "leafHash": "5a02852deb09e6a2339a276a81e838c9cb7fb007ec27aa48b0f66cff7b551255",
+      "leafIndex": 3,
+      "treeSize": 9,
+      "path": [
+        "5bef32398d47eacf08d92f4cf2537cb223eb0ca25fcc82552eef10835d9fa6ef",
+        "13249d056c8e815c27c203b4510a896d6a9c614bb527237d84e1c39176c646f0",
+        "58dd401b74f4986f26a302afca870ea5d2b0bcddf548471b39e4d362da427ec5"
+      ],
+      "rootHashHex": "b97260e6e53fcfec0712b80706b7263306b3268e5ef6053ed59852c03b355ebd"
+    },
+    {
+      "id": "inclusion-truncated-path",
+      "kind": "inclusion",
+      "expect": "INCLUSION_PROOF_INVALID",
+      "description": "a proof path with a node removed",
+      "leafHash": "5a02852deb09e6a2339a276a81e838c9cb7fb007ec27aa48b0f66cff7b551255",
+      "leafIndex": 3,
+      "treeSize": 8,
+      "path": [
+        "13249d056c8e815c27c203b4510a896d6a9c614bb527237d84e1c39176c646f0",
+        "58dd401b74f4986f26a302afca870ea5d2b0bcddf548471b39e4d362da427ec5"
+      ],
+      "rootHashHex": "b97260e6e53fcfec0712b80706b7263306b3268e5ef6053ed59852c03b355ebd"
+    },
+    {
+      "id": "inclusion-swapped-path",
+      "kind": "inclusion",
+      "expect": "INCLUSION_PROOF_INVALID",
+      "description": "a proof path with two nodes exchanged",
+      "leafHash": "5a02852deb09e6a2339a276a81e838c9cb7fb007ec27aa48b0f66cff7b551255",
+      "leafIndex": 3,
+      "treeSize": 8,
+      "path": [
+        "13249d056c8e815c27c203b4510a896d6a9c614bb527237d84e1c39176c646f0",
+        "5bef32398d47eacf08d92f4cf2537cb223eb0ca25fcc82552eef10835d9fa6ef",
+        "58dd401b74f4986f26a302afca870ea5d2b0bcddf548471b39e4d362da427ec5"
+      ],
+      "rootHashHex": "b97260e6e53fcfec0712b80706b7263306b3268e5ef6053ed59852c03b355ebd"
+    },
+    {
+      "id": "inclusion-index-beyond-size",
+      "kind": "inclusion",
+      "expect": "INCLUSION_PROOF_INVALID",
+      "description": "a leaf index that does not exist in a tree of this size",
+      "leafHash": "736df8c08067d6669094ed1598cf5cb93412d9360c2e32754842a009ecfd7eff",
+      "leafIndex": 8,
+      "treeSize": 8,
+      "path": [
+        "5bef32398d47eacf08d92f4cf2537cb223eb0ca25fcc82552eef10835d9fa6ef",
+        "13249d056c8e815c27c203b4510a896d6a9c614bb527237d84e1c39176c646f0",
+        "58dd401b74f4986f26a302afca870ea5d2b0bcddf548471b39e4d362da427ec5"
+      ],
+      "rootHashHex": "b97260e6e53fcfec0712b80706b7263306b3268e5ef6053ed59852c03b355ebd"
+    },
+    {
+      "id": "consistency-deletion",
+      "kind": "consistency",
+      "expect": "CONSISTENCY_PROOF_INVALID",
+      "description": "a checkpointed leaf was deleted; no proof connects the old head to the new one",
+      "fromSize": 5,
+      "fromRootHash": "6f44c370cd15f56784ac2f2473a8ed345f4244043635cf84fb081c25778bdafb",
+      "toSize": 7,
+      "toRootHash": "bc5959f193c3f65465fe4f38707bc3af7fe7bc6de64bb2a579a93ad3c06002bf",
+      "proof": [
+        "e9a7cfea7f463dbf62922a48d40eec681da57e4a8a72e88712d92645c2bc138f",
+        "1958b8e21777d44723de3baee209cdedd042429004c87f503e92979b9b5fd077",
+        "736df8c08067d6669094ed1598cf5cb93412d9360c2e32754842a009ecfd7eff",
+        "b2e01eb3ab3d2e1cfb631c75f42707338cb617381d60431d687614ce9581f4e0"
+      ]
+    },
+    {
+      "id": "consistency-insertion",
+      "kind": "consistency",
+      "expect": "CONSISTENCY_PROOF_INVALID",
+      "description": "a leaf was inserted before the checkpointed boundary",
+      "fromSize": 5,
+      "fromRootHash": "6f44c370cd15f56784ac2f2473a8ed345f4244043635cf84fb081c25778bdafb",
+      "toSize": 9,
+      "toRootHash": "7683eec34fd6fbeaa9d1185eb01711027b4d6457e595f8a1b5bddd2a34d7d2e4",
+      "proof": [
+        "5a02852deb09e6a2339a276a81e838c9cb7fb007ec27aa48b0f66cff7b551255",
+        "51e522547c8b31728609fd4e6329edbd8be0bd1ce36705ee0e1cdfea4bdc712e",
+        "1c229cea4fada6d819a162c6640faf6b1e2bfd53fcbaaf0179d9e577a18e2140",
+        "53eb53acd3993503b12f2364e1083fc28daf1fcf4252ca6a6f3005d7078c2a82",
+        "736df8c08067d6669094ed1598cf5cb93412d9360c2e32754842a009ecfd7eff"
+      ]
+    },
+    {
+      "id": "consistency-reordering",
+      "kind": "consistency",
+      "expect": "CONSISTENCY_PROOF_INVALID",
+      "description": "two checkpointed leaves were exchanged",
+      "fromSize": 5,
+      "fromRootHash": "6f44c370cd15f56784ac2f2473a8ed345f4244043635cf84fb081c25778bdafb",
+      "toSize": 8,
+      "toRootHash": "ef86c83030193fbe746e47c3ee5c8532a70b6b0fedcab7198fe42b73cf8d5c9c",
+      "proof": [
+        "51e522547c8b31728609fd4e6329edbd8be0bd1ce36705ee0e1cdfea4bdc712e",
+        "e9a7cfea7f463dbf62922a48d40eec681da57e4a8a72e88712d92645c2bc138f",
+        "648f94ae277c44b0f085084c99616d31a21ca3c974d711bf580b5d769c361d3d",
+        "2eee1a1a202cb7dce080718619afbbaac3270b4daf29c93dd8d0c155e18f825d"
+      ]
+    },
+    {
+      "id": "consistency-shrunk",
+      "kind": "consistency",
+      "expect": "CONSISTENCY_PROOF_INVALID",
+      "description": "a smaller tree cannot extend a larger one",
+      "fromSize": 8,
+      "fromRootHash": "b97260e6e53fcfec0712b80706b7263306b3268e5ef6053ed59852c03b355ebd",
+      "toSize": 5,
+      "toRootHash": "6f44c370cd15f56784ac2f2473a8ed345f4244043635cf84fb081c25778bdafb",
+      "proof": []
+    },
+    {
+      "id": "consistency-altered-in-place",
+      "kind": "consistency",
+      "expect": "CONSISTENCY_PROOF_INVALID",
+      "description": "two heads at one size that disagree",
+      "fromSize": 8,
+      "fromRootHash": "b97260e6e53fcfec0712b80706b7263306b3268e5ef6053ed59852c03b355ebd",
+      "toSize": 8,
+      "toRootHash": "905661dea4977c6fe609a57751383acde7b0620990c9d6bb183dbef803fd698b",
+      "proof": []
+    },
+    {
+      "id": "checkpoint-tampered-document",
+      "kind": "verifyCheckpoint",
+      "expect": "CHECKPOINT_SIGNATURE_INVALID",
+      "description": "a well-formed checkpoint whose treeSize was altered after signing",
+      "checkpoint": {
+        "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+        "checkpointSequence": 3,
+        "issuedAt": "2026-08-10T09:08:30Z",
+        "origin": "pruvz.ai/evidence-log/demo",
+        "rootHash": "sha256:b97260e6e53fcfec0712b80706b7263306b3268e5ef6053ed59852c03b355ebd",
+        "signer": {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/3c4d5e6f708192a3b4c5d6e7f8019203",
+          "provider": "azure-key-vault",
+          "suite": "ES256"
+        },
+        "treeSize": 9,
+        "version": "1"
+      },
+      "signature": "211C9W5pVmk6G053zHFLyccZ8uIihFuf0UVRAqhuS3kBa-N30SzfibX5C5cu-Pc9aU9ZM81NMeeBZm0PYCGvbw"
+    },
+    {
+      "id": "checkpoint-corrupted-signature",
+      "kind": "verifyCheckpoint",
+      "expect": "CHECKPOINT_SIGNATURE_INVALID",
+      "description": "a correct checkpoint with one signature character altered",
+      "checkpoint": {
+        "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+        "checkpointSequence": 3,
+        "issuedAt": "2026-08-10T09:08:30Z",
+        "origin": "pruvz.ai/evidence-log/demo",
+        "rootHash": "sha256:b97260e6e53fcfec0712b80706b7263306b3268e5ef6053ed59852c03b355ebd",
+        "signer": {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/3c4d5e6f708192a3b4c5d6e7f8019203",
+          "provider": "azure-key-vault",
+          "suite": "ES256"
+        },
+        "treeSize": 8,
+        "version": "1"
+      },
+      "signature": "211C9W5pVmA6G053zHFLyccZ8uIihFuf0UVRAqhuS3kBa-N30SzfibX5C5cu-Pc9aU9ZM81NMeeBZm0PYCGvbw"
+    },
+    {
+      "id": "checkpoint-signature-not-base64url",
+      "kind": "verifyCheckpoint",
+      "expect": "MALFORMED_SIGNATURE",
+      "description": "a signature that is not unpadded base64url",
+      "checkpoint": {
+        "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+        "checkpointSequence": 3,
+        "issuedAt": "2026-08-10T09:08:30Z",
+        "origin": "pruvz.ai/evidence-log/demo",
+        "rootHash": "sha256:b97260e6e53fcfec0712b80706b7263306b3268e5ef6053ed59852c03b355ebd",
+        "signer": {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/3c4d5e6f708192a3b4c5d6e7f8019203",
+          "provider": "azure-key-vault",
+          "suite": "ES256"
+        },
+        "treeSize": 8,
+        "version": "1"
+      },
+      "signature": "211C9W5pVmk6G053zHFLyccZ8uIihFuf0UVRAqhuS3kBa-N30SzfibX5C5cu-Pc9aU9ZM81NMeeBZm0PYCGv=="
+    },
+    {
+      "id": "checkpoint-invalid-public-key",
+      "kind": "verifyCheckpoint",
+      "expect": "INVALID_PUBLIC_KEY",
+      "description": "a key that is not a valid public JWK",
+      "checkpoint": {
+        "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+        "checkpointSequence": 3,
+        "issuedAt": "2026-08-10T09:08:30Z",
+        "origin": "pruvz.ai/evidence-log/demo",
+        "rootHash": "sha256:b97260e6e53fcfec0712b80706b7263306b3268e5ef6053ed59852c03b355ebd",
+        "signer": {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/3c4d5e6f708192a3b4c5d6e7f8019203",
+          "provider": "azure-key-vault",
+          "suite": "ES256"
+        },
+        "treeSize": 8,
+        "version": "1"
+      },
+      "signature": "211C9W5pVmk6G053zHFLyccZ8uIihFuf0UVRAqhuS3kBa-N30SzfibX5C5cu-Pc9aU9ZM81NMeeBZm0PYCGvbw",
+      "jwk": {
+        "crv": "P-256",
+        "kty": "EC",
+        "x": "1PNWK0RGuiTKVYmUBe9lUTFcaQ4SpAkrrQEEM58",
+        "y": "VIDdGIliHPHEEKAvyXPCTa0YTQgstISRkfBchu1A0tA"
+      }
+    },
+    {
+      "id": "accept-stale",
+      "kind": "acceptance",
+      "expect": "CHECKPOINT_STALE",
+      "description": "an old checkpoint presented as current after a newer one was accepted",
+      "accepted": {
+        "checkpointSequence": 3,
+        "origin": "pruvz.ai/evidence-log/demo",
+        "rootHash": "sha256:b97260e6e53fcfec0712b80706b7263306b3268e5ef6053ed59852c03b355ebd",
+        "treeSize": 8
+      },
+      "candidate": {
+        "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+        "checkpointSequence": 1,
+        "issuedAt": "2026-08-10T09:03:30Z",
+        "origin": "pruvz.ai/evidence-log/demo",
+        "rootHash": "sha256:34a806b9e8da1f82db8edd8d270e9f6d71511b21914bcb304741f310f8d17334",
+        "signer": {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/3c4d5e6f708192a3b4c5d6e7f8019203",
+          "provider": "azure-key-vault",
+          "suite": "ES256"
+        },
+        "treeSize": 3,
+        "version": "1"
+      },
+      "candidateSignature": "f54xRg1ZpoSbIYwI0Qh3hSZF6INrQKL2XpQBE-1ZCTtXmCk3ZGq62uB2tVfGweszsOx1zcL3HlUlxsKQlce2Xw"
+    },
+    {
+      "id": "accept-fork-same-sequence",
+      "kind": "acceptance",
+      "expect": "CHECKPOINT_FORK",
+      "description": "two correctly signed checkpoints with the same sequence and different heads",
+      "accepted": {
+        "checkpointSequence": 3,
+        "origin": "pruvz.ai/evidence-log/demo",
+        "rootHash": "sha256:b97260e6e53fcfec0712b80706b7263306b3268e5ef6053ed59852c03b355ebd",
+        "treeSize": 8
+      },
+      "candidate": {
+        "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+        "checkpointSequence": 3,
+        "issuedAt": "2026-08-10T09:08:30Z",
+        "origin": "pruvz.ai/evidence-log/demo",
+        "rootHash": "sha256:905661dea4977c6fe609a57751383acde7b0620990c9d6bb183dbef803fd698b",
+        "signer": {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/3c4d5e6f708192a3b4c5d6e7f8019203",
+          "provider": "azure-key-vault",
+          "suite": "ES256"
+        },
+        "treeSize": 8,
+        "version": "1"
+      },
+      "candidateSignature": "mZdd9gIzDpOE5a-TlJKpFWTkSv0f54jTGKqy8TL9nHsJkT6Th6AJlWuddu74ON2XnJUng2p1WXs3rUe-6pbgAA"
+    },
+    {
+      "id": "accept-fork-same-size",
+      "kind": "acceptance",
+      "expect": "CHECKPOINT_FORK",
+      "description": "a later checkpoint at the same tree size naming a different head",
+      "accepted": {
+        "checkpointSequence": 3,
+        "origin": "pruvz.ai/evidence-log/demo",
+        "rootHash": "sha256:b97260e6e53fcfec0712b80706b7263306b3268e5ef6053ed59852c03b355ebd",
+        "treeSize": 8
+      },
+      "candidate": {
+        "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+        "checkpointSequence": 4,
+        "issuedAt": "2026-08-10T09:09:30Z",
+        "origin": "pruvz.ai/evidence-log/demo",
+        "rootHash": "sha256:905661dea4977c6fe609a57751383acde7b0620990c9d6bb183dbef803fd698b",
+        "signer": {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/3c4d5e6f708192a3b4c5d6e7f8019203",
+          "provider": "azure-key-vault",
+          "suite": "ES256"
+        },
+        "treeSize": 8,
+        "version": "1"
+      },
+      "candidateSignature": "kXbOQI06l5MmgiRWWRnAaNjFGBOqGVfImFC23I0cmtIinsFjcSAWLXbI8qeSSWjlXL7a3A6HcAGjhEJCELAw2w"
+    },
+    {
+      "id": "accept-rollback",
+      "kind": "acceptance",
+      "expect": "CHECKPOINT_ROLLBACK",
+      "description": "a later checkpoint covering fewer leaves — the log shrank",
+      "accepted": {
+        "checkpointSequence": 3,
+        "origin": "pruvz.ai/evidence-log/demo",
+        "rootHash": "sha256:b97260e6e53fcfec0712b80706b7263306b3268e5ef6053ed59852c03b355ebd",
+        "treeSize": 8
+      },
+      "candidate": {
+        "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+        "checkpointSequence": 4,
+        "issuedAt": "2026-08-10T09:09:30Z",
+        "origin": "pruvz.ai/evidence-log/demo",
+        "rootHash": "sha256:6f44c370cd15f56784ac2f2473a8ed345f4244043635cf84fb081c25778bdafb",
+        "signer": {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/3c4d5e6f708192a3b4c5d6e7f8019203",
+          "provider": "azure-key-vault",
+          "suite": "ES256"
+        },
+        "treeSize": 5,
+        "version": "1"
+      },
+      "candidateSignature": "0wvfpaSkc-s8KEj7qBoJm5xw2mgtjgnDVr5uisBWqnTCeEy_npmOeCNtfX8Fp_LshSMty0G1S6Ode2qjH_19Lw"
+    },
+    {
+      "id": "accept-origin-mismatch",
+      "kind": "acceptance",
+      "expect": "CHECKPOINT_ORIGIN_MISMATCH",
+      "description": "a checkpoint from a different log entirely",
+      "accepted": {
+        "checkpointSequence": 3,
+        "origin": "pruvz.ai/evidence-log/demo",
+        "rootHash": "sha256:b97260e6e53fcfec0712b80706b7263306b3268e5ef6053ed59852c03b355ebd",
+        "treeSize": 8
+      },
+      "candidate": {
+        "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+        "checkpointSequence": 4,
+        "issuedAt": "2026-08-10T09:09:30Z",
+        "origin": "pruvz.ai/evidence-log/other",
+        "rootHash": "sha256:b97260e6e53fcfec0712b80706b7263306b3268e5ef6053ed59852c03b355ebd",
+        "signer": {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/3c4d5e6f708192a3b4c5d6e7f8019203",
+          "provider": "azure-key-vault",
+          "suite": "ES256"
+        },
+        "treeSize": 8,
+        "version": "1"
+      },
+      "candidateSignature": "4NmTRjci7oCGwFcLwYyBQS-rTtahjbFUTCQ7N20YGQZQJ10pyDw6PPCprtHoIBkgJHWQraggdll2vLfhT7c-iw"
+    },
+    {
+      "id": "accept-growth-without-proof",
+      "kind": "acceptance",
+      "expect": "CONSISTENCY_PROOF_INVALID",
+      "description": "growth asserted without a consistency proof is refused, not believed",
+      "accepted": {
+        "checkpointSequence": 2,
+        "origin": "pruvz.ai/evidence-log/demo",
+        "rootHash": "sha256:6f44c370cd15f56784ac2f2473a8ed345f4244043635cf84fb081c25778bdafb",
+        "treeSize": 5
+      },
+      "candidate": {
+        "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+        "checkpointSequence": 3,
+        "issuedAt": "2026-08-10T09:08:30Z",
+        "origin": "pruvz.ai/evidence-log/demo",
+        "rootHash": "sha256:b97260e6e53fcfec0712b80706b7263306b3268e5ef6053ed59852c03b355ebd",
+        "signer": {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/3c4d5e6f708192a3b4c5d6e7f8019203",
+          "provider": "azure-key-vault",
+          "suite": "ES256"
+        },
+        "treeSize": 8,
+        "version": "1"
+      },
+      "candidateSignature": "211C9W5pVmk6G053zHFLyccZ8uIihFuf0UVRAqhuS3kBa-N30SzfibX5C5cu-Pc9aU9ZM81NMeeBZm0PYCGvbw"
+    }
+  ]
+}

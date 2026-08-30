@@ -1,0 +1,19 @@
+# This repository is the canonical publication point for byte-exact artifacts:
+# a third party vendors these files and pins their SHA-256, and two runtimes
+# agree on them byte for byte. An end-of-line conversion on checkout would make
+# a Windows clone and a Linux clone publish different bytes under one release
+# tag, which is the one thing an immutable release may never do.
+#
+# The stored blobs are already LF; this only stops checkout from rewriting them.
+
+# The released Public Evidence Packet schemas.
+schema/** -text
+
+# The commitment golden vectors (packet format 1.4.0, product PRUVZ-26).
+commitment/** -text
+
+# The trust-registry golden vectors (release 1.4.1, product PRUVZ-95).
+trust-registry/** -text
+
+# The evidence-log golden vectors (release 1.4.2, product PRUVZ-87).
+evidence-log/** -text
