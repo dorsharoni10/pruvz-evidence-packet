@@ -1,5 +1,5 @@
 {
-  "packetFormatVersion": "1.4.0",
+  "packetFormatVersion": "1.5.0",
   "action": {
     "actionId": "act_00000000000000000000000000000002",
     "agentId": "billing-refunds-agent",
@@ -182,7 +182,11 @@
         "sourceReference": null,
         "occurredAtUtc": "2026-07-10T09:16:43Z",
         "recordedAtUtc": "2026-07-10T09:16:43Z",
-        "summary": "Refund requested for payment pay_74002."
+        "summary": "Refund requested for payment pay_74002.",
+        "runId": "run_sample_002",
+        "schemaVersion": 1,
+        "clientOperationId": "op-ingest-0001",
+        "payloadMetadata": {}
       },
       {
         "evidenceId": "evd_00000000000000000000000000000012",
@@ -193,7 +197,11 @@
         "sourceReference": "demo-refund-policy",
         "occurredAtUtc": "2026-07-10T09:16:44Z",
         "recordedAtUtc": "2026-07-10T09:16:44Z",
-        "summary": "Decision-time policy snapshot captured: demo-refund-policy v1, policy passed."
+        "summary": "Decision-time policy snapshot captured: demo-refund-policy v1, policy passed.",
+        "runId": "run_sample_002",
+        "schemaVersion": 1,
+        "clientOperationId": null,
+        "payloadMetadata": {}
       },
       {
         "evidenceId": "evd_00000000000000000000000000000013",
@@ -204,7 +212,11 @@
         "sourceReference": null,
         "occurredAtUtc": "2026-07-10T09:17:02Z",
         "recordedAtUtc": "2026-07-10T09:17:03Z",
-        "summary": "Agent claims refund of USD 49.90 succeeded (REFUND_SUCCEEDED)."
+        "summary": "Agent claims refund of USD 49.90 succeeded (REFUND_SUCCEEDED).",
+        "runId": "run_sample_002",
+        "schemaVersion": 1,
+        "clientOperationId": "op-claim-0003",
+        "payloadMetadata": {}
       },
       {
         "evidenceId": "evd_00000000000000000000000000000014",
@@ -215,7 +227,11 @@
         "sourceReference": "ref_777",
         "occurredAtUtc": "2026-07-10T09:17:09Z",
         "recordedAtUtc": "2026-07-10T09:17:10Z",
-        "summary": "Execution receipt relayed: refund ref_777 submitted to the billing system."
+        "summary": "Execution receipt relayed: refund ref_777 submitted to the billing system.",
+        "runId": "run_sample_002",
+        "schemaVersion": 1,
+        "clientOperationId": "op-receipt-0004",
+        "payloadMetadata": {}
       },
       {
         "evidenceId": "evd_00000000000000000000000000000015",
@@ -226,7 +242,15 @@
         "sourceReference": null,
         "occurredAtUtc": "2026-07-10T09:20:00Z",
         "recordedAtUtc": "2026-07-10T09:20:00Z",
-        "summary": "No qualifying refund found for payment pay_74002."
+        "summary": "No qualifying refund found for payment pay_74002.",
+        "runId": "run_sample_002",
+        "schemaVersion": 1,
+        "clientOperationId": null,
+        "payloadMetadata": {
+          "paymentId": "pay_74001",
+          "refundCount": "0",
+          "succeededRefundCount": "0"
+        }
       },
       {
         "evidenceId": "evd_00000000000000000000000000000016",
@@ -237,7 +261,14 @@
         "sourceReference": null,
         "occurredAtUtc": "2026-07-10T09:20:00Z",
         "recordedAtUtc": "2026-07-10T09:20:00Z",
-        "summary": "Outcome mismatch: expected exactly one succeeded refund of USD 49.90; observed none."
+        "summary": "Outcome mismatch: expected exactly one succeeded refund of USD 49.90; observed none.",
+        "runId": "run_sample_002",
+        "schemaVersion": 1,
+        "clientOperationId": null,
+        "payloadMetadata": {
+          "verificationStatus": "OUTCOME_MISMATCH",
+          "attemptCount": "1"
+        }
       },
       {
         "evidenceId": "evd_00000000000000000000000000000017",
@@ -248,7 +279,20 @@
         "sourceReference": null,
         "occurredAtUtc": "2026-07-10T10:00:00Z",
         "recordedAtUtc": "2026-07-10T10:00:00Z",
-        "summary": "Human review decision: APPROVED_EXCEPTION by demo-reviewer"
+        "summary": "Human review decision: APPROVED_EXCEPTION by demo-reviewer",
+        "runId": "run_sample_002",
+        "schemaVersion": 1,
+        "clientOperationId": "op-decision-0007",
+        "payloadMetadata": {
+          "decision": "APPROVED_EXCEPTION",
+          "reason": "Customer retention exception approved by support lead.",
+          "reviewerId": "demo-reviewer",
+          "previousReviewState": "PENDING_REVIEW",
+          "newReviewState": "DECIDED",
+          "decidedAtUtc": "2026-07-10T10:00:00Z",
+          "reviewedEvidenceId": "evd_00000000000000000000000000000016",
+          "reviewedEvidenceSequence": "6"
+        }
       }
     ]
   }

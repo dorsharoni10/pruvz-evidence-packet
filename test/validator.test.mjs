@@ -56,6 +56,23 @@ const withoutExactAmounts = (value) => {
   return out
 }
 
+/**
+ * Strips what format 1.5.0 added to timeline items — the four fields the
+ * canonical evidence-item commitment binds (runId, schemaVersion,
+ * clientOperationId, payloadMetadata) — so a test can derive an older-format
+ * packet from a current example.
+ */
+const withoutCommitmentFields = (packet) => {
+  const out = JSON.parse(JSON.stringify(packet))
+  for (const item of out.evidence?.items ?? []) {
+    delete item.runId
+    delete item.schemaVersion
+    delete item.clientOperationId
+    delete item.payloadMetadata
+  }
+  return out
+}
+
 test('every valid example conforms to the published schema', () => {
   const files = packetFiles(validDir)
   assert.ok(files.length >= 5, 'expected at least five valid examples')
@@ -350,7 +367,9 @@ test('formats before 1.3.0 keep the strict review-state chain (no Worker transit
   // latest decision moved the review to AWAITING_REVERIFICATION — must still
   // be rejected by the 1.2.0 consistency rules. Derived from the 1.3.0
   // re-mismatch example by removing everything 1.3.0 added.
-  const packet = withoutExactAmounts(loadPacket(validDir, 'reverified-mismatch.packet.json'))
+  const packet = withoutCommitmentFields(
+    withoutExactAmounts(loadPacket(validDir, 'reverified-mismatch.packet.json')),
+  )
   packet.packetFormatVersion = '1.2.0'
   delete packet.action.reverificationTiming
   delete packet.action.review.independentlyConfirmed
@@ -371,7 +390,9 @@ test('formats before 1.2.0 keep the DECIDED-implies-decision-evidence rule', () 
   // A 1.1.0 packet has no review block; its only review rule couples DECIDED
   // with HUMAN_REVIEW_DECISION evidence both ways. Derived from the 1.2.0
   // decided example by removing what 1.2.0 added.
-  const packet = withoutExactAmounts(loadPacket(validDir, 'outcome-mismatch-decided.packet.json'))
+  const packet = withoutCommitmentFields(
+    withoutExactAmounts(loadPacket(validDir, 'outcome-mismatch-decided.packet.json')),
+  )
   packet.packetFormatVersion = '1.1.0'
   delete packet.action.review
   delete packet.action.reverificationTiming
@@ -403,7 +424,7 @@ test('valid and invalid examples stay internally consistent on actionId', () => 
 
 test('an unsupported explicit version is refused, not silently accepted', () => {
   assert.throws(() => createValidator('2.0.0'), /Unsupported packet format version/)
-  assert.deepEqual(SUPPORTED_VERSIONS, ['1.4.0', '1.3.0', '1.2.0', '1.1.0', '1.0.0'])
+  assert.deepEqual(SUPPORTED_VERSIONS, ['1.5.0', '1.4.0', '1.3.0', '1.2.0', '1.1.0', '1.0.0'])
 })
 
 test('the documented CLI command validates without any network access', () => {

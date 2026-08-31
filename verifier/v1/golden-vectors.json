@@ -1,0 +1,4765 @@
+{
+ "verifierFormatVersion": "1",
+ "bundleFormatVersion": "1",
+ "howTheseWereProduced": "Minted for the PRUVZ-88 release by the repository test fixture (test/helpers/mint.mjs): an ephemeral trust registry (one active trust root, one active evidence key), seals over the published examples/valid/verified-refund.packet.json through the canonical commitment, an RFC 6962 log with two signed checkpoints and their consistency proof, and a synthetic RFC 3161 authority (self-signed root CA plus a timestamping leaf whose sole, critical extended key usage is id-kp-timeStamping) whose root PEM is published here for pinning. The private keys were ephemeral and discarded; nothing here is a production identity. Expected reports were produced by lib/verify.mjs at release time; a conformant second-runtime verifier (PRUVZ-97) must reproduce every verdict, reason-code set and dimension status exactly.",
+ "pin": {
+  "issuer": "pruvz.ai",
+  "root": "sha256:DZRqdIDNaHjgNRQ_WPQajY-DWc9Cq5CnmQW0_-cw5xA"
+ },
+ "tsaRoots": [
+  "-----BEGIN CERTIFICATE-----\nMIIBPTCB5KADAgECAgEBMAoGCCqGSM49BAMCMB4xHDAaBgNVBAMME1BydXZ6IE1pbnQgVFNBIFJvb3QwHhcNMjAwMTAxMDAwMDAwWhcNNDAwMTAxMDAwMDAwWjAeMRwwGgYDVQQDDBNQcnV2eiBNaW50IFRTQSBSb290MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE2edRt1aklBiLl/qpoU1wS5Sk1490a3pl80B22WEo2yeTmAIE5DMeuK331aaxi/jiY0KmONao41rcaKHGxn/a9aMTMBEwDwYDVR0TAQH/BAUwAwEB/zAKBggqhkjOPQQDAgNIADBFAiAU98KjtHzmc10/UfeZQ5VxnLbc9ZwCZgqa7bFATTi8IwIhAL7v3pNtlfzhm2DzDxqvvdgd4MGXozxPcgnZOKJDiLHv\n-----END CERTIFICATE-----\n"
+ ],
+ "bundles": {
+  "full": {
+   "bundleFormatVersion": "1",
+   "packet": {
+    "packetFormatVersion": "1.5.0",
+    "action": {
+     "actionId": "act_0123456789abcdef0123456789abcdef",
+     "agentId": "billing-refunds-agent",
+     "runId": "run_sample_001",
+     "correlationId": "pay_74001",
+     "actionType": "refund",
+     "subject": {
+      "subjectType": "payment",
+      "subjectId": "pay_74001"
+     },
+     "decision": {
+      "decisionType": "REFUND_APPROVED",
+      "amount": {
+       "amount": 42.5,
+       "amountExact": "42.5",
+       "currency": "USD"
+      }
+     },
+     "crmTicketId": "TICKET-1001",
+     "claim": {
+      "claimedOutcome": "REFUND_SUCCEEDED",
+      "claimedAtUtc": "2026-07-10T09:15:12Z"
+     },
+     "expectedOutcome": {
+      "outcomeType": "REFUND_SUCCEEDED",
+      "amount": {
+       "amount": 42.5,
+       "amountExact": "42.5",
+       "currency": "USD"
+      }
+     },
+     "observed": {
+      "source": "billing-system",
+      "sourceReference": "ref_555",
+      "occurredAtUtc": "2026-07-10T09:15:40Z",
+      "recordedAtUtc": "2026-07-10T09:15:41Z",
+      "summary": "Refund of USD 42.50 recorded as succeeded for payment pay_74001."
+     },
+     "executionStatus": "COMPLETED",
+     "verificationStatus": "VERIFIED",
+     "finalOutcome": "REFUND_SUCCEEDED",
+     "verificationFailure": null,
+     "reviewState": "NOT_REQUIRED",
+     "review": null,
+     "mismatch": null,
+     "verificationTiming": {
+      "initialCheckAfterSeconds": 10,
+      "readbackIntervalSeconds": 900,
+      "deadlineAtUtc": "2026-07-12T09:14:58Z",
+      "deadlineSource": "PRODUCT_SPEC",
+      "resolvedAtUtc": "2026-07-10T09:14:58Z"
+     },
+     "reverificationTiming": null,
+     "policySnapshot": {
+      "policyId": "demo-refund-policy",
+      "policyVersion": "1",
+      "rules": {
+       "maxPurchaseAgeDays": 30,
+       "maxRefundAmount": {
+        "amount": 100,
+        "amountExact": "100",
+        "currency": "USD"
+       },
+       "allowedPaymentStates": [
+        "SETTLED"
+       ],
+       "ticket": {
+        "ticketRequired": true,
+        "allowedTicketStatuses": [
+         "OPEN",
+         "APPROVED"
+        ]
+       },
+       "verificationDeadlineSeconds": null
+      },
+      "input": {
+       "purchasedAtUtc": "2026-06-25T08:00:00Z",
+       "evaluatedAtUtc": "2026-07-10T09:14:59Z",
+       "refundAmount": {
+        "amount": 42.5,
+        "amountExact": "42.5",
+        "currency": "USD"
+       },
+       "paymentState": "SETTLED",
+       "ticketStatus": "OPEN"
+      },
+      "evaluation": {
+       "policyPassed": true,
+       "ruleResults": [
+        {
+         "ruleId": "purchase-age",
+         "passed": true,
+         "explanation": "Purchase is 15 days old, within the 30-day limit."
+        },
+        {
+         "ruleId": "refund-amount",
+         "passed": true,
+         "explanation": "USD 42.50 is within the USD 100.00 limit."
+        },
+        {
+         "ruleId": "payment-state",
+         "passed": true,
+         "explanation": "Payment state SETTLED is allowed."
+        },
+        {
+         "ruleId": "support-ticket",
+         "passed": true,
+         "explanation": "Ticket TICKET-1001 is OPEN, which satisfies the requirement."
+        }
+       ]
+      }
+     },
+     "createdAtUtc": "2026-07-10T09:14:58Z",
+     "updatedAtUtc": "2026-07-10T09:15:45Z",
+     "executionStartedAtUtc": "2026-07-10T09:15:05Z",
+     "executionCompletedAtUtc": "2026-07-10T09:15:20Z",
+     "verificationCompletedAtUtc": "2026-07-10T09:15:45Z"
+    },
+    "evidence": {
+     "actionId": "act_0123456789abcdef0123456789abcdef",
+     "items": [
+      {
+       "evidenceId": "evd_00000000000000000000000000000001",
+       "sequence": 1,
+       "type": "ACTION_REQUEST",
+       "trustLevel": "CLAIMED",
+       "source": "billing-refunds-agent",
+       "sourceReference": null,
+       "occurredAtUtc": "2026-07-10T09:14:58Z",
+       "recordedAtUtc": "2026-07-10T09:14:58Z",
+       "summary": "Refund requested for payment pay_74001.",
+       "runId": "run_sample_001",
+       "schemaVersion": 1,
+       "clientOperationId": "op-ingest-0001",
+       "payloadMetadata": {}
+      },
+      {
+       "evidenceId": "evd_00000000000000000000000000000002",
+       "sequence": 2,
+       "type": "POLICY_SNAPSHOT_CAPTURE",
+       "trustLevel": "PRUVZ_DERIVED",
+       "source": "pruvz-api",
+       "sourceReference": "demo-refund-policy",
+       "occurredAtUtc": "2026-07-10T09:14:59Z",
+       "recordedAtUtc": "2026-07-10T09:14:59Z",
+       "summary": "Decision-time policy snapshot captured: demo-refund-policy v1, policy passed.",
+       "runId": "run_sample_001",
+       "schemaVersion": 1,
+       "clientOperationId": null,
+       "payloadMetadata": {}
+      },
+      {
+       "evidenceId": "evd_00000000000000000000000000000003",
+       "sequence": 3,
+       "type": "AGENT_CLAIM",
+       "trustLevel": "CLAIMED",
+       "source": "billing-refunds-agent",
+       "sourceReference": null,
+       "occurredAtUtc": "2026-07-10T09:15:12Z",
+       "recordedAtUtc": "2026-07-10T09:15:13Z",
+       "summary": "Agent claims refund of USD 42.50 succeeded (REFUND_SUCCEEDED).",
+       "runId": "run_sample_001",
+       "schemaVersion": 1,
+       "clientOperationId": "op-claim-0003",
+       "payloadMetadata": {}
+      },
+      {
+       "evidenceId": "evd_00000000000000000000000000000004",
+       "sequence": 4,
+       "type": "EXECUTION_RECEIPT",
+       "trustLevel": "EXECUTION_RECEIPT",
+       "source": "billing-refunds-agent",
+       "sourceReference": "ref_555",
+       "occurredAtUtc": "2026-07-10T09:15:19Z",
+       "recordedAtUtc": "2026-07-10T09:15:20Z",
+       "summary": "Execution receipt relayed: refund ref_555 submitted to the billing system.",
+       "runId": "run_sample_001",
+       "schemaVersion": 1,
+       "clientOperationId": "op-receipt-0004",
+       "payloadMetadata": {}
+      },
+      {
+       "evidenceId": "evd_00000000000000000000000000000005",
+       "sequence": 5,
+       "type": "SOURCE_READBACK",
+       "trustLevel": "INDEPENDENT_READBACK",
+       "source": "billing-system",
+       "sourceReference": "ref_555",
+       "occurredAtUtc": "2026-07-10T09:15:40Z",
+       "recordedAtUtc": "2026-07-10T09:15:41Z",
+       "summary": "Refund of USD 42.50 recorded as succeeded for payment pay_74001.",
+       "runId": "run_sample_001",
+       "schemaVersion": 1,
+       "clientOperationId": null,
+       "payloadMetadata": {
+        "paymentId": "ref_555",
+        "refundCount": "1",
+        "succeededRefundCount": "1"
+       }
+      },
+      {
+       "evidenceId": "evd_00000000000000000000000000000006",
+       "sequence": 6,
+       "type": "VERIFICATION_RESULT",
+       "trustLevel": "PRUVZ_DERIVED",
+       "source": "pruvz-worker",
+       "sourceReference": null,
+       "occurredAtUtc": "2026-07-10T09:15:45Z",
+       "recordedAtUtc": "2026-07-10T09:15:45Z",
+       "summary": "VERIFIED: exactly one succeeded refund of USD 42.50 matched payment pay_74001.",
+       "runId": "run_sample_001",
+       "schemaVersion": 1,
+       "clientOperationId": null,
+       "payloadMetadata": {
+        "verificationStatus": "VERIFIED",
+        "attemptCount": "1"
+       }
+      }
+     ]
+    }
+   },
+   "seals": {
+    "evd_00000000000000000000000000000001": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:2cd415c53016c05998b18e994814456fdc0fb89be3210a44d65219b9796da2ba",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:14:58Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000001",
+       "sequence": 1,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "Tj92-Wfb0fRLYoJ5-Ae867K9paMafPdHptRe5PlwdriTG998BuVAH2czCWJqBeh4XbCVNmF4Yo8ur_Tjhn-2RA"
+    },
+    "evd_00000000000000000000000000000002": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:be7fd5f74d223799a07c0b919c9eb0f29f3cc68c57cab816389176020a2ea2ee",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:14:59Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000002",
+       "sequence": 2,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "zoDk_rYsVg4ND6trt0wvz4-sH9SNZUplTRm5GKGQ4NV1JRegw7BejVLHHAXVfe6cJYBw2Mbzws1ul-TZ2_ueSw"
+    },
+    "evd_00000000000000000000000000000003": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:ef9582fe6d2a2262706551b651f23dde27544657773c057ae0b7688c4c528c3b",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:15:13Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000003",
+       "sequence": 3,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "2i17i_VN9O3amNAGlyMJlb9E3CgUkpPY4FMNbHRQkLits0Iha1mZbRcZ5utxA2xqII6-xGUAPeB-diupMNuOyg"
+    },
+    "evd_00000000000000000000000000000004": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:cd60851fced14bfbaa118e4303d398f7fe1307ec7e86f4d352aec1c303c013fb",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:15:20Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000004",
+       "sequence": 4,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "w9g1FwaOIFQQE5bHoSPQgGbNITP1zef_7g5YEqTvYfCcg7RPV50zyAn9_IaFW1gaJ4UAFctO822AS2vXXSZd1Q"
+    },
+    "evd_00000000000000000000000000000005": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:84b0fc54d755e7eb2cb5768fb61c38e96f7cf2d5f6b7eceeecd6b9f0f22b230a",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:15:41Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000005",
+       "sequence": 5,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "ekdPPvqO-8SYzZ2dxvfgc3hTLZUUPc0WUMdVLSUcGERQJGcPcwCADOg3yXs2BpRjIi7ja2VDIq0zSTD2DMUlSA"
+    },
+    "evd_00000000000000000000000000000006": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:8c5b0d6db710e7b85e10e60784e1417f8e235b53a624d9f7762f8992f0c167ff",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:15:45Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000006",
+       "sequence": 6,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "cKraq9pYdnvJntWkzQlIa0oNgJm7UYfOv9Db34mf6I0DzqMIjQsRvr8lxieDNvNOZQLnyT5riMLoEWc-dgy7bw"
+    }
+   },
+   "proofs": {
+    "evd_00000000000000000000000000000001": {
+     "leafIndex": 0,
+     "leafHash": "c47c87ce1229ad52a7eda2c406314c5883a2843f80e8f3c925acd245c5822d3f",
+     "path": [
+      "70b6d4f62876eec2682d51b7ff3daca140492f6cb26dbcc39203c2b548f5cf7e",
+      "2250f3e8306f35a4292ff4fb310585db1e92a6c70953459dcd55e98810db38ad",
+      "4a0144d41bb96c48ff818d76493d3a5a11d9bce947425403b53dcdedf2417aba"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    },
+    "evd_00000000000000000000000000000002": {
+     "leafIndex": 1,
+     "leafHash": "70b6d4f62876eec2682d51b7ff3daca140492f6cb26dbcc39203c2b548f5cf7e",
+     "path": [
+      "c47c87ce1229ad52a7eda2c406314c5883a2843f80e8f3c925acd245c5822d3f",
+      "2250f3e8306f35a4292ff4fb310585db1e92a6c70953459dcd55e98810db38ad",
+      "4a0144d41bb96c48ff818d76493d3a5a11d9bce947425403b53dcdedf2417aba"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    },
+    "evd_00000000000000000000000000000003": {
+     "leafIndex": 2,
+     "leafHash": "5ee206d0cf825b39c6f25740ac0d84a3539871adff8adcd3cebc5f751c04e5b4",
+     "path": [
+      "6d5cc902595dacc8a6afb026df9761a3f176244234b5a840810b3b6702c8dc33",
+      "573b74ba1c31a66ccaa9058f9b3f74ab02075321f8bb333b430227650bfca101",
+      "4a0144d41bb96c48ff818d76493d3a5a11d9bce947425403b53dcdedf2417aba"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    },
+    "evd_00000000000000000000000000000004": {
+     "leafIndex": 3,
+     "leafHash": "6d5cc902595dacc8a6afb026df9761a3f176244234b5a840810b3b6702c8dc33",
+     "path": [
+      "5ee206d0cf825b39c6f25740ac0d84a3539871adff8adcd3cebc5f751c04e5b4",
+      "573b74ba1c31a66ccaa9058f9b3f74ab02075321f8bb333b430227650bfca101",
+      "4a0144d41bb96c48ff818d76493d3a5a11d9bce947425403b53dcdedf2417aba"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    },
+    "evd_00000000000000000000000000000005": {
+     "leafIndex": 4,
+     "leafHash": "e9ed63d8d7eaa8618dfb8e180beeef94607196fe7a92a9a4ca422c0c79a99dee",
+     "path": [
+      "34d68cf0a5925a68e9fb6df8c2ce70e23b4a4be0bf2d8ceea0dabf489da10cd5",
+      "041d0ea454784fd1fe9353dd9366ce4decd36ba48e96ca5b58344d0722e46349"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    },
+    "evd_00000000000000000000000000000006": {
+     "leafIndex": 5,
+     "leafHash": "34d68cf0a5925a68e9fb6df8c2ce70e23b4a4be0bf2d8ceea0dabf489da10cd5",
+     "path": [
+      "e9ed63d8d7eaa8618dfb8e180beeef94607196fe7a92a9a4ca422c0c79a99dee",
+      "041d0ea454784fd1fe9353dd9366ce4decd36ba48e96ca5b58344d0722e46349"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    }
+   },
+   "checkpoints": [
+    {
+     "checkpoint": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "checkpointSequence": 1,
+      "issuedAt": "2026-08-10T09:00:00Z",
+      "origin": "pruvz.ai/evidence-log/mint",
+      "rootHash": "sha256:041d0ea454784fd1fe9353dd9366ce4decd36ba48e96ca5b58344d0722e46349",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "treeSize": 4,
+      "version": "1"
+     },
+     "signature": "Y1dpPROza7E85faOITro9Jw-1pkNDGOW7bxlJU7dBk3shcwTK60xsw7aFT7lisk_sJjdl_N-hDzMO49bph0UkA"
+    },
+    {
+     "checkpoint": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "checkpointSequence": 2,
+      "issuedAt": "2026-08-10T09:01:00Z",
+      "origin": "pruvz.ai/evidence-log/mint",
+      "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "treeSize": 6,
+      "version": "1"
+     },
+     "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+    }
+   ],
+   "consistencyProofs": [
+    {
+     "fromSize": 4,
+     "toSize": 6,
+     "proof": [
+      "4a0144d41bb96c48ff818d76493d3a5a11d9bce947425403b53dcdedf2417aba"
+     ]
+    }
+   ],
+   "trustRegistry": [
+    {
+     "manifest": {
+      "formatVersion": "1",
+      "issuedAtUtc": "2026-08-01T00:00:00Z",
+      "issuer": "pruvz.ai",
+      "keys": [
+       {
+        "keyId": "mint:keys/trust-root/1",
+        "predecessorKeyId": null,
+        "provider": "local-development",
+        "publicKey": {
+         "crv": "P-256",
+         "kty": "EC",
+         "x": "rY2jGPlAzdM9UI_FqC6KyYM1ci-K9I8JEB4_ZSKiaPI",
+         "y": "dT1ebRuIlV8TdiQ-Zhu8bOHSbHMcc_Ou-b7ULuyJqXs"
+        },
+        "retiredAtUtc": null,
+        "revocationReason": null,
+        "revokedAtUtc": null,
+        "status": "ACTIVE",
+        "suite": "ES256",
+        "thumbprint": "sha256:DZRqdIDNaHjgNRQ_WPQajY-DWc9Cq5CnmQW0_-cw5xA",
+        "use": "trust-root",
+        "validFromUtc": "2026-07-01T00:00:00Z"
+       },
+       {
+        "keyId": "mint:keys/evidence-signing/1",
+        "predecessorKeyId": null,
+        "provider": "local-development",
+        "publicKey": {
+         "crv": "P-256",
+         "kty": "EC",
+         "x": "KYiS9272F_dqjEtub21FjO2Nui_gd7EiETe5mSKu2Ao",
+         "y": "t2zlrumF72AOxOdWGBWS8p9Z-yCb1wdvn-BMkOxh_ZE"
+        },
+        "retiredAtUtc": null,
+        "revocationReason": null,
+        "revokedAtUtc": null,
+        "status": "ACTIVE",
+        "suite": "ES256",
+        "thumbprint": "sha256:kOoSsO5A-iiq3TMOdyNDQiWbZiWDa91bB82Fea5dxl8",
+        "use": "evidence-signing",
+        "validFromUtc": "2026-07-01T00:00:00Z"
+       }
+      ],
+      "previous": null,
+      "registryVersion": 1
+     },
+     "signatures": [
+      {
+       "keyId": "mint:keys/trust-root/1",
+       "signature": "9O6MFkq-Y5d9OQ9q0bIQIRLhAj16dBhygdoAe5MnAXcx1Hxwqwuq3LzYlPJnNgpdhf4UFNNmIK5y9YAjhcnU5A",
+       "suite": "ES256"
+      }
+     ],
+     "attestations": {
+      "publications": [],
+      "witnesses": []
+     }
+    }
+   ],
+   "anchors": {
+    "checkpoints": {
+     "2": {
+      "anchors": [
+       {
+        "version": "1",
+        "anchorId": "anc_mint_checkpoint_2",
+        "trustDomain": "mint-tsa",
+        "status": "ANCHORED",
+        "subject": {
+         "kind": "log-checkpoint",
+         "origin": "pruvz.ai/evidence-log/mint",
+         "subjectVersion": 2
+        },
+        "blindingNonce": "LHGQgumk2WQtOqlu7vTMAdvcVt8EpKVnmeyZA1eLbLc",
+        "requestNonce": "AWM3QhMQRp7lIqG4xfC4Jg",
+        "receipt": {
+         "kind": "rfc3161-timestamp-token",
+         "token": "MIIDvAYJKoZIhvcNAQcCoIIDrTCCA6kCAQMxDzANBglghkgBZQMEAgEFADB6BgsqhkiG9w0BCRABBKBrBGkwZwIBAQYJKwYBBAGGjR8BMC8wCwYJYIZIAWUDBAIBBCCvYI0pVXJfRSyHQVCBaf3WuolqCA+zhaF7MrK8++yNDAIDC1lNGA8yMDI2MDgzMDEyMDAwMFoCEAFjN0ITEEae5SKhuMXwuCagggKDMIIBPTCB5KADAgECAgEBMAoGCCqGSM49BAMCMB4xHDAaBgNVBAMME1BydXZ6IE1pbnQgVFNBIFJvb3QwHhcNMjAwMTAxMDAwMDAwWhcNNDAwMTAxMDAwMDAwWjAeMRwwGgYDVQQDDBNQcnV2eiBNaW50IFRTQSBSb290MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE2edRt1aklBiLl/qpoU1wS5Sk1490a3pl80B22WEo2yeTmAIE5DMeuK331aaxi/jiY0KmONao41rcaKHGxn/a9aMTMBEwDwYDVR0TAQH/BAUwAwEB/zAKBggqhkjOPQQDAgNIADBFAiAU98KjtHzmc10/UfeZQ5VxnLbc9ZwCZgqa7bFATTi8IwIhAL7v3pNtlfzhm2DzDxqvvdgd4MGXozxPcgnZOKJDiLHvMIIBPjCB5qADAgECAgECMAoGCCqGSM49BAMCMB4xHDAaBgNVBAMME1BydXZ6IE1pbnQgVFNBIFJvb3QwHhcNMjAwMTAxMDAwMDAwWhcNNDAwMTAxMDAwMDAwWjAZMRcwFQYDVQQDDA5QcnV2eiBNaW50IFRTQTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABHQ2GVajpKw3kQnSzRynaKmBA5DjmolQ+08glpfLoyZIHiYa7M1yjgWYPvHwawALIhAf12AndvuDA+NqyyvayiqjGjAYMBYGA1UdJQEB/wQMMAoGCCsGAQUFBwMIMAoGCCqGSM49BAMCA0cAMEQCIFxsWniTzXTUOWY7KU6WAf8sek5G0GWgv+Pdr+zCG8/cAiAPxcsed92e00WjMNhorBHjdB7jrU4OCo68OZ1lUTciszGBjzCBjAIBATAjMB4xHDAaBgNVBAMME1BydXZ6IE1pbnQgVFNBIFJvb3QCAQIwDQYJYIZIAWUDBAIBBQAwCgYIKoZIzj0EAwIERzBFAiEA76/pNU4PIZ9ewjQNRh99l9/ai/jgroR92nipZr11Sx8CIDVAPz9BLDsz1SXs1Kp0rc3B0D0/ojIKMyxENvQdqyFQ"
+        }
+       }
+      ],
+      "anchoringEnabled": true,
+      "trustDomain": "mint-tsa",
+      "note": "minted by the test fixture"
+     }
+    },
+    "trustRegistry": {
+     "1": {
+      "anchors": [
+       {
+        "version": "1",
+        "anchorId": "anc_mint_registry_1",
+        "trustDomain": "mint-tsa",
+        "status": "ANCHORED",
+        "subject": {
+         "kind": "trust-registry",
+         "origin": "pruvz.ai",
+         "subjectVersion": 1
+        },
+        "blindingNonce": "VTRpNcdhpFyPe86-E4zlaA9fqjd6t3mIL5OB_VVRrjc",
+        "requestNonce": "ARG1MQrHkxdH8g7Uw43Tyg",
+        "receipt": {
+         "kind": "rfc3161-timestamp-token",
+         "token": "MIIDvAYJKoZIhvcNAQcCoIIDrTCCA6kCAQMxDzANBglghkgBZQMEAgEFADB6BgsqhkiG9w0BCRABBKBrBGkwZwIBAQYJKwYBBAGGjR8BMC8wCwYJYIZIAWUDBAIBBCASDY/qg7X7N/5UM0Vqe9k5p4yNFCMKzWs1KTj6BjYBFAIDC1laGA8yMDI2MDgzMDEyMDAwMVoCEAERtTEKx5MXR/IO1MON08qgggKDMIIBPTCB5KADAgECAgEBMAoGCCqGSM49BAMCMB4xHDAaBgNVBAMME1BydXZ6IE1pbnQgVFNBIFJvb3QwHhcNMjAwMTAxMDAwMDAwWhcNNDAwMTAxMDAwMDAwWjAeMRwwGgYDVQQDDBNQcnV2eiBNaW50IFRTQSBSb290MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE2edRt1aklBiLl/qpoU1wS5Sk1490a3pl80B22WEo2yeTmAIE5DMeuK331aaxi/jiY0KmONao41rcaKHGxn/a9aMTMBEwDwYDVR0TAQH/BAUwAwEB/zAKBggqhkjOPQQDAgNIADBFAiAU98KjtHzmc10/UfeZQ5VxnLbc9ZwCZgqa7bFATTi8IwIhAL7v3pNtlfzhm2DzDxqvvdgd4MGXozxPcgnZOKJDiLHvMIIBPjCB5qADAgECAgECMAoGCCqGSM49BAMCMB4xHDAaBgNVBAMME1BydXZ6IE1pbnQgVFNBIFJvb3QwHhcNMjAwMTAxMDAwMDAwWhcNNDAwMTAxMDAwMDAwWjAZMRcwFQYDVQQDDA5QcnV2eiBNaW50IFRTQTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABHQ2GVajpKw3kQnSzRynaKmBA5DjmolQ+08glpfLoyZIHiYa7M1yjgWYPvHwawALIhAf12AndvuDA+NqyyvayiqjGjAYMBYGA1UdJQEB/wQMMAoGCCsGAQUFBwMIMAoGCCqGSM49BAMCA0cAMEQCIFxsWniTzXTUOWY7KU6WAf8sek5G0GWgv+Pdr+zCG8/cAiAPxcsed92e00WjMNhorBHjdB7jrU4OCo68OZ1lUTciszGBjzCBjAIBATAjMB4xHDAaBgNVBAMME1BydXZ6IE1pbnQgVFNBIFJvb3QCAQIwDQYJYIZIAWUDBAIBBQAwCgYIKoZIzj0EAwIERzBFAiBEs6bL/PFZNejSxXQRQHlmnor+Q/IzLm5LuYDjXbGEUAIhAJSv4MMGKKzhj5kWp/pUGtTuGIPlYpo4YgAdCiNWNp+i"
+        }
+       }
+      ],
+      "anchoringEnabled": true,
+      "trustDomain": "mint-tsa",
+      "note": "minted by the test fixture"
+     }
+    }
+   }
+  },
+  "no-anchors": {
+   "bundleFormatVersion": "1",
+   "packet": {
+    "packetFormatVersion": "1.5.0",
+    "action": {
+     "actionId": "act_0123456789abcdef0123456789abcdef",
+     "agentId": "billing-refunds-agent",
+     "runId": "run_sample_001",
+     "correlationId": "pay_74001",
+     "actionType": "refund",
+     "subject": {
+      "subjectType": "payment",
+      "subjectId": "pay_74001"
+     },
+     "decision": {
+      "decisionType": "REFUND_APPROVED",
+      "amount": {
+       "amount": 42.5,
+       "amountExact": "42.5",
+       "currency": "USD"
+      }
+     },
+     "crmTicketId": "TICKET-1001",
+     "claim": {
+      "claimedOutcome": "REFUND_SUCCEEDED",
+      "claimedAtUtc": "2026-07-10T09:15:12Z"
+     },
+     "expectedOutcome": {
+      "outcomeType": "REFUND_SUCCEEDED",
+      "amount": {
+       "amount": 42.5,
+       "amountExact": "42.5",
+       "currency": "USD"
+      }
+     },
+     "observed": {
+      "source": "billing-system",
+      "sourceReference": "ref_555",
+      "occurredAtUtc": "2026-07-10T09:15:40Z",
+      "recordedAtUtc": "2026-07-10T09:15:41Z",
+      "summary": "Refund of USD 42.50 recorded as succeeded for payment pay_74001."
+     },
+     "executionStatus": "COMPLETED",
+     "verificationStatus": "VERIFIED",
+     "finalOutcome": "REFUND_SUCCEEDED",
+     "verificationFailure": null,
+     "reviewState": "NOT_REQUIRED",
+     "review": null,
+     "mismatch": null,
+     "verificationTiming": {
+      "initialCheckAfterSeconds": 10,
+      "readbackIntervalSeconds": 900,
+      "deadlineAtUtc": "2026-07-12T09:14:58Z",
+      "deadlineSource": "PRODUCT_SPEC",
+      "resolvedAtUtc": "2026-07-10T09:14:58Z"
+     },
+     "reverificationTiming": null,
+     "policySnapshot": {
+      "policyId": "demo-refund-policy",
+      "policyVersion": "1",
+      "rules": {
+       "maxPurchaseAgeDays": 30,
+       "maxRefundAmount": {
+        "amount": 100,
+        "amountExact": "100",
+        "currency": "USD"
+       },
+       "allowedPaymentStates": [
+        "SETTLED"
+       ],
+       "ticket": {
+        "ticketRequired": true,
+        "allowedTicketStatuses": [
+         "OPEN",
+         "APPROVED"
+        ]
+       },
+       "verificationDeadlineSeconds": null
+      },
+      "input": {
+       "purchasedAtUtc": "2026-06-25T08:00:00Z",
+       "evaluatedAtUtc": "2026-07-10T09:14:59Z",
+       "refundAmount": {
+        "amount": 42.5,
+        "amountExact": "42.5",
+        "currency": "USD"
+       },
+       "paymentState": "SETTLED",
+       "ticketStatus": "OPEN"
+      },
+      "evaluation": {
+       "policyPassed": true,
+       "ruleResults": [
+        {
+         "ruleId": "purchase-age",
+         "passed": true,
+         "explanation": "Purchase is 15 days old, within the 30-day limit."
+        },
+        {
+         "ruleId": "refund-amount",
+         "passed": true,
+         "explanation": "USD 42.50 is within the USD 100.00 limit."
+        },
+        {
+         "ruleId": "payment-state",
+         "passed": true,
+         "explanation": "Payment state SETTLED is allowed."
+        },
+        {
+         "ruleId": "support-ticket",
+         "passed": true,
+         "explanation": "Ticket TICKET-1001 is OPEN, which satisfies the requirement."
+        }
+       ]
+      }
+     },
+     "createdAtUtc": "2026-07-10T09:14:58Z",
+     "updatedAtUtc": "2026-07-10T09:15:45Z",
+     "executionStartedAtUtc": "2026-07-10T09:15:05Z",
+     "executionCompletedAtUtc": "2026-07-10T09:15:20Z",
+     "verificationCompletedAtUtc": "2026-07-10T09:15:45Z"
+    },
+    "evidence": {
+     "actionId": "act_0123456789abcdef0123456789abcdef",
+     "items": [
+      {
+       "evidenceId": "evd_00000000000000000000000000000001",
+       "sequence": 1,
+       "type": "ACTION_REQUEST",
+       "trustLevel": "CLAIMED",
+       "source": "billing-refunds-agent",
+       "sourceReference": null,
+       "occurredAtUtc": "2026-07-10T09:14:58Z",
+       "recordedAtUtc": "2026-07-10T09:14:58Z",
+       "summary": "Refund requested for payment pay_74001.",
+       "runId": "run_sample_001",
+       "schemaVersion": 1,
+       "clientOperationId": "op-ingest-0001",
+       "payloadMetadata": {}
+      },
+      {
+       "evidenceId": "evd_00000000000000000000000000000002",
+       "sequence": 2,
+       "type": "POLICY_SNAPSHOT_CAPTURE",
+       "trustLevel": "PRUVZ_DERIVED",
+       "source": "pruvz-api",
+       "sourceReference": "demo-refund-policy",
+       "occurredAtUtc": "2026-07-10T09:14:59Z",
+       "recordedAtUtc": "2026-07-10T09:14:59Z",
+       "summary": "Decision-time policy snapshot captured: demo-refund-policy v1, policy passed.",
+       "runId": "run_sample_001",
+       "schemaVersion": 1,
+       "clientOperationId": null,
+       "payloadMetadata": {}
+      },
+      {
+       "evidenceId": "evd_00000000000000000000000000000003",
+       "sequence": 3,
+       "type": "AGENT_CLAIM",
+       "trustLevel": "CLAIMED",
+       "source": "billing-refunds-agent",
+       "sourceReference": null,
+       "occurredAtUtc": "2026-07-10T09:15:12Z",
+       "recordedAtUtc": "2026-07-10T09:15:13Z",
+       "summary": "Agent claims refund of USD 42.50 succeeded (REFUND_SUCCEEDED).",
+       "runId": "run_sample_001",
+       "schemaVersion": 1,
+       "clientOperationId": "op-claim-0003",
+       "payloadMetadata": {}
+      },
+      {
+       "evidenceId": "evd_00000000000000000000000000000004",
+       "sequence": 4,
+       "type": "EXECUTION_RECEIPT",
+       "trustLevel": "EXECUTION_RECEIPT",
+       "source": "billing-refunds-agent",
+       "sourceReference": "ref_555",
+       "occurredAtUtc": "2026-07-10T09:15:19Z",
+       "recordedAtUtc": "2026-07-10T09:15:20Z",
+       "summary": "Execution receipt relayed: refund ref_555 submitted to the billing system.",
+       "runId": "run_sample_001",
+       "schemaVersion": 1,
+       "clientOperationId": "op-receipt-0004",
+       "payloadMetadata": {}
+      },
+      {
+       "evidenceId": "evd_00000000000000000000000000000005",
+       "sequence": 5,
+       "type": "SOURCE_READBACK",
+       "trustLevel": "INDEPENDENT_READBACK",
+       "source": "billing-system",
+       "sourceReference": "ref_555",
+       "occurredAtUtc": "2026-07-10T09:15:40Z",
+       "recordedAtUtc": "2026-07-10T09:15:41Z",
+       "summary": "Refund of USD 42.50 recorded as succeeded for payment pay_74001.",
+       "runId": "run_sample_001",
+       "schemaVersion": 1,
+       "clientOperationId": null,
+       "payloadMetadata": {
+        "paymentId": "ref_555",
+        "refundCount": "1",
+        "succeededRefundCount": "1"
+       }
+      },
+      {
+       "evidenceId": "evd_00000000000000000000000000000006",
+       "sequence": 6,
+       "type": "VERIFICATION_RESULT",
+       "trustLevel": "PRUVZ_DERIVED",
+       "source": "pruvz-worker",
+       "sourceReference": null,
+       "occurredAtUtc": "2026-07-10T09:15:45Z",
+       "recordedAtUtc": "2026-07-10T09:15:45Z",
+       "summary": "VERIFIED: exactly one succeeded refund of USD 42.50 matched payment pay_74001.",
+       "runId": "run_sample_001",
+       "schemaVersion": 1,
+       "clientOperationId": null,
+       "payloadMetadata": {
+        "verificationStatus": "VERIFIED",
+        "attemptCount": "1"
+       }
+      }
+     ]
+    }
+   },
+   "seals": {
+    "evd_00000000000000000000000000000001": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:2cd415c53016c05998b18e994814456fdc0fb89be3210a44d65219b9796da2ba",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:14:58Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000001",
+       "sequence": 1,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "Tj92-Wfb0fRLYoJ5-Ae867K9paMafPdHptRe5PlwdriTG998BuVAH2czCWJqBeh4XbCVNmF4Yo8ur_Tjhn-2RA"
+    },
+    "evd_00000000000000000000000000000002": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:be7fd5f74d223799a07c0b919c9eb0f29f3cc68c57cab816389176020a2ea2ee",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:14:59Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000002",
+       "sequence": 2,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "zoDk_rYsVg4ND6trt0wvz4-sH9SNZUplTRm5GKGQ4NV1JRegw7BejVLHHAXVfe6cJYBw2Mbzws1ul-TZ2_ueSw"
+    },
+    "evd_00000000000000000000000000000003": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:ef9582fe6d2a2262706551b651f23dde27544657773c057ae0b7688c4c528c3b",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:15:13Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000003",
+       "sequence": 3,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "2i17i_VN9O3amNAGlyMJlb9E3CgUkpPY4FMNbHRQkLits0Iha1mZbRcZ5utxA2xqII6-xGUAPeB-diupMNuOyg"
+    },
+    "evd_00000000000000000000000000000004": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:cd60851fced14bfbaa118e4303d398f7fe1307ec7e86f4d352aec1c303c013fb",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:15:20Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000004",
+       "sequence": 4,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "w9g1FwaOIFQQE5bHoSPQgGbNITP1zef_7g5YEqTvYfCcg7RPV50zyAn9_IaFW1gaJ4UAFctO822AS2vXXSZd1Q"
+    },
+    "evd_00000000000000000000000000000005": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:84b0fc54d755e7eb2cb5768fb61c38e96f7cf2d5f6b7eceeecd6b9f0f22b230a",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:15:41Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000005",
+       "sequence": 5,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "ekdPPvqO-8SYzZ2dxvfgc3hTLZUUPc0WUMdVLSUcGERQJGcPcwCADOg3yXs2BpRjIi7ja2VDIq0zSTD2DMUlSA"
+    },
+    "evd_00000000000000000000000000000006": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:8c5b0d6db710e7b85e10e60784e1417f8e235b53a624d9f7762f8992f0c167ff",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:15:45Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000006",
+       "sequence": 6,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "cKraq9pYdnvJntWkzQlIa0oNgJm7UYfOv9Db34mf6I0DzqMIjQsRvr8lxieDNvNOZQLnyT5riMLoEWc-dgy7bw"
+    }
+   },
+   "proofs": {
+    "evd_00000000000000000000000000000001": {
+     "leafIndex": 0,
+     "leafHash": "c47c87ce1229ad52a7eda2c406314c5883a2843f80e8f3c925acd245c5822d3f",
+     "path": [
+      "70b6d4f62876eec2682d51b7ff3daca140492f6cb26dbcc39203c2b548f5cf7e",
+      "2250f3e8306f35a4292ff4fb310585db1e92a6c70953459dcd55e98810db38ad",
+      "4a0144d41bb96c48ff818d76493d3a5a11d9bce947425403b53dcdedf2417aba"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    },
+    "evd_00000000000000000000000000000002": {
+     "leafIndex": 1,
+     "leafHash": "70b6d4f62876eec2682d51b7ff3daca140492f6cb26dbcc39203c2b548f5cf7e",
+     "path": [
+      "c47c87ce1229ad52a7eda2c406314c5883a2843f80e8f3c925acd245c5822d3f",
+      "2250f3e8306f35a4292ff4fb310585db1e92a6c70953459dcd55e98810db38ad",
+      "4a0144d41bb96c48ff818d76493d3a5a11d9bce947425403b53dcdedf2417aba"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    },
+    "evd_00000000000000000000000000000003": {
+     "leafIndex": 2,
+     "leafHash": "5ee206d0cf825b39c6f25740ac0d84a3539871adff8adcd3cebc5f751c04e5b4",
+     "path": [
+      "6d5cc902595dacc8a6afb026df9761a3f176244234b5a840810b3b6702c8dc33",
+      "573b74ba1c31a66ccaa9058f9b3f74ab02075321f8bb333b430227650bfca101",
+      "4a0144d41bb96c48ff818d76493d3a5a11d9bce947425403b53dcdedf2417aba"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    },
+    "evd_00000000000000000000000000000004": {
+     "leafIndex": 3,
+     "leafHash": "6d5cc902595dacc8a6afb026df9761a3f176244234b5a840810b3b6702c8dc33",
+     "path": [
+      "5ee206d0cf825b39c6f25740ac0d84a3539871adff8adcd3cebc5f751c04e5b4",
+      "573b74ba1c31a66ccaa9058f9b3f74ab02075321f8bb333b430227650bfca101",
+      "4a0144d41bb96c48ff818d76493d3a5a11d9bce947425403b53dcdedf2417aba"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    },
+    "evd_00000000000000000000000000000005": {
+     "leafIndex": 4,
+     "leafHash": "e9ed63d8d7eaa8618dfb8e180beeef94607196fe7a92a9a4ca422c0c79a99dee",
+     "path": [
+      "34d68cf0a5925a68e9fb6df8c2ce70e23b4a4be0bf2d8ceea0dabf489da10cd5",
+      "041d0ea454784fd1fe9353dd9366ce4decd36ba48e96ca5b58344d0722e46349"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    },
+    "evd_00000000000000000000000000000006": {
+     "leafIndex": 5,
+     "leafHash": "34d68cf0a5925a68e9fb6df8c2ce70e23b4a4be0bf2d8ceea0dabf489da10cd5",
+     "path": [
+      "e9ed63d8d7eaa8618dfb8e180beeef94607196fe7a92a9a4ca422c0c79a99dee",
+      "041d0ea454784fd1fe9353dd9366ce4decd36ba48e96ca5b58344d0722e46349"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    }
+   },
+   "checkpoints": [
+    {
+     "checkpoint": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "checkpointSequence": 1,
+      "issuedAt": "2026-08-10T09:00:00Z",
+      "origin": "pruvz.ai/evidence-log/mint",
+      "rootHash": "sha256:041d0ea454784fd1fe9353dd9366ce4decd36ba48e96ca5b58344d0722e46349",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "treeSize": 4,
+      "version": "1"
+     },
+     "signature": "Y1dpPROza7E85faOITro9Jw-1pkNDGOW7bxlJU7dBk3shcwTK60xsw7aFT7lisk_sJjdl_N-hDzMO49bph0UkA"
+    },
+    {
+     "checkpoint": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "checkpointSequence": 2,
+      "issuedAt": "2026-08-10T09:01:00Z",
+      "origin": "pruvz.ai/evidence-log/mint",
+      "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "treeSize": 6,
+      "version": "1"
+     },
+     "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+    }
+   ],
+   "consistencyProofs": [
+    {
+     "fromSize": 4,
+     "toSize": 6,
+     "proof": [
+      "4a0144d41bb96c48ff818d76493d3a5a11d9bce947425403b53dcdedf2417aba"
+     ]
+    }
+   ],
+   "trustRegistry": [
+    {
+     "manifest": {
+      "formatVersion": "1",
+      "issuedAtUtc": "2026-08-01T00:00:00Z",
+      "issuer": "pruvz.ai",
+      "keys": [
+       {
+        "keyId": "mint:keys/trust-root/1",
+        "predecessorKeyId": null,
+        "provider": "local-development",
+        "publicKey": {
+         "crv": "P-256",
+         "kty": "EC",
+         "x": "rY2jGPlAzdM9UI_FqC6KyYM1ci-K9I8JEB4_ZSKiaPI",
+         "y": "dT1ebRuIlV8TdiQ-Zhu8bOHSbHMcc_Ou-b7ULuyJqXs"
+        },
+        "retiredAtUtc": null,
+        "revocationReason": null,
+        "revokedAtUtc": null,
+        "status": "ACTIVE",
+        "suite": "ES256",
+        "thumbprint": "sha256:DZRqdIDNaHjgNRQ_WPQajY-DWc9Cq5CnmQW0_-cw5xA",
+        "use": "trust-root",
+        "validFromUtc": "2026-07-01T00:00:00Z"
+       },
+       {
+        "keyId": "mint:keys/evidence-signing/1",
+        "predecessorKeyId": null,
+        "provider": "local-development",
+        "publicKey": {
+         "crv": "P-256",
+         "kty": "EC",
+         "x": "KYiS9272F_dqjEtub21FjO2Nui_gd7EiETe5mSKu2Ao",
+         "y": "t2zlrumF72AOxOdWGBWS8p9Z-yCb1wdvn-BMkOxh_ZE"
+        },
+        "retiredAtUtc": null,
+        "revocationReason": null,
+        "revokedAtUtc": null,
+        "status": "ACTIVE",
+        "suite": "ES256",
+        "thumbprint": "sha256:kOoSsO5A-iiq3TMOdyNDQiWbZiWDa91bB82Fea5dxl8",
+        "use": "evidence-signing",
+        "validFromUtc": "2026-07-01T00:00:00Z"
+       }
+      ],
+      "previous": null,
+      "registryVersion": 1
+     },
+     "signatures": [
+      {
+       "keyId": "mint:keys/trust-root/1",
+       "signature": "9O6MFkq-Y5d9OQ9q0bIQIRLhAj16dBhygdoAe5MnAXcx1Hxwqwuq3LzYlPJnNgpdhf4UFNNmIK5y9YAjhcnU5A",
+       "suite": "ES256"
+      }
+     ],
+     "attestations": {
+      "publications": [],
+      "witnesses": []
+     }
+    }
+   ],
+   "anchors": {}
+  },
+  "tampered-summary": {
+   "bundleFormatVersion": "1",
+   "packet": {
+    "packetFormatVersion": "1.5.0",
+    "action": {
+     "actionId": "act_0123456789abcdef0123456789abcdef",
+     "agentId": "billing-refunds-agent",
+     "runId": "run_sample_001",
+     "correlationId": "pay_74001",
+     "actionType": "refund",
+     "subject": {
+      "subjectType": "payment",
+      "subjectId": "pay_74001"
+     },
+     "decision": {
+      "decisionType": "REFUND_APPROVED",
+      "amount": {
+       "amount": 42.5,
+       "amountExact": "42.5",
+       "currency": "USD"
+      }
+     },
+     "crmTicketId": "TICKET-1001",
+     "claim": {
+      "claimedOutcome": "REFUND_SUCCEEDED",
+      "claimedAtUtc": "2026-07-10T09:15:12Z"
+     },
+     "expectedOutcome": {
+      "outcomeType": "REFUND_SUCCEEDED",
+      "amount": {
+       "amount": 42.5,
+       "amountExact": "42.5",
+       "currency": "USD"
+      }
+     },
+     "observed": {
+      "source": "billing-system",
+      "sourceReference": "ref_555",
+      "occurredAtUtc": "2026-07-10T09:15:40Z",
+      "recordedAtUtc": "2026-07-10T09:15:41Z",
+      "summary": "Refund of USD 42.50 recorded as succeeded for payment pay_74001."
+     },
+     "executionStatus": "COMPLETED",
+     "verificationStatus": "VERIFIED",
+     "finalOutcome": "REFUND_SUCCEEDED",
+     "verificationFailure": null,
+     "reviewState": "NOT_REQUIRED",
+     "review": null,
+     "mismatch": null,
+     "verificationTiming": {
+      "initialCheckAfterSeconds": 10,
+      "readbackIntervalSeconds": 900,
+      "deadlineAtUtc": "2026-07-12T09:14:58Z",
+      "deadlineSource": "PRODUCT_SPEC",
+      "resolvedAtUtc": "2026-07-10T09:14:58Z"
+     },
+     "reverificationTiming": null,
+     "policySnapshot": {
+      "policyId": "demo-refund-policy",
+      "policyVersion": "1",
+      "rules": {
+       "maxPurchaseAgeDays": 30,
+       "maxRefundAmount": {
+        "amount": 100,
+        "amountExact": "100",
+        "currency": "USD"
+       },
+       "allowedPaymentStates": [
+        "SETTLED"
+       ],
+       "ticket": {
+        "ticketRequired": true,
+        "allowedTicketStatuses": [
+         "OPEN",
+         "APPROVED"
+        ]
+       },
+       "verificationDeadlineSeconds": null
+      },
+      "input": {
+       "purchasedAtUtc": "2026-06-25T08:00:00Z",
+       "evaluatedAtUtc": "2026-07-10T09:14:59Z",
+       "refundAmount": {
+        "amount": 42.5,
+        "amountExact": "42.5",
+        "currency": "USD"
+       },
+       "paymentState": "SETTLED",
+       "ticketStatus": "OPEN"
+      },
+      "evaluation": {
+       "policyPassed": true,
+       "ruleResults": [
+        {
+         "ruleId": "purchase-age",
+         "passed": true,
+         "explanation": "Purchase is 15 days old, within the 30-day limit."
+        },
+        {
+         "ruleId": "refund-amount",
+         "passed": true,
+         "explanation": "USD 42.50 is within the USD 100.00 limit."
+        },
+        {
+         "ruleId": "payment-state",
+         "passed": true,
+         "explanation": "Payment state SETTLED is allowed."
+        },
+        {
+         "ruleId": "support-ticket",
+         "passed": true,
+         "explanation": "Ticket TICKET-1001 is OPEN, which satisfies the requirement."
+        }
+       ]
+      }
+     },
+     "createdAtUtc": "2026-07-10T09:14:58Z",
+     "updatedAtUtc": "2026-07-10T09:15:45Z",
+     "executionStartedAtUtc": "2026-07-10T09:15:05Z",
+     "executionCompletedAtUtc": "2026-07-10T09:15:20Z",
+     "verificationCompletedAtUtc": "2026-07-10T09:15:45Z"
+    },
+    "evidence": {
+     "actionId": "act_0123456789abcdef0123456789abcdef",
+     "items": [
+      {
+       "evidenceId": "evd_00000000000000000000000000000001",
+       "sequence": 1,
+       "type": "ACTION_REQUEST",
+       "trustLevel": "CLAIMED",
+       "source": "billing-refunds-agent",
+       "sourceReference": null,
+       "occurredAtUtc": "2026-07-10T09:14:58Z",
+       "recordedAtUtc": "2026-07-10T09:14:58Z",
+       "summary": "Refund requested for payment pay_74001.",
+       "runId": "run_sample_001",
+       "schemaVersion": 1,
+       "clientOperationId": "op-ingest-0001",
+       "payloadMetadata": {}
+      },
+      {
+       "evidenceId": "evd_00000000000000000000000000000002",
+       "sequence": 2,
+       "type": "POLICY_SNAPSHOT_CAPTURE",
+       "trustLevel": "PRUVZ_DERIVED",
+       "source": "pruvz-api",
+       "sourceReference": "demo-refund-policy",
+       "occurredAtUtc": "2026-07-10T09:14:59Z",
+       "recordedAtUtc": "2026-07-10T09:14:59Z",
+       "summary": "Decision-time policy snapshot captured: demo-refund-policy v1, policy passed.",
+       "runId": "run_sample_001",
+       "schemaVersion": 1,
+       "clientOperationId": null,
+       "payloadMetadata": {}
+      },
+      {
+       "evidenceId": "evd_00000000000000000000000000000003",
+       "sequence": 3,
+       "type": "AGENT_CLAIM",
+       "trustLevel": "CLAIMED",
+       "source": "billing-refunds-agent",
+       "sourceReference": null,
+       "occurredAtUtc": "2026-07-10T09:15:12Z",
+       "recordedAtUtc": "2026-07-10T09:15:13Z",
+       "summary": "Agent claims refund of USD 42.50 succeeded (REFUND_SUCCEEDED).",
+       "runId": "run_sample_001",
+       "schemaVersion": 1,
+       "clientOperationId": "op-claim-0003",
+       "payloadMetadata": {}
+      },
+      {
+       "evidenceId": "evd_00000000000000000000000000000004",
+       "sequence": 4,
+       "type": "EXECUTION_RECEIPT",
+       "trustLevel": "EXECUTION_RECEIPT",
+       "source": "billing-refunds-agent",
+       "sourceReference": "ref_555",
+       "occurredAtUtc": "2026-07-10T09:15:19Z",
+       "recordedAtUtc": "2026-07-10T09:15:20Z",
+       "summary": "Execution receipt relayed: refund ref_555 submitted to the billing system.",
+       "runId": "run_sample_001",
+       "schemaVersion": 1,
+       "clientOperationId": "op-receipt-0004",
+       "payloadMetadata": {}
+      },
+      {
+       "evidenceId": "evd_00000000000000000000000000000005",
+       "sequence": 5,
+       "type": "SOURCE_READBACK",
+       "trustLevel": "INDEPENDENT_READBACK",
+       "source": "billing-system",
+       "sourceReference": "ref_555",
+       "occurredAtUtc": "2026-07-10T09:15:40Z",
+       "recordedAtUtc": "2026-07-10T09:15:41Z",
+       "summary": "Refund confirmed for a different payment entirely.",
+       "runId": "run_sample_001",
+       "schemaVersion": 1,
+       "clientOperationId": null,
+       "payloadMetadata": {
+        "paymentId": "ref_555",
+        "refundCount": "1",
+        "succeededRefundCount": "1"
+       }
+      },
+      {
+       "evidenceId": "evd_00000000000000000000000000000006",
+       "sequence": 6,
+       "type": "VERIFICATION_RESULT",
+       "trustLevel": "PRUVZ_DERIVED",
+       "source": "pruvz-worker",
+       "sourceReference": null,
+       "occurredAtUtc": "2026-07-10T09:15:45Z",
+       "recordedAtUtc": "2026-07-10T09:15:45Z",
+       "summary": "VERIFIED: exactly one succeeded refund of USD 42.50 matched payment pay_74001.",
+       "runId": "run_sample_001",
+       "schemaVersion": 1,
+       "clientOperationId": null,
+       "payloadMetadata": {
+        "verificationStatus": "VERIFIED",
+        "attemptCount": "1"
+       }
+      }
+     ]
+    }
+   },
+   "seals": {
+    "evd_00000000000000000000000000000001": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:2cd415c53016c05998b18e994814456fdc0fb89be3210a44d65219b9796da2ba",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:14:58Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000001",
+       "sequence": 1,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "Tj92-Wfb0fRLYoJ5-Ae867K9paMafPdHptRe5PlwdriTG998BuVAH2czCWJqBeh4XbCVNmF4Yo8ur_Tjhn-2RA"
+    },
+    "evd_00000000000000000000000000000002": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:be7fd5f74d223799a07c0b919c9eb0f29f3cc68c57cab816389176020a2ea2ee",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:14:59Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000002",
+       "sequence": 2,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "zoDk_rYsVg4ND6trt0wvz4-sH9SNZUplTRm5GKGQ4NV1JRegw7BejVLHHAXVfe6cJYBw2Mbzws1ul-TZ2_ueSw"
+    },
+    "evd_00000000000000000000000000000003": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:ef9582fe6d2a2262706551b651f23dde27544657773c057ae0b7688c4c528c3b",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:15:13Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000003",
+       "sequence": 3,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "2i17i_VN9O3amNAGlyMJlb9E3CgUkpPY4FMNbHRQkLits0Iha1mZbRcZ5utxA2xqII6-xGUAPeB-diupMNuOyg"
+    },
+    "evd_00000000000000000000000000000004": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:cd60851fced14bfbaa118e4303d398f7fe1307ec7e86f4d352aec1c303c013fb",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:15:20Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000004",
+       "sequence": 4,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "w9g1FwaOIFQQE5bHoSPQgGbNITP1zef_7g5YEqTvYfCcg7RPV50zyAn9_IaFW1gaJ4UAFctO822AS2vXXSZd1Q"
+    },
+    "evd_00000000000000000000000000000005": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:84b0fc54d755e7eb2cb5768fb61c38e96f7cf2d5f6b7eceeecd6b9f0f22b230a",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:15:41Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000005",
+       "sequence": 5,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "ekdPPvqO-8SYzZ2dxvfgc3hTLZUUPc0WUMdVLSUcGERQJGcPcwCADOg3yXs2BpRjIi7ja2VDIq0zSTD2DMUlSA"
+    },
+    "evd_00000000000000000000000000000006": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:8c5b0d6db710e7b85e10e60784e1417f8e235b53a624d9f7762f8992f0c167ff",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:15:45Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000006",
+       "sequence": 6,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "cKraq9pYdnvJntWkzQlIa0oNgJm7UYfOv9Db34mf6I0DzqMIjQsRvr8lxieDNvNOZQLnyT5riMLoEWc-dgy7bw"
+    }
+   },
+   "proofs": {
+    "evd_00000000000000000000000000000001": {
+     "leafIndex": 0,
+     "leafHash": "c47c87ce1229ad52a7eda2c406314c5883a2843f80e8f3c925acd245c5822d3f",
+     "path": [
+      "70b6d4f62876eec2682d51b7ff3daca140492f6cb26dbcc39203c2b548f5cf7e",
+      "2250f3e8306f35a4292ff4fb310585db1e92a6c70953459dcd55e98810db38ad",
+      "4a0144d41bb96c48ff818d76493d3a5a11d9bce947425403b53dcdedf2417aba"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    },
+    "evd_00000000000000000000000000000002": {
+     "leafIndex": 1,
+     "leafHash": "70b6d4f62876eec2682d51b7ff3daca140492f6cb26dbcc39203c2b548f5cf7e",
+     "path": [
+      "c47c87ce1229ad52a7eda2c406314c5883a2843f80e8f3c925acd245c5822d3f",
+      "2250f3e8306f35a4292ff4fb310585db1e92a6c70953459dcd55e98810db38ad",
+      "4a0144d41bb96c48ff818d76493d3a5a11d9bce947425403b53dcdedf2417aba"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    },
+    "evd_00000000000000000000000000000003": {
+     "leafIndex": 2,
+     "leafHash": "5ee206d0cf825b39c6f25740ac0d84a3539871adff8adcd3cebc5f751c04e5b4",
+     "path": [
+      "6d5cc902595dacc8a6afb026df9761a3f176244234b5a840810b3b6702c8dc33",
+      "573b74ba1c31a66ccaa9058f9b3f74ab02075321f8bb333b430227650bfca101",
+      "4a0144d41bb96c48ff818d76493d3a5a11d9bce947425403b53dcdedf2417aba"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    },
+    "evd_00000000000000000000000000000004": {
+     "leafIndex": 3,
+     "leafHash": "6d5cc902595dacc8a6afb026df9761a3f176244234b5a840810b3b6702c8dc33",
+     "path": [
+      "5ee206d0cf825b39c6f25740ac0d84a3539871adff8adcd3cebc5f751c04e5b4",
+      "573b74ba1c31a66ccaa9058f9b3f74ab02075321f8bb333b430227650bfca101",
+      "4a0144d41bb96c48ff818d76493d3a5a11d9bce947425403b53dcdedf2417aba"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    },
+    "evd_00000000000000000000000000000005": {
+     "leafIndex": 4,
+     "leafHash": "e9ed63d8d7eaa8618dfb8e180beeef94607196fe7a92a9a4ca422c0c79a99dee",
+     "path": [
+      "34d68cf0a5925a68e9fb6df8c2ce70e23b4a4be0bf2d8ceea0dabf489da10cd5",
+      "041d0ea454784fd1fe9353dd9366ce4decd36ba48e96ca5b58344d0722e46349"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    },
+    "evd_00000000000000000000000000000006": {
+     "leafIndex": 5,
+     "leafHash": "34d68cf0a5925a68e9fb6df8c2ce70e23b4a4be0bf2d8ceea0dabf489da10cd5",
+     "path": [
+      "e9ed63d8d7eaa8618dfb8e180beeef94607196fe7a92a9a4ca422c0c79a99dee",
+      "041d0ea454784fd1fe9353dd9366ce4decd36ba48e96ca5b58344d0722e46349"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    }
+   },
+   "checkpoints": [
+    {
+     "checkpoint": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "checkpointSequence": 1,
+      "issuedAt": "2026-08-10T09:00:00Z",
+      "origin": "pruvz.ai/evidence-log/mint",
+      "rootHash": "sha256:041d0ea454784fd1fe9353dd9366ce4decd36ba48e96ca5b58344d0722e46349",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "treeSize": 4,
+      "version": "1"
+     },
+     "signature": "Y1dpPROza7E85faOITro9Jw-1pkNDGOW7bxlJU7dBk3shcwTK60xsw7aFT7lisk_sJjdl_N-hDzMO49bph0UkA"
+    },
+    {
+     "checkpoint": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "checkpointSequence": 2,
+      "issuedAt": "2026-08-10T09:01:00Z",
+      "origin": "pruvz.ai/evidence-log/mint",
+      "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "treeSize": 6,
+      "version": "1"
+     },
+     "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+    }
+   ],
+   "consistencyProofs": [
+    {
+     "fromSize": 4,
+     "toSize": 6,
+     "proof": [
+      "4a0144d41bb96c48ff818d76493d3a5a11d9bce947425403b53dcdedf2417aba"
+     ]
+    }
+   ],
+   "trustRegistry": [
+    {
+     "manifest": {
+      "formatVersion": "1",
+      "issuedAtUtc": "2026-08-01T00:00:00Z",
+      "issuer": "pruvz.ai",
+      "keys": [
+       {
+        "keyId": "mint:keys/trust-root/1",
+        "predecessorKeyId": null,
+        "provider": "local-development",
+        "publicKey": {
+         "crv": "P-256",
+         "kty": "EC",
+         "x": "rY2jGPlAzdM9UI_FqC6KyYM1ci-K9I8JEB4_ZSKiaPI",
+         "y": "dT1ebRuIlV8TdiQ-Zhu8bOHSbHMcc_Ou-b7ULuyJqXs"
+        },
+        "retiredAtUtc": null,
+        "revocationReason": null,
+        "revokedAtUtc": null,
+        "status": "ACTIVE",
+        "suite": "ES256",
+        "thumbprint": "sha256:DZRqdIDNaHjgNRQ_WPQajY-DWc9Cq5CnmQW0_-cw5xA",
+        "use": "trust-root",
+        "validFromUtc": "2026-07-01T00:00:00Z"
+       },
+       {
+        "keyId": "mint:keys/evidence-signing/1",
+        "predecessorKeyId": null,
+        "provider": "local-development",
+        "publicKey": {
+         "crv": "P-256",
+         "kty": "EC",
+         "x": "KYiS9272F_dqjEtub21FjO2Nui_gd7EiETe5mSKu2Ao",
+         "y": "t2zlrumF72AOxOdWGBWS8p9Z-yCb1wdvn-BMkOxh_ZE"
+        },
+        "retiredAtUtc": null,
+        "revocationReason": null,
+        "revokedAtUtc": null,
+        "status": "ACTIVE",
+        "suite": "ES256",
+        "thumbprint": "sha256:kOoSsO5A-iiq3TMOdyNDQiWbZiWDa91bB82Fea5dxl8",
+        "use": "evidence-signing",
+        "validFromUtc": "2026-07-01T00:00:00Z"
+       }
+      ],
+      "previous": null,
+      "registryVersion": 1
+     },
+     "signatures": [
+      {
+       "keyId": "mint:keys/trust-root/1",
+       "signature": "9O6MFkq-Y5d9OQ9q0bIQIRLhAj16dBhygdoAe5MnAXcx1Hxwqwuq3LzYlPJnNgpdhf4UFNNmIK5y9YAjhcnU5A",
+       "suite": "ES256"
+      }
+     ],
+     "attestations": {
+      "publications": [],
+      "witnesses": []
+     }
+    }
+   ],
+   "anchors": {
+    "checkpoints": {
+     "2": {
+      "anchors": [
+       {
+        "version": "1",
+        "anchorId": "anc_mint_checkpoint_2",
+        "trustDomain": "mint-tsa",
+        "status": "ANCHORED",
+        "subject": {
+         "kind": "log-checkpoint",
+         "origin": "pruvz.ai/evidence-log/mint",
+         "subjectVersion": 2
+        },
+        "blindingNonce": "LHGQgumk2WQtOqlu7vTMAdvcVt8EpKVnmeyZA1eLbLc",
+        "requestNonce": "AWM3QhMQRp7lIqG4xfC4Jg",
+        "receipt": {
+         "kind": "rfc3161-timestamp-token",
+         "token": "MIIDvAYJKoZIhvcNAQcCoIIDrTCCA6kCAQMxDzANBglghkgBZQMEAgEFADB6BgsqhkiG9w0BCRABBKBrBGkwZwIBAQYJKwYBBAGGjR8BMC8wCwYJYIZIAWUDBAIBBCCvYI0pVXJfRSyHQVCBaf3WuolqCA+zhaF7MrK8++yNDAIDC1lNGA8yMDI2MDgzMDEyMDAwMFoCEAFjN0ITEEae5SKhuMXwuCagggKDMIIBPTCB5KADAgECAgEBMAoGCCqGSM49BAMCMB4xHDAaBgNVBAMME1BydXZ6IE1pbnQgVFNBIFJvb3QwHhcNMjAwMTAxMDAwMDAwWhcNNDAwMTAxMDAwMDAwWjAeMRwwGgYDVQQDDBNQcnV2eiBNaW50IFRTQSBSb290MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE2edRt1aklBiLl/qpoU1wS5Sk1490a3pl80B22WEo2yeTmAIE5DMeuK331aaxi/jiY0KmONao41rcaKHGxn/a9aMTMBEwDwYDVR0TAQH/BAUwAwEB/zAKBggqhkjOPQQDAgNIADBFAiAU98KjtHzmc10/UfeZQ5VxnLbc9ZwCZgqa7bFATTi8IwIhAL7v3pNtlfzhm2DzDxqvvdgd4MGXozxPcgnZOKJDiLHvMIIBPjCB5qADAgECAgECMAoGCCqGSM49BAMCMB4xHDAaBgNVBAMME1BydXZ6IE1pbnQgVFNBIFJvb3QwHhcNMjAwMTAxMDAwMDAwWhcNNDAwMTAxMDAwMDAwWjAZMRcwFQYDVQQDDA5QcnV2eiBNaW50IFRTQTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABHQ2GVajpKw3kQnSzRynaKmBA5DjmolQ+08glpfLoyZIHiYa7M1yjgWYPvHwawALIhAf12AndvuDA+NqyyvayiqjGjAYMBYGA1UdJQEB/wQMMAoGCCsGAQUFBwMIMAoGCCqGSM49BAMCA0cAMEQCIFxsWniTzXTUOWY7KU6WAf8sek5G0GWgv+Pdr+zCG8/cAiAPxcsed92e00WjMNhorBHjdB7jrU4OCo68OZ1lUTciszGBjzCBjAIBATAjMB4xHDAaBgNVBAMME1BydXZ6IE1pbnQgVFNBIFJvb3QCAQIwDQYJYIZIAWUDBAIBBQAwCgYIKoZIzj0EAwIERzBFAiEA76/pNU4PIZ9ewjQNRh99l9/ai/jgroR92nipZr11Sx8CIDVAPz9BLDsz1SXs1Kp0rc3B0D0/ojIKMyxENvQdqyFQ"
+        }
+       }
+      ],
+      "anchoringEnabled": true,
+      "trustDomain": "mint-tsa",
+      "note": "minted by the test fixture"
+     }
+    },
+    "trustRegistry": {
+     "1": {
+      "anchors": [
+       {
+        "version": "1",
+        "anchorId": "anc_mint_registry_1",
+        "trustDomain": "mint-tsa",
+        "status": "ANCHORED",
+        "subject": {
+         "kind": "trust-registry",
+         "origin": "pruvz.ai",
+         "subjectVersion": 1
+        },
+        "blindingNonce": "VTRpNcdhpFyPe86-E4zlaA9fqjd6t3mIL5OB_VVRrjc",
+        "requestNonce": "ARG1MQrHkxdH8g7Uw43Tyg",
+        "receipt": {
+         "kind": "rfc3161-timestamp-token",
+         "token": "MIIDvAYJKoZIhvcNAQcCoIIDrTCCA6kCAQMxDzANBglghkgBZQMEAgEFADB6BgsqhkiG9w0BCRABBKBrBGkwZwIBAQYJKwYBBAGGjR8BMC8wCwYJYIZIAWUDBAIBBCASDY/qg7X7N/5UM0Vqe9k5p4yNFCMKzWs1KTj6BjYBFAIDC1laGA8yMDI2MDgzMDEyMDAwMVoCEAERtTEKx5MXR/IO1MON08qgggKDMIIBPTCB5KADAgECAgEBMAoGCCqGSM49BAMCMB4xHDAaBgNVBAMME1BydXZ6IE1pbnQgVFNBIFJvb3QwHhcNMjAwMTAxMDAwMDAwWhcNNDAwMTAxMDAwMDAwWjAeMRwwGgYDVQQDDBNQcnV2eiBNaW50IFRTQSBSb290MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE2edRt1aklBiLl/qpoU1wS5Sk1490a3pl80B22WEo2yeTmAIE5DMeuK331aaxi/jiY0KmONao41rcaKHGxn/a9aMTMBEwDwYDVR0TAQH/BAUwAwEB/zAKBggqhkjOPQQDAgNIADBFAiAU98KjtHzmc10/UfeZQ5VxnLbc9ZwCZgqa7bFATTi8IwIhAL7v3pNtlfzhm2DzDxqvvdgd4MGXozxPcgnZOKJDiLHvMIIBPjCB5qADAgECAgECMAoGCCqGSM49BAMCMB4xHDAaBgNVBAMME1BydXZ6IE1pbnQgVFNBIFJvb3QwHhcNMjAwMTAxMDAwMDAwWhcNNDAwMTAxMDAwMDAwWjAZMRcwFQYDVQQDDA5QcnV2eiBNaW50IFRTQTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABHQ2GVajpKw3kQnSzRynaKmBA5DjmolQ+08glpfLoyZIHiYa7M1yjgWYPvHwawALIhAf12AndvuDA+NqyyvayiqjGjAYMBYGA1UdJQEB/wQMMAoGCCsGAQUFBwMIMAoGCCqGSM49BAMCA0cAMEQCIFxsWniTzXTUOWY7KU6WAf8sek5G0GWgv+Pdr+zCG8/cAiAPxcsed92e00WjMNhorBHjdB7jrU4OCo68OZ1lUTciszGBjzCBjAIBATAjMB4xHDAaBgNVBAMME1BydXZ6IE1pbnQgVFNBIFJvb3QCAQIwDQYJYIZIAWUDBAIBBQAwCgYIKoZIzj0EAwIERzBFAiBEs6bL/PFZNejSxXQRQHlmnor+Q/IzLm5LuYDjXbGEUAIhAJSv4MMGKKzhj5kWp/pUGtTuGIPlYpo4YgAdCiNWNp+i"
+        }
+       }
+      ],
+      "anchoringEnabled": true,
+      "trustDomain": "mint-tsa",
+      "note": "minted by the test fixture"
+     }
+    }
+   }
+  },
+  "tampered-seal-signature": {
+   "bundleFormatVersion": "1",
+   "packet": {
+    "packetFormatVersion": "1.5.0",
+    "action": {
+     "actionId": "act_0123456789abcdef0123456789abcdef",
+     "agentId": "billing-refunds-agent",
+     "runId": "run_sample_001",
+     "correlationId": "pay_74001",
+     "actionType": "refund",
+     "subject": {
+      "subjectType": "payment",
+      "subjectId": "pay_74001"
+     },
+     "decision": {
+      "decisionType": "REFUND_APPROVED",
+      "amount": {
+       "amount": 42.5,
+       "amountExact": "42.5",
+       "currency": "USD"
+      }
+     },
+     "crmTicketId": "TICKET-1001",
+     "claim": {
+      "claimedOutcome": "REFUND_SUCCEEDED",
+      "claimedAtUtc": "2026-07-10T09:15:12Z"
+     },
+     "expectedOutcome": {
+      "outcomeType": "REFUND_SUCCEEDED",
+      "amount": {
+       "amount": 42.5,
+       "amountExact": "42.5",
+       "currency": "USD"
+      }
+     },
+     "observed": {
+      "source": "billing-system",
+      "sourceReference": "ref_555",
+      "occurredAtUtc": "2026-07-10T09:15:40Z",
+      "recordedAtUtc": "2026-07-10T09:15:41Z",
+      "summary": "Refund of USD 42.50 recorded as succeeded for payment pay_74001."
+     },
+     "executionStatus": "COMPLETED",
+     "verificationStatus": "VERIFIED",
+     "finalOutcome": "REFUND_SUCCEEDED",
+     "verificationFailure": null,
+     "reviewState": "NOT_REQUIRED",
+     "review": null,
+     "mismatch": null,
+     "verificationTiming": {
+      "initialCheckAfterSeconds": 10,
+      "readbackIntervalSeconds": 900,
+      "deadlineAtUtc": "2026-07-12T09:14:58Z",
+      "deadlineSource": "PRODUCT_SPEC",
+      "resolvedAtUtc": "2026-07-10T09:14:58Z"
+     },
+     "reverificationTiming": null,
+     "policySnapshot": {
+      "policyId": "demo-refund-policy",
+      "policyVersion": "1",
+      "rules": {
+       "maxPurchaseAgeDays": 30,
+       "maxRefundAmount": {
+        "amount": 100,
+        "amountExact": "100",
+        "currency": "USD"
+       },
+       "allowedPaymentStates": [
+        "SETTLED"
+       ],
+       "ticket": {
+        "ticketRequired": true,
+        "allowedTicketStatuses": [
+         "OPEN",
+         "APPROVED"
+        ]
+       },
+       "verificationDeadlineSeconds": null
+      },
+      "input": {
+       "purchasedAtUtc": "2026-06-25T08:00:00Z",
+       "evaluatedAtUtc": "2026-07-10T09:14:59Z",
+       "refundAmount": {
+        "amount": 42.5,
+        "amountExact": "42.5",
+        "currency": "USD"
+       },
+       "paymentState": "SETTLED",
+       "ticketStatus": "OPEN"
+      },
+      "evaluation": {
+       "policyPassed": true,
+       "ruleResults": [
+        {
+         "ruleId": "purchase-age",
+         "passed": true,
+         "explanation": "Purchase is 15 days old, within the 30-day limit."
+        },
+        {
+         "ruleId": "refund-amount",
+         "passed": true,
+         "explanation": "USD 42.50 is within the USD 100.00 limit."
+        },
+        {
+         "ruleId": "payment-state",
+         "passed": true,
+         "explanation": "Payment state SETTLED is allowed."
+        },
+        {
+         "ruleId": "support-ticket",
+         "passed": true,
+         "explanation": "Ticket TICKET-1001 is OPEN, which satisfies the requirement."
+        }
+       ]
+      }
+     },
+     "createdAtUtc": "2026-07-10T09:14:58Z",
+     "updatedAtUtc": "2026-07-10T09:15:45Z",
+     "executionStartedAtUtc": "2026-07-10T09:15:05Z",
+     "executionCompletedAtUtc": "2026-07-10T09:15:20Z",
+     "verificationCompletedAtUtc": "2026-07-10T09:15:45Z"
+    },
+    "evidence": {
+     "actionId": "act_0123456789abcdef0123456789abcdef",
+     "items": [
+      {
+       "evidenceId": "evd_00000000000000000000000000000001",
+       "sequence": 1,
+       "type": "ACTION_REQUEST",
+       "trustLevel": "CLAIMED",
+       "source": "billing-refunds-agent",
+       "sourceReference": null,
+       "occurredAtUtc": "2026-07-10T09:14:58Z",
+       "recordedAtUtc": "2026-07-10T09:14:58Z",
+       "summary": "Refund requested for payment pay_74001.",
+       "runId": "run_sample_001",
+       "schemaVersion": 1,
+       "clientOperationId": "op-ingest-0001",
+       "payloadMetadata": {}
+      },
+      {
+       "evidenceId": "evd_00000000000000000000000000000002",
+       "sequence": 2,
+       "type": "POLICY_SNAPSHOT_CAPTURE",
+       "trustLevel": "PRUVZ_DERIVED",
+       "source": "pruvz-api",
+       "sourceReference": "demo-refund-policy",
+       "occurredAtUtc": "2026-07-10T09:14:59Z",
+       "recordedAtUtc": "2026-07-10T09:14:59Z",
+       "summary": "Decision-time policy snapshot captured: demo-refund-policy v1, policy passed.",
+       "runId": "run_sample_001",
+       "schemaVersion": 1,
+       "clientOperationId": null,
+       "payloadMetadata": {}
+      },
+      {
+       "evidenceId": "evd_00000000000000000000000000000003",
+       "sequence": 3,
+       "type": "AGENT_CLAIM",
+       "trustLevel": "CLAIMED",
+       "source": "billing-refunds-agent",
+       "sourceReference": null,
+       "occurredAtUtc": "2026-07-10T09:15:12Z",
+       "recordedAtUtc": "2026-07-10T09:15:13Z",
+       "summary": "Agent claims refund of USD 42.50 succeeded (REFUND_SUCCEEDED).",
+       "runId": "run_sample_001",
+       "schemaVersion": 1,
+       "clientOperationId": "op-claim-0003",
+       "payloadMetadata": {}
+      },
+      {
+       "evidenceId": "evd_00000000000000000000000000000004",
+       "sequence": 4,
+       "type": "EXECUTION_RECEIPT",
+       "trustLevel": "EXECUTION_RECEIPT",
+       "source": "billing-refunds-agent",
+       "sourceReference": "ref_555",
+       "occurredAtUtc": "2026-07-10T09:15:19Z",
+       "recordedAtUtc": "2026-07-10T09:15:20Z",
+       "summary": "Execution receipt relayed: refund ref_555 submitted to the billing system.",
+       "runId": "run_sample_001",
+       "schemaVersion": 1,
+       "clientOperationId": "op-receipt-0004",
+       "payloadMetadata": {}
+      },
+      {
+       "evidenceId": "evd_00000000000000000000000000000005",
+       "sequence": 5,
+       "type": "SOURCE_READBACK",
+       "trustLevel": "INDEPENDENT_READBACK",
+       "source": "billing-system",
+       "sourceReference": "ref_555",
+       "occurredAtUtc": "2026-07-10T09:15:40Z",
+       "recordedAtUtc": "2026-07-10T09:15:41Z",
+       "summary": "Refund of USD 42.50 recorded as succeeded for payment pay_74001.",
+       "runId": "run_sample_001",
+       "schemaVersion": 1,
+       "clientOperationId": null,
+       "payloadMetadata": {
+        "paymentId": "ref_555",
+        "refundCount": "1",
+        "succeededRefundCount": "1"
+       }
+      },
+      {
+       "evidenceId": "evd_00000000000000000000000000000006",
+       "sequence": 6,
+       "type": "VERIFICATION_RESULT",
+       "trustLevel": "PRUVZ_DERIVED",
+       "source": "pruvz-worker",
+       "sourceReference": null,
+       "occurredAtUtc": "2026-07-10T09:15:45Z",
+       "recordedAtUtc": "2026-07-10T09:15:45Z",
+       "summary": "VERIFIED: exactly one succeeded refund of USD 42.50 matched payment pay_74001.",
+       "runId": "run_sample_001",
+       "schemaVersion": 1,
+       "clientOperationId": null,
+       "payloadMetadata": {
+        "verificationStatus": "VERIFIED",
+        "attemptCount": "1"
+       }
+      }
+     ]
+    }
+   },
+   "seals": {
+    "evd_00000000000000000000000000000001": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:2cd415c53016c05998b18e994814456fdc0fb89be3210a44d65219b9796da2ba",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:14:58Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000001",
+       "sequence": 1,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "Tj92-Wfb0fRLYn15-Ae867K9paMafPdHptRe5PlwdriTG998BuVAH2czCWJqBeh4XbCVNmF4Yo8ur_Tjhn-2RA"
+    },
+    "evd_00000000000000000000000000000002": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:be7fd5f74d223799a07c0b919c9eb0f29f3cc68c57cab816389176020a2ea2ee",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:14:59Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000002",
+       "sequence": 2,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "zoDk_rYsVg4ND6trt0wvz4-sH9SNZUplTRm5GKGQ4NV1JRegw7BejVLHHAXVfe6cJYBw2Mbzws1ul-TZ2_ueSw"
+    },
+    "evd_00000000000000000000000000000003": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:ef9582fe6d2a2262706551b651f23dde27544657773c057ae0b7688c4c528c3b",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:15:13Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000003",
+       "sequence": 3,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "2i17i_VN9O3amNAGlyMJlb9E3CgUkpPY4FMNbHRQkLits0Iha1mZbRcZ5utxA2xqII6-xGUAPeB-diupMNuOyg"
+    },
+    "evd_00000000000000000000000000000004": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:cd60851fced14bfbaa118e4303d398f7fe1307ec7e86f4d352aec1c303c013fb",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:15:20Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000004",
+       "sequence": 4,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "w9g1FwaOIFQQE5bHoSPQgGbNITP1zef_7g5YEqTvYfCcg7RPV50zyAn9_IaFW1gaJ4UAFctO822AS2vXXSZd1Q"
+    },
+    "evd_00000000000000000000000000000005": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:84b0fc54d755e7eb2cb5768fb61c38e96f7cf2d5f6b7eceeecd6b9f0f22b230a",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:15:41Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000005",
+       "sequence": 5,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "ekdPPvqO-8SYzZ2dxvfgc3hTLZUUPc0WUMdVLSUcGERQJGcPcwCADOg3yXs2BpRjIi7ja2VDIq0zSTD2DMUlSA"
+    },
+    "evd_00000000000000000000000000000006": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:8c5b0d6db710e7b85e10e60784e1417f8e235b53a624d9f7762f8992f0c167ff",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:15:45Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000006",
+       "sequence": 6,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "cKraq9pYdnvJntWkzQlIa0oNgJm7UYfOv9Db34mf6I0DzqMIjQsRvr8lxieDNvNOZQLnyT5riMLoEWc-dgy7bw"
+    }
+   },
+   "proofs": {
+    "evd_00000000000000000000000000000001": {
+     "leafIndex": 0,
+     "leafHash": "c47c87ce1229ad52a7eda2c406314c5883a2843f80e8f3c925acd245c5822d3f",
+     "path": [
+      "70b6d4f62876eec2682d51b7ff3daca140492f6cb26dbcc39203c2b548f5cf7e",
+      "2250f3e8306f35a4292ff4fb310585db1e92a6c70953459dcd55e98810db38ad",
+      "4a0144d41bb96c48ff818d76493d3a5a11d9bce947425403b53dcdedf2417aba"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    },
+    "evd_00000000000000000000000000000002": {
+     "leafIndex": 1,
+     "leafHash": "70b6d4f62876eec2682d51b7ff3daca140492f6cb26dbcc39203c2b548f5cf7e",
+     "path": [
+      "c47c87ce1229ad52a7eda2c406314c5883a2843f80e8f3c925acd245c5822d3f",
+      "2250f3e8306f35a4292ff4fb310585db1e92a6c70953459dcd55e98810db38ad",
+      "4a0144d41bb96c48ff818d76493d3a5a11d9bce947425403b53dcdedf2417aba"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    },
+    "evd_00000000000000000000000000000003": {
+     "leafIndex": 2,
+     "leafHash": "5ee206d0cf825b39c6f25740ac0d84a3539871adff8adcd3cebc5f751c04e5b4",
+     "path": [
+      "6d5cc902595dacc8a6afb026df9761a3f176244234b5a840810b3b6702c8dc33",
+      "573b74ba1c31a66ccaa9058f9b3f74ab02075321f8bb333b430227650bfca101",
+      "4a0144d41bb96c48ff818d76493d3a5a11d9bce947425403b53dcdedf2417aba"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    },
+    "evd_00000000000000000000000000000004": {
+     "leafIndex": 3,
+     "leafHash": "6d5cc902595dacc8a6afb026df9761a3f176244234b5a840810b3b6702c8dc33",
+     "path": [
+      "5ee206d0cf825b39c6f25740ac0d84a3539871adff8adcd3cebc5f751c04e5b4",
+      "573b74ba1c31a66ccaa9058f9b3f74ab02075321f8bb333b430227650bfca101",
+      "4a0144d41bb96c48ff818d76493d3a5a11d9bce947425403b53dcdedf2417aba"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    },
+    "evd_00000000000000000000000000000005": {
+     "leafIndex": 4,
+     "leafHash": "e9ed63d8d7eaa8618dfb8e180beeef94607196fe7a92a9a4ca422c0c79a99dee",
+     "path": [
+      "34d68cf0a5925a68e9fb6df8c2ce70e23b4a4be0bf2d8ceea0dabf489da10cd5",
+      "041d0ea454784fd1fe9353dd9366ce4decd36ba48e96ca5b58344d0722e46349"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    },
+    "evd_00000000000000000000000000000006": {
+     "leafIndex": 5,
+     "leafHash": "34d68cf0a5925a68e9fb6df8c2ce70e23b4a4be0bf2d8ceea0dabf489da10cd5",
+     "path": [
+      "e9ed63d8d7eaa8618dfb8e180beeef94607196fe7a92a9a4ca422c0c79a99dee",
+      "041d0ea454784fd1fe9353dd9366ce4decd36ba48e96ca5b58344d0722e46349"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    }
+   },
+   "checkpoints": [
+    {
+     "checkpoint": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "checkpointSequence": 1,
+      "issuedAt": "2026-08-10T09:00:00Z",
+      "origin": "pruvz.ai/evidence-log/mint",
+      "rootHash": "sha256:041d0ea454784fd1fe9353dd9366ce4decd36ba48e96ca5b58344d0722e46349",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "treeSize": 4,
+      "version": "1"
+     },
+     "signature": "Y1dpPROza7E85faOITro9Jw-1pkNDGOW7bxlJU7dBk3shcwTK60xsw7aFT7lisk_sJjdl_N-hDzMO49bph0UkA"
+    },
+    {
+     "checkpoint": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "checkpointSequence": 2,
+      "issuedAt": "2026-08-10T09:01:00Z",
+      "origin": "pruvz.ai/evidence-log/mint",
+      "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "treeSize": 6,
+      "version": "1"
+     },
+     "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+    }
+   ],
+   "consistencyProofs": [
+    {
+     "fromSize": 4,
+     "toSize": 6,
+     "proof": [
+      "4a0144d41bb96c48ff818d76493d3a5a11d9bce947425403b53dcdedf2417aba"
+     ]
+    }
+   ],
+   "trustRegistry": [
+    {
+     "manifest": {
+      "formatVersion": "1",
+      "issuedAtUtc": "2026-08-01T00:00:00Z",
+      "issuer": "pruvz.ai",
+      "keys": [
+       {
+        "keyId": "mint:keys/trust-root/1",
+        "predecessorKeyId": null,
+        "provider": "local-development",
+        "publicKey": {
+         "crv": "P-256",
+         "kty": "EC",
+         "x": "rY2jGPlAzdM9UI_FqC6KyYM1ci-K9I8JEB4_ZSKiaPI",
+         "y": "dT1ebRuIlV8TdiQ-Zhu8bOHSbHMcc_Ou-b7ULuyJqXs"
+        },
+        "retiredAtUtc": null,
+        "revocationReason": null,
+        "revokedAtUtc": null,
+        "status": "ACTIVE",
+        "suite": "ES256",
+        "thumbprint": "sha256:DZRqdIDNaHjgNRQ_WPQajY-DWc9Cq5CnmQW0_-cw5xA",
+        "use": "trust-root",
+        "validFromUtc": "2026-07-01T00:00:00Z"
+       },
+       {
+        "keyId": "mint:keys/evidence-signing/1",
+        "predecessorKeyId": null,
+        "provider": "local-development",
+        "publicKey": {
+         "crv": "P-256",
+         "kty": "EC",
+         "x": "KYiS9272F_dqjEtub21FjO2Nui_gd7EiETe5mSKu2Ao",
+         "y": "t2zlrumF72AOxOdWGBWS8p9Z-yCb1wdvn-BMkOxh_ZE"
+        },
+        "retiredAtUtc": null,
+        "revocationReason": null,
+        "revokedAtUtc": null,
+        "status": "ACTIVE",
+        "suite": "ES256",
+        "thumbprint": "sha256:kOoSsO5A-iiq3TMOdyNDQiWbZiWDa91bB82Fea5dxl8",
+        "use": "evidence-signing",
+        "validFromUtc": "2026-07-01T00:00:00Z"
+       }
+      ],
+      "previous": null,
+      "registryVersion": 1
+     },
+     "signatures": [
+      {
+       "keyId": "mint:keys/trust-root/1",
+       "signature": "9O6MFkq-Y5d9OQ9q0bIQIRLhAj16dBhygdoAe5MnAXcx1Hxwqwuq3LzYlPJnNgpdhf4UFNNmIK5y9YAjhcnU5A",
+       "suite": "ES256"
+      }
+     ],
+     "attestations": {
+      "publications": [],
+      "witnesses": []
+     }
+    }
+   ],
+   "anchors": {
+    "checkpoints": {
+     "2": {
+      "anchors": [
+       {
+        "version": "1",
+        "anchorId": "anc_mint_checkpoint_2",
+        "trustDomain": "mint-tsa",
+        "status": "ANCHORED",
+        "subject": {
+         "kind": "log-checkpoint",
+         "origin": "pruvz.ai/evidence-log/mint",
+         "subjectVersion": 2
+        },
+        "blindingNonce": "LHGQgumk2WQtOqlu7vTMAdvcVt8EpKVnmeyZA1eLbLc",
+        "requestNonce": "AWM3QhMQRp7lIqG4xfC4Jg",
+        "receipt": {
+         "kind": "rfc3161-timestamp-token",
+         "token": "MIIDvAYJKoZIhvcNAQcCoIIDrTCCA6kCAQMxDzANBglghkgBZQMEAgEFADB6BgsqhkiG9w0BCRABBKBrBGkwZwIBAQYJKwYBBAGGjR8BMC8wCwYJYIZIAWUDBAIBBCCvYI0pVXJfRSyHQVCBaf3WuolqCA+zhaF7MrK8++yNDAIDC1lNGA8yMDI2MDgzMDEyMDAwMFoCEAFjN0ITEEae5SKhuMXwuCagggKDMIIBPTCB5KADAgECAgEBMAoGCCqGSM49BAMCMB4xHDAaBgNVBAMME1BydXZ6IE1pbnQgVFNBIFJvb3QwHhcNMjAwMTAxMDAwMDAwWhcNNDAwMTAxMDAwMDAwWjAeMRwwGgYDVQQDDBNQcnV2eiBNaW50IFRTQSBSb290MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE2edRt1aklBiLl/qpoU1wS5Sk1490a3pl80B22WEo2yeTmAIE5DMeuK331aaxi/jiY0KmONao41rcaKHGxn/a9aMTMBEwDwYDVR0TAQH/BAUwAwEB/zAKBggqhkjOPQQDAgNIADBFAiAU98KjtHzmc10/UfeZQ5VxnLbc9ZwCZgqa7bFATTi8IwIhAL7v3pNtlfzhm2DzDxqvvdgd4MGXozxPcgnZOKJDiLHvMIIBPjCB5qADAgECAgECMAoGCCqGSM49BAMCMB4xHDAaBgNVBAMME1BydXZ6IE1pbnQgVFNBIFJvb3QwHhcNMjAwMTAxMDAwMDAwWhcNNDAwMTAxMDAwMDAwWjAZMRcwFQYDVQQDDA5QcnV2eiBNaW50IFRTQTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABHQ2GVajpKw3kQnSzRynaKmBA5DjmolQ+08glpfLoyZIHiYa7M1yjgWYPvHwawALIhAf12AndvuDA+NqyyvayiqjGjAYMBYGA1UdJQEB/wQMMAoGCCsGAQUFBwMIMAoGCCqGSM49BAMCA0cAMEQCIFxsWniTzXTUOWY7KU6WAf8sek5G0GWgv+Pdr+zCG8/cAiAPxcsed92e00WjMNhorBHjdB7jrU4OCo68OZ1lUTciszGBjzCBjAIBATAjMB4xHDAaBgNVBAMME1BydXZ6IE1pbnQgVFNBIFJvb3QCAQIwDQYJYIZIAWUDBAIBBQAwCgYIKoZIzj0EAwIERzBFAiEA76/pNU4PIZ9ewjQNRh99l9/ai/jgroR92nipZr11Sx8CIDVAPz9BLDsz1SXs1Kp0rc3B0D0/ojIKMyxENvQdqyFQ"
+        }
+       }
+      ],
+      "anchoringEnabled": true,
+      "trustDomain": "mint-tsa",
+      "note": "minted by the test fixture"
+     }
+    },
+    "trustRegistry": {
+     "1": {
+      "anchors": [
+       {
+        "version": "1",
+        "anchorId": "anc_mint_registry_1",
+        "trustDomain": "mint-tsa",
+        "status": "ANCHORED",
+        "subject": {
+         "kind": "trust-registry",
+         "origin": "pruvz.ai",
+         "subjectVersion": 1
+        },
+        "blindingNonce": "VTRpNcdhpFyPe86-E4zlaA9fqjd6t3mIL5OB_VVRrjc",
+        "requestNonce": "ARG1MQrHkxdH8g7Uw43Tyg",
+        "receipt": {
+         "kind": "rfc3161-timestamp-token",
+         "token": "MIIDvAYJKoZIhvcNAQcCoIIDrTCCA6kCAQMxDzANBglghkgBZQMEAgEFADB6BgsqhkiG9w0BCRABBKBrBGkwZwIBAQYJKwYBBAGGjR8BMC8wCwYJYIZIAWUDBAIBBCASDY/qg7X7N/5UM0Vqe9k5p4yNFCMKzWs1KTj6BjYBFAIDC1laGA8yMDI2MDgzMDEyMDAwMVoCEAERtTEKx5MXR/IO1MON08qgggKDMIIBPTCB5KADAgECAgEBMAoGCCqGSM49BAMCMB4xHDAaBgNVBAMME1BydXZ6IE1pbnQgVFNBIFJvb3QwHhcNMjAwMTAxMDAwMDAwWhcNNDAwMTAxMDAwMDAwWjAeMRwwGgYDVQQDDBNQcnV2eiBNaW50IFRTQSBSb290MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE2edRt1aklBiLl/qpoU1wS5Sk1490a3pl80B22WEo2yeTmAIE5DMeuK331aaxi/jiY0KmONao41rcaKHGxn/a9aMTMBEwDwYDVR0TAQH/BAUwAwEB/zAKBggqhkjOPQQDAgNIADBFAiAU98KjtHzmc10/UfeZQ5VxnLbc9ZwCZgqa7bFATTi8IwIhAL7v3pNtlfzhm2DzDxqvvdgd4MGXozxPcgnZOKJDiLHvMIIBPjCB5qADAgECAgECMAoGCCqGSM49BAMCMB4xHDAaBgNVBAMME1BydXZ6IE1pbnQgVFNBIFJvb3QwHhcNMjAwMTAxMDAwMDAwWhcNNDAwMTAxMDAwMDAwWjAZMRcwFQYDVQQDDA5QcnV2eiBNaW50IFRTQTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABHQ2GVajpKw3kQnSzRynaKmBA5DjmolQ+08glpfLoyZIHiYa7M1yjgWYPvHwawALIhAf12AndvuDA+NqyyvayiqjGjAYMBYGA1UdJQEB/wQMMAoGCCsGAQUFBwMIMAoGCCqGSM49BAMCA0cAMEQCIFxsWniTzXTUOWY7KU6WAf8sek5G0GWgv+Pdr+zCG8/cAiAPxcsed92e00WjMNhorBHjdB7jrU4OCo68OZ1lUTciszGBjzCBjAIBATAjMB4xHDAaBgNVBAMME1BydXZ6IE1pbnQgVFNBIFJvb3QCAQIwDQYJYIZIAWUDBAIBBQAwCgYIKoZIzj0EAwIERzBFAiBEs6bL/PFZNejSxXQRQHlmnor+Q/IzLm5LuYDjXbGEUAIhAJSv4MMGKKzhj5kWp/pUGtTuGIPlYpo4YgAdCiNWNp+i"
+        }
+       }
+      ],
+      "anchoringEnabled": true,
+      "trustDomain": "mint-tsa",
+      "note": "minted by the test fixture"
+     }
+    }
+   }
+  },
+  "anchor-token-signature-corrupted": {
+   "bundleFormatVersion": "1",
+   "packet": {
+    "packetFormatVersion": "1.5.0",
+    "action": {
+     "actionId": "act_0123456789abcdef0123456789abcdef",
+     "agentId": "billing-refunds-agent",
+     "runId": "run_sample_001",
+     "correlationId": "pay_74001",
+     "actionType": "refund",
+     "subject": {
+      "subjectType": "payment",
+      "subjectId": "pay_74001"
+     },
+     "decision": {
+      "decisionType": "REFUND_APPROVED",
+      "amount": {
+       "amount": 42.5,
+       "amountExact": "42.5",
+       "currency": "USD"
+      }
+     },
+     "crmTicketId": "TICKET-1001",
+     "claim": {
+      "claimedOutcome": "REFUND_SUCCEEDED",
+      "claimedAtUtc": "2026-07-10T09:15:12Z"
+     },
+     "expectedOutcome": {
+      "outcomeType": "REFUND_SUCCEEDED",
+      "amount": {
+       "amount": 42.5,
+       "amountExact": "42.5",
+       "currency": "USD"
+      }
+     },
+     "observed": {
+      "source": "billing-system",
+      "sourceReference": "ref_555",
+      "occurredAtUtc": "2026-07-10T09:15:40Z",
+      "recordedAtUtc": "2026-07-10T09:15:41Z",
+      "summary": "Refund of USD 42.50 recorded as succeeded for payment pay_74001."
+     },
+     "executionStatus": "COMPLETED",
+     "verificationStatus": "VERIFIED",
+     "finalOutcome": "REFUND_SUCCEEDED",
+     "verificationFailure": null,
+     "reviewState": "NOT_REQUIRED",
+     "review": null,
+     "mismatch": null,
+     "verificationTiming": {
+      "initialCheckAfterSeconds": 10,
+      "readbackIntervalSeconds": 900,
+      "deadlineAtUtc": "2026-07-12T09:14:58Z",
+      "deadlineSource": "PRODUCT_SPEC",
+      "resolvedAtUtc": "2026-07-10T09:14:58Z"
+     },
+     "reverificationTiming": null,
+     "policySnapshot": {
+      "policyId": "demo-refund-policy",
+      "policyVersion": "1",
+      "rules": {
+       "maxPurchaseAgeDays": 30,
+       "maxRefundAmount": {
+        "amount": 100,
+        "amountExact": "100",
+        "currency": "USD"
+       },
+       "allowedPaymentStates": [
+        "SETTLED"
+       ],
+       "ticket": {
+        "ticketRequired": true,
+        "allowedTicketStatuses": [
+         "OPEN",
+         "APPROVED"
+        ]
+       },
+       "verificationDeadlineSeconds": null
+      },
+      "input": {
+       "purchasedAtUtc": "2026-06-25T08:00:00Z",
+       "evaluatedAtUtc": "2026-07-10T09:14:59Z",
+       "refundAmount": {
+        "amount": 42.5,
+        "amountExact": "42.5",
+        "currency": "USD"
+       },
+       "paymentState": "SETTLED",
+       "ticketStatus": "OPEN"
+      },
+      "evaluation": {
+       "policyPassed": true,
+       "ruleResults": [
+        {
+         "ruleId": "purchase-age",
+         "passed": true,
+         "explanation": "Purchase is 15 days old, within the 30-day limit."
+        },
+        {
+         "ruleId": "refund-amount",
+         "passed": true,
+         "explanation": "USD 42.50 is within the USD 100.00 limit."
+        },
+        {
+         "ruleId": "payment-state",
+         "passed": true,
+         "explanation": "Payment state SETTLED is allowed."
+        },
+        {
+         "ruleId": "support-ticket",
+         "passed": true,
+         "explanation": "Ticket TICKET-1001 is OPEN, which satisfies the requirement."
+        }
+       ]
+      }
+     },
+     "createdAtUtc": "2026-07-10T09:14:58Z",
+     "updatedAtUtc": "2026-07-10T09:15:45Z",
+     "executionStartedAtUtc": "2026-07-10T09:15:05Z",
+     "executionCompletedAtUtc": "2026-07-10T09:15:20Z",
+     "verificationCompletedAtUtc": "2026-07-10T09:15:45Z"
+    },
+    "evidence": {
+     "actionId": "act_0123456789abcdef0123456789abcdef",
+     "items": [
+      {
+       "evidenceId": "evd_00000000000000000000000000000001",
+       "sequence": 1,
+       "type": "ACTION_REQUEST",
+       "trustLevel": "CLAIMED",
+       "source": "billing-refunds-agent",
+       "sourceReference": null,
+       "occurredAtUtc": "2026-07-10T09:14:58Z",
+       "recordedAtUtc": "2026-07-10T09:14:58Z",
+       "summary": "Refund requested for payment pay_74001.",
+       "runId": "run_sample_001",
+       "schemaVersion": 1,
+       "clientOperationId": "op-ingest-0001",
+       "payloadMetadata": {}
+      },
+      {
+       "evidenceId": "evd_00000000000000000000000000000002",
+       "sequence": 2,
+       "type": "POLICY_SNAPSHOT_CAPTURE",
+       "trustLevel": "PRUVZ_DERIVED",
+       "source": "pruvz-api",
+       "sourceReference": "demo-refund-policy",
+       "occurredAtUtc": "2026-07-10T09:14:59Z",
+       "recordedAtUtc": "2026-07-10T09:14:59Z",
+       "summary": "Decision-time policy snapshot captured: demo-refund-policy v1, policy passed.",
+       "runId": "run_sample_001",
+       "schemaVersion": 1,
+       "clientOperationId": null,
+       "payloadMetadata": {}
+      },
+      {
+       "evidenceId": "evd_00000000000000000000000000000003",
+       "sequence": 3,
+       "type": "AGENT_CLAIM",
+       "trustLevel": "CLAIMED",
+       "source": "billing-refunds-agent",
+       "sourceReference": null,
+       "occurredAtUtc": "2026-07-10T09:15:12Z",
+       "recordedAtUtc": "2026-07-10T09:15:13Z",
+       "summary": "Agent claims refund of USD 42.50 succeeded (REFUND_SUCCEEDED).",
+       "runId": "run_sample_001",
+       "schemaVersion": 1,
+       "clientOperationId": "op-claim-0003",
+       "payloadMetadata": {}
+      },
+      {
+       "evidenceId": "evd_00000000000000000000000000000004",
+       "sequence": 4,
+       "type": "EXECUTION_RECEIPT",
+       "trustLevel": "EXECUTION_RECEIPT",
+       "source": "billing-refunds-agent",
+       "sourceReference": "ref_555",
+       "occurredAtUtc": "2026-07-10T09:15:19Z",
+       "recordedAtUtc": "2026-07-10T09:15:20Z",
+       "summary": "Execution receipt relayed: refund ref_555 submitted to the billing system.",
+       "runId": "run_sample_001",
+       "schemaVersion": 1,
+       "clientOperationId": "op-receipt-0004",
+       "payloadMetadata": {}
+      },
+      {
+       "evidenceId": "evd_00000000000000000000000000000005",
+       "sequence": 5,
+       "type": "SOURCE_READBACK",
+       "trustLevel": "INDEPENDENT_READBACK",
+       "source": "billing-system",
+       "sourceReference": "ref_555",
+       "occurredAtUtc": "2026-07-10T09:15:40Z",
+       "recordedAtUtc": "2026-07-10T09:15:41Z",
+       "summary": "Refund of USD 42.50 recorded as succeeded for payment pay_74001.",
+       "runId": "run_sample_001",
+       "schemaVersion": 1,
+       "clientOperationId": null,
+       "payloadMetadata": {
+        "paymentId": "ref_555",
+        "refundCount": "1",
+        "succeededRefundCount": "1"
+       }
+      },
+      {
+       "evidenceId": "evd_00000000000000000000000000000006",
+       "sequence": 6,
+       "type": "VERIFICATION_RESULT",
+       "trustLevel": "PRUVZ_DERIVED",
+       "source": "pruvz-worker",
+       "sourceReference": null,
+       "occurredAtUtc": "2026-07-10T09:15:45Z",
+       "recordedAtUtc": "2026-07-10T09:15:45Z",
+       "summary": "VERIFIED: exactly one succeeded refund of USD 42.50 matched payment pay_74001.",
+       "runId": "run_sample_001",
+       "schemaVersion": 1,
+       "clientOperationId": null,
+       "payloadMetadata": {
+        "verificationStatus": "VERIFIED",
+        "attemptCount": "1"
+       }
+      }
+     ]
+    }
+   },
+   "seals": {
+    "evd_00000000000000000000000000000001": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:2cd415c53016c05998b18e994814456fdc0fb89be3210a44d65219b9796da2ba",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:14:58Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000001",
+       "sequence": 1,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "Tj92-Wfb0fRLYoJ5-Ae867K9paMafPdHptRe5PlwdriTG998BuVAH2czCWJqBeh4XbCVNmF4Yo8ur_Tjhn-2RA"
+    },
+    "evd_00000000000000000000000000000002": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:be7fd5f74d223799a07c0b919c9eb0f29f3cc68c57cab816389176020a2ea2ee",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:14:59Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000002",
+       "sequence": 2,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "zoDk_rYsVg4ND6trt0wvz4-sH9SNZUplTRm5GKGQ4NV1JRegw7BejVLHHAXVfe6cJYBw2Mbzws1ul-TZ2_ueSw"
+    },
+    "evd_00000000000000000000000000000003": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:ef9582fe6d2a2262706551b651f23dde27544657773c057ae0b7688c4c528c3b",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:15:13Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000003",
+       "sequence": 3,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "2i17i_VN9O3amNAGlyMJlb9E3CgUkpPY4FMNbHRQkLits0Iha1mZbRcZ5utxA2xqII6-xGUAPeB-diupMNuOyg"
+    },
+    "evd_00000000000000000000000000000004": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:cd60851fced14bfbaa118e4303d398f7fe1307ec7e86f4d352aec1c303c013fb",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:15:20Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000004",
+       "sequence": 4,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "w9g1FwaOIFQQE5bHoSPQgGbNITP1zef_7g5YEqTvYfCcg7RPV50zyAn9_IaFW1gaJ4UAFctO822AS2vXXSZd1Q"
+    },
+    "evd_00000000000000000000000000000005": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:84b0fc54d755e7eb2cb5768fb61c38e96f7cf2d5f6b7eceeecd6b9f0f22b230a",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:15:41Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000005",
+       "sequence": 5,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "ekdPPvqO-8SYzZ2dxvfgc3hTLZUUPc0WUMdVLSUcGERQJGcPcwCADOg3yXs2BpRjIi7ja2VDIq0zSTD2DMUlSA"
+    },
+    "evd_00000000000000000000000000000006": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:8c5b0d6db710e7b85e10e60784e1417f8e235b53a624d9f7762f8992f0c167ff",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:15:45Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000006",
+       "sequence": 6,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "cKraq9pYdnvJntWkzQlIa0oNgJm7UYfOv9Db34mf6I0DzqMIjQsRvr8lxieDNvNOZQLnyT5riMLoEWc-dgy7bw"
+    }
+   },
+   "proofs": {
+    "evd_00000000000000000000000000000001": {
+     "leafIndex": 0,
+     "leafHash": "c47c87ce1229ad52a7eda2c406314c5883a2843f80e8f3c925acd245c5822d3f",
+     "path": [
+      "70b6d4f62876eec2682d51b7ff3daca140492f6cb26dbcc39203c2b548f5cf7e",
+      "2250f3e8306f35a4292ff4fb310585db1e92a6c70953459dcd55e98810db38ad",
+      "4a0144d41bb96c48ff818d76493d3a5a11d9bce947425403b53dcdedf2417aba"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    },
+    "evd_00000000000000000000000000000002": {
+     "leafIndex": 1,
+     "leafHash": "70b6d4f62876eec2682d51b7ff3daca140492f6cb26dbcc39203c2b548f5cf7e",
+     "path": [
+      "c47c87ce1229ad52a7eda2c406314c5883a2843f80e8f3c925acd245c5822d3f",
+      "2250f3e8306f35a4292ff4fb310585db1e92a6c70953459dcd55e98810db38ad",
+      "4a0144d41bb96c48ff818d76493d3a5a11d9bce947425403b53dcdedf2417aba"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    },
+    "evd_00000000000000000000000000000003": {
+     "leafIndex": 2,
+     "leafHash": "5ee206d0cf825b39c6f25740ac0d84a3539871adff8adcd3cebc5f751c04e5b4",
+     "path": [
+      "6d5cc902595dacc8a6afb026df9761a3f176244234b5a840810b3b6702c8dc33",
+      "573b74ba1c31a66ccaa9058f9b3f74ab02075321f8bb333b430227650bfca101",
+      "4a0144d41bb96c48ff818d76493d3a5a11d9bce947425403b53dcdedf2417aba"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    },
+    "evd_00000000000000000000000000000004": {
+     "leafIndex": 3,
+     "leafHash": "6d5cc902595dacc8a6afb026df9761a3f176244234b5a840810b3b6702c8dc33",
+     "path": [
+      "5ee206d0cf825b39c6f25740ac0d84a3539871adff8adcd3cebc5f751c04e5b4",
+      "573b74ba1c31a66ccaa9058f9b3f74ab02075321f8bb333b430227650bfca101",
+      "4a0144d41bb96c48ff818d76493d3a5a11d9bce947425403b53dcdedf2417aba"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    },
+    "evd_00000000000000000000000000000005": {
+     "leafIndex": 4,
+     "leafHash": "e9ed63d8d7eaa8618dfb8e180beeef94607196fe7a92a9a4ca422c0c79a99dee",
+     "path": [
+      "34d68cf0a5925a68e9fb6df8c2ce70e23b4a4be0bf2d8ceea0dabf489da10cd5",
+      "041d0ea454784fd1fe9353dd9366ce4decd36ba48e96ca5b58344d0722e46349"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    },
+    "evd_00000000000000000000000000000006": {
+     "leafIndex": 5,
+     "leafHash": "34d68cf0a5925a68e9fb6df8c2ce70e23b4a4be0bf2d8ceea0dabf489da10cd5",
+     "path": [
+      "e9ed63d8d7eaa8618dfb8e180beeef94607196fe7a92a9a4ca422c0c79a99dee",
+      "041d0ea454784fd1fe9353dd9366ce4decd36ba48e96ca5b58344d0722e46349"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    }
+   },
+   "checkpoints": [
+    {
+     "checkpoint": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "checkpointSequence": 1,
+      "issuedAt": "2026-08-10T09:00:00Z",
+      "origin": "pruvz.ai/evidence-log/mint",
+      "rootHash": "sha256:041d0ea454784fd1fe9353dd9366ce4decd36ba48e96ca5b58344d0722e46349",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "treeSize": 4,
+      "version": "1"
+     },
+     "signature": "Y1dpPROza7E85faOITro9Jw-1pkNDGOW7bxlJU7dBk3shcwTK60xsw7aFT7lisk_sJjdl_N-hDzMO49bph0UkA"
+    },
+    {
+     "checkpoint": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "checkpointSequence": 2,
+      "issuedAt": "2026-08-10T09:01:00Z",
+      "origin": "pruvz.ai/evidence-log/mint",
+      "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "treeSize": 6,
+      "version": "1"
+     },
+     "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+    }
+   ],
+   "consistencyProofs": [
+    {
+     "fromSize": 4,
+     "toSize": 6,
+     "proof": [
+      "4a0144d41bb96c48ff818d76493d3a5a11d9bce947425403b53dcdedf2417aba"
+     ]
+    }
+   ],
+   "trustRegistry": [
+    {
+     "manifest": {
+      "formatVersion": "1",
+      "issuedAtUtc": "2026-08-01T00:00:00Z",
+      "issuer": "pruvz.ai",
+      "keys": [
+       {
+        "keyId": "mint:keys/trust-root/1",
+        "predecessorKeyId": null,
+        "provider": "local-development",
+        "publicKey": {
+         "crv": "P-256",
+         "kty": "EC",
+         "x": "rY2jGPlAzdM9UI_FqC6KyYM1ci-K9I8JEB4_ZSKiaPI",
+         "y": "dT1ebRuIlV8TdiQ-Zhu8bOHSbHMcc_Ou-b7ULuyJqXs"
+        },
+        "retiredAtUtc": null,
+        "revocationReason": null,
+        "revokedAtUtc": null,
+        "status": "ACTIVE",
+        "suite": "ES256",
+        "thumbprint": "sha256:DZRqdIDNaHjgNRQ_WPQajY-DWc9Cq5CnmQW0_-cw5xA",
+        "use": "trust-root",
+        "validFromUtc": "2026-07-01T00:00:00Z"
+       },
+       {
+        "keyId": "mint:keys/evidence-signing/1",
+        "predecessorKeyId": null,
+        "provider": "local-development",
+        "publicKey": {
+         "crv": "P-256",
+         "kty": "EC",
+         "x": "KYiS9272F_dqjEtub21FjO2Nui_gd7EiETe5mSKu2Ao",
+         "y": "t2zlrumF72AOxOdWGBWS8p9Z-yCb1wdvn-BMkOxh_ZE"
+        },
+        "retiredAtUtc": null,
+        "revocationReason": null,
+        "revokedAtUtc": null,
+        "status": "ACTIVE",
+        "suite": "ES256",
+        "thumbprint": "sha256:kOoSsO5A-iiq3TMOdyNDQiWbZiWDa91bB82Fea5dxl8",
+        "use": "evidence-signing",
+        "validFromUtc": "2026-07-01T00:00:00Z"
+       }
+      ],
+      "previous": null,
+      "registryVersion": 1
+     },
+     "signatures": [
+      {
+       "keyId": "mint:keys/trust-root/1",
+       "signature": "9O6MFkq-Y5d9OQ9q0bIQIRLhAj16dBhygdoAe5MnAXcx1Hxwqwuq3LzYlPJnNgpdhf4UFNNmIK5y9YAjhcnU5A",
+       "suite": "ES256"
+      }
+     ],
+     "attestations": {
+      "publications": [],
+      "witnesses": []
+     }
+    }
+   ],
+   "anchors": {
+    "checkpoints": {
+     "2": {
+      "anchors": [
+       {
+        "version": "1",
+        "anchorId": "anc_mint_checkpoint_2",
+        "trustDomain": "mint-tsa",
+        "status": "ANCHORED",
+        "subject": {
+         "kind": "log-checkpoint",
+         "origin": "pruvz.ai/evidence-log/mint",
+         "subjectVersion": 2
+        },
+        "blindingNonce": "LHGQgumk2WQtOqlu7vTMAdvcVt8EpKVnmeyZA1eLbLc",
+        "requestNonce": "AWM3QhMQRp7lIqG4xfC4Jg",
+        "receipt": {
+         "kind": "rfc3161-timestamp-token",
+         "token": "MIIDvAYJKoZIhvcNAQcCoIIDrTCCA6kCAQMxDzANBglghkgBZQMEAgEFADB6BgsqhkiG9w0BCRABBKBrBGkwZwIBAQYJKwYBBAGGjR8BMC8wCwYJYIZIAWUDBAIBBCCvYI0pVXJfRSyHQVCBaf3WuolqCA+zhaF7MrK8++yNDAIDC1lNGA8yMDI2MDgzMDEyMDAwMFoCEAFjN0ITEEae5SKhuMXwuCagggKDMIIBPTCB5KADAgECAgEBMAoGCCqGSM49BAMCMB4xHDAaBgNVBAMME1BydXZ6IE1pbnQgVFNBIFJvb3QwHhcNMjAwMTAxMDAwMDAwWhcNNDAwMTAxMDAwMDAwWjAeMRwwGgYDVQQDDBNQcnV2eiBNaW50IFRTQSBSb290MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE2edRt1aklBiLl/qpoU1wS5Sk1490a3pl80B22WEo2yeTmAIE5DMeuK331aaxi/jiY0KmONao41rcaKHGxn/a9aMTMBEwDwYDVR0TAQH/BAUwAwEB/zAKBggqhkjOPQQDAgNIADBFAiAU98KjtHzmc10/UfeZQ5VxnLbc9ZwCZgqa7bFATTi8IwIhAL7v3pNtlfzhm2DzDxqvvdgd4MGXozxPcgnZOKJDiLHvMIIBPjCB5qADAgECAgECMAoGCCqGSM49BAMCMB4xHDAaBgNVBAMME1BydXZ6IE1pbnQgVFNBIFJvb3QwHhcNMjAwMTAxMDAwMDAwWhcNNDAwMTAxMDAwMDAwWjAZMRcwFQYDVQQDDA5QcnV2eiBNaW50IFRTQTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABHQ2GVajpKw3kQnSzRynaKmBA5DjmolQ+08glpfLoyZIHiYa7M1yjgWYPvHwawALIhAf12AndvuDA+NqyyvayiqjGjAYMBYGA1UdJQEB/wQMMAoGCCsGAQUFBwMIMAoGCCqGSM49BAMCA0cAMEQCIFxsWniTzXTUOWY7KU6WAf8sek5G0GWgv+Pdr+zCG8/cAiAPxcsed92e00WjMNhorBHjdB7jrU4OCo68OZ1lUTciszGBjzCBjAIBATAjMB4xHDAaBgNVBAMME1BydXZ6IE1pbnQgVFNBIFJvb3QCAQIwDQYJYIZIAWUDBAIBBQAwCgYIKoZIzj0EAwIERzBFAiEA76/pNU4PIZ9ewjQNRh99l9/ai/jgroR92nipZr11Sx8CIDVAPz9BLDsz1SXs1Kp0rc3B0D0/ojIKMyxENgsdqyFQ"
+        }
+       }
+      ],
+      "anchoringEnabled": true,
+      "trustDomain": "mint-tsa",
+      "note": "minted by the test fixture"
+     }
+    },
+    "trustRegistry": {
+     "1": {
+      "anchors": [
+       {
+        "version": "1",
+        "anchorId": "anc_mint_registry_1",
+        "trustDomain": "mint-tsa",
+        "status": "ANCHORED",
+        "subject": {
+         "kind": "trust-registry",
+         "origin": "pruvz.ai",
+         "subjectVersion": 1
+        },
+        "blindingNonce": "VTRpNcdhpFyPe86-E4zlaA9fqjd6t3mIL5OB_VVRrjc",
+        "requestNonce": "ARG1MQrHkxdH8g7Uw43Tyg",
+        "receipt": {
+         "kind": "rfc3161-timestamp-token",
+         "token": "MIIDvAYJKoZIhvcNAQcCoIIDrTCCA6kCAQMxDzANBglghkgBZQMEAgEFADB6BgsqhkiG9w0BCRABBKBrBGkwZwIBAQYJKwYBBAGGjR8BMC8wCwYJYIZIAWUDBAIBBCASDY/qg7X7N/5UM0Vqe9k5p4yNFCMKzWs1KTj6BjYBFAIDC1laGA8yMDI2MDgzMDEyMDAwMVoCEAERtTEKx5MXR/IO1MON08qgggKDMIIBPTCB5KADAgECAgEBMAoGCCqGSM49BAMCMB4xHDAaBgNVBAMME1BydXZ6IE1pbnQgVFNBIFJvb3QwHhcNMjAwMTAxMDAwMDAwWhcNNDAwMTAxMDAwMDAwWjAeMRwwGgYDVQQDDBNQcnV2eiBNaW50IFRTQSBSb290MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE2edRt1aklBiLl/qpoU1wS5Sk1490a3pl80B22WEo2yeTmAIE5DMeuK331aaxi/jiY0KmONao41rcaKHGxn/a9aMTMBEwDwYDVR0TAQH/BAUwAwEB/zAKBggqhkjOPQQDAgNIADBFAiAU98KjtHzmc10/UfeZQ5VxnLbc9ZwCZgqa7bFATTi8IwIhAL7v3pNtlfzhm2DzDxqvvdgd4MGXozxPcgnZOKJDiLHvMIIBPjCB5qADAgECAgECMAoGCCqGSM49BAMCMB4xHDAaBgNVBAMME1BydXZ6IE1pbnQgVFNBIFJvb3QwHhcNMjAwMTAxMDAwMDAwWhcNNDAwMTAxMDAwMDAwWjAZMRcwFQYDVQQDDA5QcnV2eiBNaW50IFRTQTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABHQ2GVajpKw3kQnSzRynaKmBA5DjmolQ+08glpfLoyZIHiYa7M1yjgWYPvHwawALIhAf12AndvuDA+NqyyvayiqjGjAYMBYGA1UdJQEB/wQMMAoGCCsGAQUFBwMIMAoGCCqGSM49BAMCA0cAMEQCIFxsWniTzXTUOWY7KU6WAf8sek5G0GWgv+Pdr+zCG8/cAiAPxcsed92e00WjMNhorBHjdB7jrU4OCo68OZ1lUTciszGBjzCBjAIBATAjMB4xHDAaBgNVBAMME1BydXZ6IE1pbnQgVFNBIFJvb3QCAQIwDQYJYIZIAWUDBAIBBQAwCgYIKoZIzj0EAwIERzBFAiBEs6bL/PFZNejSxXQRQHlmnor+Q/IzLm5LuYDjXbGEUAIhAJSv4MMGKKzhj5kWp/pUGtTuGIPlYpo4YgAdCiNWNp+i"
+        }
+       }
+      ],
+      "anchoringEnabled": true,
+      "trustDomain": "mint-tsa",
+      "note": "minted by the test fixture"
+     }
+    }
+   }
+  },
+  "proof-only": {
+   "bundleFormatVersion": "1",
+   "packet": null,
+   "seals": {
+    "evd_00000000000000000000000000000001": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:2cd415c53016c05998b18e994814456fdc0fb89be3210a44d65219b9796da2ba",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:14:58Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000001",
+       "sequence": 1,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "Tj92-Wfb0fRLYoJ5-Ae867K9paMafPdHptRe5PlwdriTG998BuVAH2czCWJqBeh4XbCVNmF4Yo8ur_Tjhn-2RA"
+    },
+    "evd_00000000000000000000000000000002": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:be7fd5f74d223799a07c0b919c9eb0f29f3cc68c57cab816389176020a2ea2ee",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:14:59Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000002",
+       "sequence": 2,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "zoDk_rYsVg4ND6trt0wvz4-sH9SNZUplTRm5GKGQ4NV1JRegw7BejVLHHAXVfe6cJYBw2Mbzws1ul-TZ2_ueSw"
+    },
+    "evd_00000000000000000000000000000003": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:ef9582fe6d2a2262706551b651f23dde27544657773c057ae0b7688c4c528c3b",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:15:13Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000003",
+       "sequence": 3,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "2i17i_VN9O3amNAGlyMJlb9E3CgUkpPY4FMNbHRQkLits0Iha1mZbRcZ5utxA2xqII6-xGUAPeB-diupMNuOyg"
+    },
+    "evd_00000000000000000000000000000004": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:cd60851fced14bfbaa118e4303d398f7fe1307ec7e86f4d352aec1c303c013fb",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:15:20Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000004",
+       "sequence": 4,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "w9g1FwaOIFQQE5bHoSPQgGbNITP1zef_7g5YEqTvYfCcg7RPV50zyAn9_IaFW1gaJ4UAFctO822AS2vXXSZd1Q"
+    },
+    "evd_00000000000000000000000000000005": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:84b0fc54d755e7eb2cb5768fb61c38e96f7cf2d5f6b7eceeecd6b9f0f22b230a",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:15:41Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000005",
+       "sequence": 5,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "ekdPPvqO-8SYzZ2dxvfgc3hTLZUUPc0WUMdVLSUcGERQJGcPcwCADOg3yXs2BpRjIi7ja2VDIq0zSTD2DMUlSA"
+    },
+    "evd_00000000000000000000000000000006": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:8c5b0d6db710e7b85e10e60784e1417f8e235b53a624d9f7762f8992f0c167ff",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:15:45Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000006",
+       "sequence": 6,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "cKraq9pYdnvJntWkzQlIa0oNgJm7UYfOv9Db34mf6I0DzqMIjQsRvr8lxieDNvNOZQLnyT5riMLoEWc-dgy7bw"
+    }
+   },
+   "proofs": {
+    "evd_00000000000000000000000000000001": {
+     "leafIndex": 0,
+     "leafHash": "c47c87ce1229ad52a7eda2c406314c5883a2843f80e8f3c925acd245c5822d3f",
+     "path": [
+      "70b6d4f62876eec2682d51b7ff3daca140492f6cb26dbcc39203c2b548f5cf7e",
+      "2250f3e8306f35a4292ff4fb310585db1e92a6c70953459dcd55e98810db38ad",
+      "4a0144d41bb96c48ff818d76493d3a5a11d9bce947425403b53dcdedf2417aba"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    },
+    "evd_00000000000000000000000000000002": {
+     "leafIndex": 1,
+     "leafHash": "70b6d4f62876eec2682d51b7ff3daca140492f6cb26dbcc39203c2b548f5cf7e",
+     "path": [
+      "c47c87ce1229ad52a7eda2c406314c5883a2843f80e8f3c925acd245c5822d3f",
+      "2250f3e8306f35a4292ff4fb310585db1e92a6c70953459dcd55e98810db38ad",
+      "4a0144d41bb96c48ff818d76493d3a5a11d9bce947425403b53dcdedf2417aba"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    },
+    "evd_00000000000000000000000000000003": {
+     "leafIndex": 2,
+     "leafHash": "5ee206d0cf825b39c6f25740ac0d84a3539871adff8adcd3cebc5f751c04e5b4",
+     "path": [
+      "6d5cc902595dacc8a6afb026df9761a3f176244234b5a840810b3b6702c8dc33",
+      "573b74ba1c31a66ccaa9058f9b3f74ab02075321f8bb333b430227650bfca101",
+      "4a0144d41bb96c48ff818d76493d3a5a11d9bce947425403b53dcdedf2417aba"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    },
+    "evd_00000000000000000000000000000004": {
+     "leafIndex": 3,
+     "leafHash": "6d5cc902595dacc8a6afb026df9761a3f176244234b5a840810b3b6702c8dc33",
+     "path": [
+      "5ee206d0cf825b39c6f25740ac0d84a3539871adff8adcd3cebc5f751c04e5b4",
+      "573b74ba1c31a66ccaa9058f9b3f74ab02075321f8bb333b430227650bfca101",
+      "4a0144d41bb96c48ff818d76493d3a5a11d9bce947425403b53dcdedf2417aba"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    },
+    "evd_00000000000000000000000000000005": {
+     "leafIndex": 4,
+     "leafHash": "e9ed63d8d7eaa8618dfb8e180beeef94607196fe7a92a9a4ca422c0c79a99dee",
+     "path": [
+      "34d68cf0a5925a68e9fb6df8c2ce70e23b4a4be0bf2d8ceea0dabf489da10cd5",
+      "041d0ea454784fd1fe9353dd9366ce4decd36ba48e96ca5b58344d0722e46349"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    },
+    "evd_00000000000000000000000000000006": {
+     "leafIndex": 5,
+     "leafHash": "34d68cf0a5925a68e9fb6df8c2ce70e23b4a4be0bf2d8ceea0dabf489da10cd5",
+     "path": [
+      "e9ed63d8d7eaa8618dfb8e180beeef94607196fe7a92a9a4ca422c0c79a99dee",
+      "041d0ea454784fd1fe9353dd9366ce4decd36ba48e96ca5b58344d0722e46349"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    }
+   },
+   "checkpoints": [
+    {
+     "checkpoint": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "checkpointSequence": 1,
+      "issuedAt": "2026-08-10T09:00:00Z",
+      "origin": "pruvz.ai/evidence-log/mint",
+      "rootHash": "sha256:041d0ea454784fd1fe9353dd9366ce4decd36ba48e96ca5b58344d0722e46349",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "treeSize": 4,
+      "version": "1"
+     },
+     "signature": "Y1dpPROza7E85faOITro9Jw-1pkNDGOW7bxlJU7dBk3shcwTK60xsw7aFT7lisk_sJjdl_N-hDzMO49bph0UkA"
+    },
+    {
+     "checkpoint": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "checkpointSequence": 2,
+      "issuedAt": "2026-08-10T09:01:00Z",
+      "origin": "pruvz.ai/evidence-log/mint",
+      "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "treeSize": 6,
+      "version": "1"
+     },
+     "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+    }
+   ],
+   "consistencyProofs": [
+    {
+     "fromSize": 4,
+     "toSize": 6,
+     "proof": [
+      "4a0144d41bb96c48ff818d76493d3a5a11d9bce947425403b53dcdedf2417aba"
+     ]
+    }
+   ],
+   "trustRegistry": [
+    {
+     "manifest": {
+      "formatVersion": "1",
+      "issuedAtUtc": "2026-08-01T00:00:00Z",
+      "issuer": "pruvz.ai",
+      "keys": [
+       {
+        "keyId": "mint:keys/trust-root/1",
+        "predecessorKeyId": null,
+        "provider": "local-development",
+        "publicKey": {
+         "crv": "P-256",
+         "kty": "EC",
+         "x": "rY2jGPlAzdM9UI_FqC6KyYM1ci-K9I8JEB4_ZSKiaPI",
+         "y": "dT1ebRuIlV8TdiQ-Zhu8bOHSbHMcc_Ou-b7ULuyJqXs"
+        },
+        "retiredAtUtc": null,
+        "revocationReason": null,
+        "revokedAtUtc": null,
+        "status": "ACTIVE",
+        "suite": "ES256",
+        "thumbprint": "sha256:DZRqdIDNaHjgNRQ_WPQajY-DWc9Cq5CnmQW0_-cw5xA",
+        "use": "trust-root",
+        "validFromUtc": "2026-07-01T00:00:00Z"
+       },
+       {
+        "keyId": "mint:keys/evidence-signing/1",
+        "predecessorKeyId": null,
+        "provider": "local-development",
+        "publicKey": {
+         "crv": "P-256",
+         "kty": "EC",
+         "x": "KYiS9272F_dqjEtub21FjO2Nui_gd7EiETe5mSKu2Ao",
+         "y": "t2zlrumF72AOxOdWGBWS8p9Z-yCb1wdvn-BMkOxh_ZE"
+        },
+        "retiredAtUtc": null,
+        "revocationReason": null,
+        "revokedAtUtc": null,
+        "status": "ACTIVE",
+        "suite": "ES256",
+        "thumbprint": "sha256:kOoSsO5A-iiq3TMOdyNDQiWbZiWDa91bB82Fea5dxl8",
+        "use": "evidence-signing",
+        "validFromUtc": "2026-07-01T00:00:00Z"
+       }
+      ],
+      "previous": null,
+      "registryVersion": 1
+     },
+     "signatures": [
+      {
+       "keyId": "mint:keys/trust-root/1",
+       "signature": "9O6MFkq-Y5d9OQ9q0bIQIRLhAj16dBhygdoAe5MnAXcx1Hxwqwuq3LzYlPJnNgpdhf4UFNNmIK5y9YAjhcnU5A",
+       "suite": "ES256"
+      }
+     ],
+     "attestations": {
+      "publications": [],
+      "witnesses": []
+     }
+    }
+   ],
+   "anchors": {
+    "checkpoints": {
+     "2": {
+      "anchors": [
+       {
+        "version": "1",
+        "anchorId": "anc_mint_checkpoint_2",
+        "trustDomain": "mint-tsa",
+        "status": "ANCHORED",
+        "subject": {
+         "kind": "log-checkpoint",
+         "origin": "pruvz.ai/evidence-log/mint",
+         "subjectVersion": 2
+        },
+        "blindingNonce": "LHGQgumk2WQtOqlu7vTMAdvcVt8EpKVnmeyZA1eLbLc",
+        "requestNonce": "AWM3QhMQRp7lIqG4xfC4Jg",
+        "receipt": {
+         "kind": "rfc3161-timestamp-token",
+         "token": "MIIDvAYJKoZIhvcNAQcCoIIDrTCCA6kCAQMxDzANBglghkgBZQMEAgEFADB6BgsqhkiG9w0BCRABBKBrBGkwZwIBAQYJKwYBBAGGjR8BMC8wCwYJYIZIAWUDBAIBBCCvYI0pVXJfRSyHQVCBaf3WuolqCA+zhaF7MrK8++yNDAIDC1lNGA8yMDI2MDgzMDEyMDAwMFoCEAFjN0ITEEae5SKhuMXwuCagggKDMIIBPTCB5KADAgECAgEBMAoGCCqGSM49BAMCMB4xHDAaBgNVBAMME1BydXZ6IE1pbnQgVFNBIFJvb3QwHhcNMjAwMTAxMDAwMDAwWhcNNDAwMTAxMDAwMDAwWjAeMRwwGgYDVQQDDBNQcnV2eiBNaW50IFRTQSBSb290MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE2edRt1aklBiLl/qpoU1wS5Sk1490a3pl80B22WEo2yeTmAIE5DMeuK331aaxi/jiY0KmONao41rcaKHGxn/a9aMTMBEwDwYDVR0TAQH/BAUwAwEB/zAKBggqhkjOPQQDAgNIADBFAiAU98KjtHzmc10/UfeZQ5VxnLbc9ZwCZgqa7bFATTi8IwIhAL7v3pNtlfzhm2DzDxqvvdgd4MGXozxPcgnZOKJDiLHvMIIBPjCB5qADAgECAgECMAoGCCqGSM49BAMCMB4xHDAaBgNVBAMME1BydXZ6IE1pbnQgVFNBIFJvb3QwHhcNMjAwMTAxMDAwMDAwWhcNNDAwMTAxMDAwMDAwWjAZMRcwFQYDVQQDDA5QcnV2eiBNaW50IFRTQTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABHQ2GVajpKw3kQnSzRynaKmBA5DjmolQ+08glpfLoyZIHiYa7M1yjgWYPvHwawALIhAf12AndvuDA+NqyyvayiqjGjAYMBYGA1UdJQEB/wQMMAoGCCsGAQUFBwMIMAoGCCqGSM49BAMCA0cAMEQCIFxsWniTzXTUOWY7KU6WAf8sek5G0GWgv+Pdr+zCG8/cAiAPxcsed92e00WjMNhorBHjdB7jrU4OCo68OZ1lUTciszGBjzCBjAIBATAjMB4xHDAaBgNVBAMME1BydXZ6IE1pbnQgVFNBIFJvb3QCAQIwDQYJYIZIAWUDBAIBBQAwCgYIKoZIzj0EAwIERzBFAiEA76/pNU4PIZ9ewjQNRh99l9/ai/jgroR92nipZr11Sx8CIDVAPz9BLDsz1SXs1Kp0rc3B0D0/ojIKMyxENvQdqyFQ"
+        }
+       }
+      ],
+      "anchoringEnabled": true,
+      "trustDomain": "mint-tsa",
+      "note": "minted by the test fixture"
+     }
+    },
+    "trustRegistry": {
+     "1": {
+      "anchors": [
+       {
+        "version": "1",
+        "anchorId": "anc_mint_registry_1",
+        "trustDomain": "mint-tsa",
+        "status": "ANCHORED",
+        "subject": {
+         "kind": "trust-registry",
+         "origin": "pruvz.ai",
+         "subjectVersion": 1
+        },
+        "blindingNonce": "VTRpNcdhpFyPe86-E4zlaA9fqjd6t3mIL5OB_VVRrjc",
+        "requestNonce": "ARG1MQrHkxdH8g7Uw43Tyg",
+        "receipt": {
+         "kind": "rfc3161-timestamp-token",
+         "token": "MIIDvAYJKoZIhvcNAQcCoIIDrTCCA6kCAQMxDzANBglghkgBZQMEAgEFADB6BgsqhkiG9w0BCRABBKBrBGkwZwIBAQYJKwYBBAGGjR8BMC8wCwYJYIZIAWUDBAIBBCASDY/qg7X7N/5UM0Vqe9k5p4yNFCMKzWs1KTj6BjYBFAIDC1laGA8yMDI2MDgzMDEyMDAwMVoCEAERtTEKx5MXR/IO1MON08qgggKDMIIBPTCB5KADAgECAgEBMAoGCCqGSM49BAMCMB4xHDAaBgNVBAMME1BydXZ6IE1pbnQgVFNBIFJvb3QwHhcNMjAwMTAxMDAwMDAwWhcNNDAwMTAxMDAwMDAwWjAeMRwwGgYDVQQDDBNQcnV2eiBNaW50IFRTQSBSb290MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE2edRt1aklBiLl/qpoU1wS5Sk1490a3pl80B22WEo2yeTmAIE5DMeuK331aaxi/jiY0KmONao41rcaKHGxn/a9aMTMBEwDwYDVR0TAQH/BAUwAwEB/zAKBggqhkjOPQQDAgNIADBFAiAU98KjtHzmc10/UfeZQ5VxnLbc9ZwCZgqa7bFATTi8IwIhAL7v3pNtlfzhm2DzDxqvvdgd4MGXozxPcgnZOKJDiLHvMIIBPjCB5qADAgECAgECMAoGCCqGSM49BAMCMB4xHDAaBgNVBAMME1BydXZ6IE1pbnQgVFNBIFJvb3QwHhcNMjAwMTAxMDAwMDAwWhcNNDAwMTAxMDAwMDAwWjAZMRcwFQYDVQQDDA5QcnV2eiBNaW50IFRTQTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABHQ2GVajpKw3kQnSzRynaKmBA5DjmolQ+08glpfLoyZIHiYa7M1yjgWYPvHwawALIhAf12AndvuDA+NqyyvayiqjGjAYMBYGA1UdJQEB/wQMMAoGCCsGAQUFBwMIMAoGCCqGSM49BAMCA0cAMEQCIFxsWniTzXTUOWY7KU6WAf8sek5G0GWgv+Pdr+zCG8/cAiAPxcsed92e00WjMNhorBHjdB7jrU4OCo68OZ1lUTciszGBjzCBjAIBATAjMB4xHDAaBgNVBAMME1BydXZ6IE1pbnQgVFNBIFJvb3QCAQIwDQYJYIZIAWUDBAIBBQAwCgYIKoZIzj0EAwIERzBFAiBEs6bL/PFZNejSxXQRQHlmnor+Q/IzLm5LuYDjXbGEUAIhAJSv4MMGKKzhj5kWp/pUGtTuGIPlYpo4YgAdCiNWNp+i"
+        }
+       }
+      ],
+      "anchoringEnabled": true,
+      "trustDomain": "mint-tsa",
+      "note": "minted by the test fixture"
+     }
+    }
+   }
+  },
+  "registry-absent": {
+   "bundleFormatVersion": "1",
+   "packet": {
+    "packetFormatVersion": "1.5.0",
+    "action": {
+     "actionId": "act_0123456789abcdef0123456789abcdef",
+     "agentId": "billing-refunds-agent",
+     "runId": "run_sample_001",
+     "correlationId": "pay_74001",
+     "actionType": "refund",
+     "subject": {
+      "subjectType": "payment",
+      "subjectId": "pay_74001"
+     },
+     "decision": {
+      "decisionType": "REFUND_APPROVED",
+      "amount": {
+       "amount": 42.5,
+       "amountExact": "42.5",
+       "currency": "USD"
+      }
+     },
+     "crmTicketId": "TICKET-1001",
+     "claim": {
+      "claimedOutcome": "REFUND_SUCCEEDED",
+      "claimedAtUtc": "2026-07-10T09:15:12Z"
+     },
+     "expectedOutcome": {
+      "outcomeType": "REFUND_SUCCEEDED",
+      "amount": {
+       "amount": 42.5,
+       "amountExact": "42.5",
+       "currency": "USD"
+      }
+     },
+     "observed": {
+      "source": "billing-system",
+      "sourceReference": "ref_555",
+      "occurredAtUtc": "2026-07-10T09:15:40Z",
+      "recordedAtUtc": "2026-07-10T09:15:41Z",
+      "summary": "Refund of USD 42.50 recorded as succeeded for payment pay_74001."
+     },
+     "executionStatus": "COMPLETED",
+     "verificationStatus": "VERIFIED",
+     "finalOutcome": "REFUND_SUCCEEDED",
+     "verificationFailure": null,
+     "reviewState": "NOT_REQUIRED",
+     "review": null,
+     "mismatch": null,
+     "verificationTiming": {
+      "initialCheckAfterSeconds": 10,
+      "readbackIntervalSeconds": 900,
+      "deadlineAtUtc": "2026-07-12T09:14:58Z",
+      "deadlineSource": "PRODUCT_SPEC",
+      "resolvedAtUtc": "2026-07-10T09:14:58Z"
+     },
+     "reverificationTiming": null,
+     "policySnapshot": {
+      "policyId": "demo-refund-policy",
+      "policyVersion": "1",
+      "rules": {
+       "maxPurchaseAgeDays": 30,
+       "maxRefundAmount": {
+        "amount": 100,
+        "amountExact": "100",
+        "currency": "USD"
+       },
+       "allowedPaymentStates": [
+        "SETTLED"
+       ],
+       "ticket": {
+        "ticketRequired": true,
+        "allowedTicketStatuses": [
+         "OPEN",
+         "APPROVED"
+        ]
+       },
+       "verificationDeadlineSeconds": null
+      },
+      "input": {
+       "purchasedAtUtc": "2026-06-25T08:00:00Z",
+       "evaluatedAtUtc": "2026-07-10T09:14:59Z",
+       "refundAmount": {
+        "amount": 42.5,
+        "amountExact": "42.5",
+        "currency": "USD"
+       },
+       "paymentState": "SETTLED",
+       "ticketStatus": "OPEN"
+      },
+      "evaluation": {
+       "policyPassed": true,
+       "ruleResults": [
+        {
+         "ruleId": "purchase-age",
+         "passed": true,
+         "explanation": "Purchase is 15 days old, within the 30-day limit."
+        },
+        {
+         "ruleId": "refund-amount",
+         "passed": true,
+         "explanation": "USD 42.50 is within the USD 100.00 limit."
+        },
+        {
+         "ruleId": "payment-state",
+         "passed": true,
+         "explanation": "Payment state SETTLED is allowed."
+        },
+        {
+         "ruleId": "support-ticket",
+         "passed": true,
+         "explanation": "Ticket TICKET-1001 is OPEN, which satisfies the requirement."
+        }
+       ]
+      }
+     },
+     "createdAtUtc": "2026-07-10T09:14:58Z",
+     "updatedAtUtc": "2026-07-10T09:15:45Z",
+     "executionStartedAtUtc": "2026-07-10T09:15:05Z",
+     "executionCompletedAtUtc": "2026-07-10T09:15:20Z",
+     "verificationCompletedAtUtc": "2026-07-10T09:15:45Z"
+    },
+    "evidence": {
+     "actionId": "act_0123456789abcdef0123456789abcdef",
+     "items": [
+      {
+       "evidenceId": "evd_00000000000000000000000000000001",
+       "sequence": 1,
+       "type": "ACTION_REQUEST",
+       "trustLevel": "CLAIMED",
+       "source": "billing-refunds-agent",
+       "sourceReference": null,
+       "occurredAtUtc": "2026-07-10T09:14:58Z",
+       "recordedAtUtc": "2026-07-10T09:14:58Z",
+       "summary": "Refund requested for payment pay_74001.",
+       "runId": "run_sample_001",
+       "schemaVersion": 1,
+       "clientOperationId": "op-ingest-0001",
+       "payloadMetadata": {}
+      },
+      {
+       "evidenceId": "evd_00000000000000000000000000000002",
+       "sequence": 2,
+       "type": "POLICY_SNAPSHOT_CAPTURE",
+       "trustLevel": "PRUVZ_DERIVED",
+       "source": "pruvz-api",
+       "sourceReference": "demo-refund-policy",
+       "occurredAtUtc": "2026-07-10T09:14:59Z",
+       "recordedAtUtc": "2026-07-10T09:14:59Z",
+       "summary": "Decision-time policy snapshot captured: demo-refund-policy v1, policy passed.",
+       "runId": "run_sample_001",
+       "schemaVersion": 1,
+       "clientOperationId": null,
+       "payloadMetadata": {}
+      },
+      {
+       "evidenceId": "evd_00000000000000000000000000000003",
+       "sequence": 3,
+       "type": "AGENT_CLAIM",
+       "trustLevel": "CLAIMED",
+       "source": "billing-refunds-agent",
+       "sourceReference": null,
+       "occurredAtUtc": "2026-07-10T09:15:12Z",
+       "recordedAtUtc": "2026-07-10T09:15:13Z",
+       "summary": "Agent claims refund of USD 42.50 succeeded (REFUND_SUCCEEDED).",
+       "runId": "run_sample_001",
+       "schemaVersion": 1,
+       "clientOperationId": "op-claim-0003",
+       "payloadMetadata": {}
+      },
+      {
+       "evidenceId": "evd_00000000000000000000000000000004",
+       "sequence": 4,
+       "type": "EXECUTION_RECEIPT",
+       "trustLevel": "EXECUTION_RECEIPT",
+       "source": "billing-refunds-agent",
+       "sourceReference": "ref_555",
+       "occurredAtUtc": "2026-07-10T09:15:19Z",
+       "recordedAtUtc": "2026-07-10T09:15:20Z",
+       "summary": "Execution receipt relayed: refund ref_555 submitted to the billing system.",
+       "runId": "run_sample_001",
+       "schemaVersion": 1,
+       "clientOperationId": "op-receipt-0004",
+       "payloadMetadata": {}
+      },
+      {
+       "evidenceId": "evd_00000000000000000000000000000005",
+       "sequence": 5,
+       "type": "SOURCE_READBACK",
+       "trustLevel": "INDEPENDENT_READBACK",
+       "source": "billing-system",
+       "sourceReference": "ref_555",
+       "occurredAtUtc": "2026-07-10T09:15:40Z",
+       "recordedAtUtc": "2026-07-10T09:15:41Z",
+       "summary": "Refund of USD 42.50 recorded as succeeded for payment pay_74001.",
+       "runId": "run_sample_001",
+       "schemaVersion": 1,
+       "clientOperationId": null,
+       "payloadMetadata": {
+        "paymentId": "ref_555",
+        "refundCount": "1",
+        "succeededRefundCount": "1"
+       }
+      },
+      {
+       "evidenceId": "evd_00000000000000000000000000000006",
+       "sequence": 6,
+       "type": "VERIFICATION_RESULT",
+       "trustLevel": "PRUVZ_DERIVED",
+       "source": "pruvz-worker",
+       "sourceReference": null,
+       "occurredAtUtc": "2026-07-10T09:15:45Z",
+       "recordedAtUtc": "2026-07-10T09:15:45Z",
+       "summary": "VERIFIED: exactly one succeeded refund of USD 42.50 matched payment pay_74001.",
+       "runId": "run_sample_001",
+       "schemaVersion": 1,
+       "clientOperationId": null,
+       "payloadMetadata": {
+        "verificationStatus": "VERIFIED",
+        "attemptCount": "1"
+       }
+      }
+     ]
+    }
+   },
+   "seals": {
+    "evd_00000000000000000000000000000001": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:2cd415c53016c05998b18e994814456fdc0fb89be3210a44d65219b9796da2ba",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:14:58Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000001",
+       "sequence": 1,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "Tj92-Wfb0fRLYoJ5-Ae867K9paMafPdHptRe5PlwdriTG998BuVAH2czCWJqBeh4XbCVNmF4Yo8ur_Tjhn-2RA"
+    },
+    "evd_00000000000000000000000000000002": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:be7fd5f74d223799a07c0b919c9eb0f29f3cc68c57cab816389176020a2ea2ee",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:14:59Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000002",
+       "sequence": 2,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "zoDk_rYsVg4ND6trt0wvz4-sH9SNZUplTRm5GKGQ4NV1JRegw7BejVLHHAXVfe6cJYBw2Mbzws1ul-TZ2_ueSw"
+    },
+    "evd_00000000000000000000000000000003": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:ef9582fe6d2a2262706551b651f23dde27544657773c057ae0b7688c4c528c3b",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:15:13Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000003",
+       "sequence": 3,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "2i17i_VN9O3amNAGlyMJlb9E3CgUkpPY4FMNbHRQkLits0Iha1mZbRcZ5utxA2xqII6-xGUAPeB-diupMNuOyg"
+    },
+    "evd_00000000000000000000000000000004": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:cd60851fced14bfbaa118e4303d398f7fe1307ec7e86f4d352aec1c303c013fb",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:15:20Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000004",
+       "sequence": 4,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "w9g1FwaOIFQQE5bHoSPQgGbNITP1zef_7g5YEqTvYfCcg7RPV50zyAn9_IaFW1gaJ4UAFctO822AS2vXXSZd1Q"
+    },
+    "evd_00000000000000000000000000000005": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:84b0fc54d755e7eb2cb5768fb61c38e96f7cf2d5f6b7eceeecd6b9f0f22b230a",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:15:41Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000005",
+       "sequence": 5,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "ekdPPvqO-8SYzZ2dxvfgc3hTLZUUPc0WUMdVLSUcGERQJGcPcwCADOg3yXs2BpRjIi7ja2VDIq0zSTD2DMUlSA"
+    },
+    "evd_00000000000000000000000000000006": {
+     "envelope": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "commitment": {
+       "digest": "sha256:8c5b0d6db710e7b85e10e60784e1417f8e235b53a624d9f7762f8992f0c167ff",
+       "digestSuite": "sha-256",
+       "kind": "evidence-item",
+       "version": "1"
+      },
+      "committedAt": "2026-07-10T09:15:45Z",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "subject": {
+       "actionId": "act_0123456789abcdef0123456789abcdef",
+       "evidenceId": "evd_00000000000000000000000000000006",
+       "sequence": 6,
+       "tenantId": "tenant-demo"
+      },
+      "version": "1"
+     },
+     "signature": "cKraq9pYdnvJntWkzQlIa0oNgJm7UYfOv9Db34mf6I0DzqMIjQsRvr8lxieDNvNOZQLnyT5riMLoEWc-dgy7bw"
+    }
+   },
+   "proofs": {
+    "evd_00000000000000000000000000000001": {
+     "leafIndex": 0,
+     "leafHash": "c47c87ce1229ad52a7eda2c406314c5883a2843f80e8f3c925acd245c5822d3f",
+     "path": [
+      "70b6d4f62876eec2682d51b7ff3daca140492f6cb26dbcc39203c2b548f5cf7e",
+      "2250f3e8306f35a4292ff4fb310585db1e92a6c70953459dcd55e98810db38ad",
+      "4a0144d41bb96c48ff818d76493d3a5a11d9bce947425403b53dcdedf2417aba"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    },
+    "evd_00000000000000000000000000000002": {
+     "leafIndex": 1,
+     "leafHash": "70b6d4f62876eec2682d51b7ff3daca140492f6cb26dbcc39203c2b548f5cf7e",
+     "path": [
+      "c47c87ce1229ad52a7eda2c406314c5883a2843f80e8f3c925acd245c5822d3f",
+      "2250f3e8306f35a4292ff4fb310585db1e92a6c70953459dcd55e98810db38ad",
+      "4a0144d41bb96c48ff818d76493d3a5a11d9bce947425403b53dcdedf2417aba"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    },
+    "evd_00000000000000000000000000000003": {
+     "leafIndex": 2,
+     "leafHash": "5ee206d0cf825b39c6f25740ac0d84a3539871adff8adcd3cebc5f751c04e5b4",
+     "path": [
+      "6d5cc902595dacc8a6afb026df9761a3f176244234b5a840810b3b6702c8dc33",
+      "573b74ba1c31a66ccaa9058f9b3f74ab02075321f8bb333b430227650bfca101",
+      "4a0144d41bb96c48ff818d76493d3a5a11d9bce947425403b53dcdedf2417aba"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    },
+    "evd_00000000000000000000000000000004": {
+     "leafIndex": 3,
+     "leafHash": "6d5cc902595dacc8a6afb026df9761a3f176244234b5a840810b3b6702c8dc33",
+     "path": [
+      "5ee206d0cf825b39c6f25740ac0d84a3539871adff8adcd3cebc5f751c04e5b4",
+      "573b74ba1c31a66ccaa9058f9b3f74ab02075321f8bb333b430227650bfca101",
+      "4a0144d41bb96c48ff818d76493d3a5a11d9bce947425403b53dcdedf2417aba"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    },
+    "evd_00000000000000000000000000000005": {
+     "leafIndex": 4,
+     "leafHash": "e9ed63d8d7eaa8618dfb8e180beeef94607196fe7a92a9a4ca422c0c79a99dee",
+     "path": [
+      "34d68cf0a5925a68e9fb6df8c2ce70e23b4a4be0bf2d8ceea0dabf489da10cd5",
+      "041d0ea454784fd1fe9353dd9366ce4decd36ba48e96ca5b58344d0722e46349"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    },
+    "evd_00000000000000000000000000000006": {
+     "leafIndex": 5,
+     "leafHash": "34d68cf0a5925a68e9fb6df8c2ce70e23b4a4be0bf2d8ceea0dabf489da10cd5",
+     "path": [
+      "e9ed63d8d7eaa8618dfb8e180beeef94607196fe7a92a9a4ca422c0c79a99dee",
+      "041d0ea454784fd1fe9353dd9366ce4decd36ba48e96ca5b58344d0722e46349"
+     ],
+     "checkpoint": {
+      "checkpoint": {
+       "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+       "checkpointSequence": 2,
+       "issuedAt": "2026-08-10T09:01:00Z",
+       "origin": "pruvz.ai/evidence-log/mint",
+       "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+       "signer": {
+        "keyId": "mint:keys/evidence-signing/1",
+        "provider": "local-development",
+        "suite": "ES256"
+       },
+       "treeSize": 6,
+       "version": "1"
+      },
+      "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+     }
+    }
+   },
+   "checkpoints": [
+    {
+     "checkpoint": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "checkpointSequence": 1,
+      "issuedAt": "2026-08-10T09:00:00Z",
+      "origin": "pruvz.ai/evidence-log/mint",
+      "rootHash": "sha256:041d0ea454784fd1fe9353dd9366ce4decd36ba48e96ca5b58344d0722e46349",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "treeSize": 4,
+      "version": "1"
+     },
+     "signature": "Y1dpPROza7E85faOITro9Jw-1pkNDGOW7bxlJU7dBk3shcwTK60xsw7aFT7lisk_sJjdl_N-hDzMO49bph0UkA"
+    },
+    {
+     "checkpoint": {
+      "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+      "checkpointSequence": 2,
+      "issuedAt": "2026-08-10T09:01:00Z",
+      "origin": "pruvz.ai/evidence-log/mint",
+      "rootHash": "sha256:199226f91bb791c381d273f678f0edfa57fa370e0d06343b54313433305d98a0",
+      "signer": {
+       "keyId": "mint:keys/evidence-signing/1",
+       "provider": "local-development",
+       "suite": "ES256"
+      },
+      "treeSize": 6,
+      "version": "1"
+     },
+     "signature": "qT6rlbVdQN_PGdpAG3nIgvxZtcJ2eIhlub3Yy79_LH7OHOzZR_ZGBaihfod865jmB-OQ0Q-aMYa4UysaA1xslw"
+    }
+   ],
+   "consistencyProofs": [
+    {
+     "fromSize": 4,
+     "toSize": 6,
+     "proof": [
+      "4a0144d41bb96c48ff818d76493d3a5a11d9bce947425403b53dcdedf2417aba"
+     ]
+    }
+   ],
+   "trustRegistry": null,
+   "anchors": {}
+  }
+ },
+ "cases": [
+  {
+   "id": "full",
+   "description": "A complete coherent bundle — packet, seals, inclusion and consistency proofs, trust-registry chain, and witnessed anchors verified against the pinned authority root. The only reachable FULLY_VERIFIED.",
+   "bundle": "full",
+   "options": {
+    "tenant": "tenant-demo",
+    "tsaRoots": true
+   },
+   "expect": {
+    "verdict": "FULLY_VERIFIED",
+    "reasonCodes": [
+     "STATE_FIRST_USE"
+    ],
+    "dimensions": {
+     "packet": "VALID",
+     "commitment": "MATCHES",
+     "seals": "VALID",
+     "trustRegistry": "ACCEPTED",
+     "logInclusion": "PROVEN",
+     "logConsistency": "PROVEN",
+     "checkpoints": "ACCEPTED",
+     "anchors": "WITNESSED",
+     "assuranceProfile": "CONSISTENT",
+     "suiteSupport": "SUPPORTED",
+     "retention": "PAYLOAD_PRESENT"
+    }
+   }
+  },
+  {
+   "id": "full-without-tsa-roots",
+   "description": "The same bundle verified without pinned timestamp-authority roots: bindings are checked, receipts are not authenticated, and the verdict honestly degrades.",
+   "bundle": "full",
+   "options": {
+    "tenant": "tenant-demo",
+    "tsaRoots": false
+   },
+   "expect": {
+    "verdict": "PARTIALLY_VERIFIED",
+    "reasonCodes": [
+     "ANCHOR_AUTHORITY_NOT_EVALUATED",
+     "STATE_FIRST_USE"
+    ],
+    "dimensions": {
+     "packet": "VALID",
+     "commitment": "MATCHES",
+     "seals": "VALID",
+     "trustRegistry": "ACCEPTED",
+     "logInclusion": "PROVEN",
+     "logConsistency": "PROVEN",
+     "checkpoints": "ACCEPTED",
+     "anchors": "BINDING_ONLY",
+     "assuranceProfile": "CONSISTENT",
+     "suiteSupport": "SUPPORTED",
+     "retention": "PAYLOAD_PRESENT"
+    }
+   }
+  },
+  {
+   "id": "no-anchors",
+   "description": "No anchors at all, as a PRE_CUSTOMER_DEFAULT deployment produces today: the cost-gated capability is reported absent and the verdict can never be FULLY_VERIFIED.",
+   "bundle": "no-anchors",
+   "options": {
+    "tenant": "tenant-demo",
+    "tsaRoots": true
+   },
+   "expect": {
+    "verdict": "PARTIALLY_VERIFIED",
+    "reasonCodes": [
+     "ANCHORS_ABSENT",
+     "COST_GATED_CAPABILITY_ABSENT",
+     "STATE_FIRST_USE"
+    ],
+    "dimensions": {
+     "packet": "VALID",
+     "commitment": "MATCHES",
+     "seals": "VALID",
+     "trustRegistry": "ACCEPTED",
+     "logInclusion": "PROVEN",
+     "logConsistency": "PROVEN",
+     "checkpoints": "ACCEPTED",
+     "anchors": "ABSENT",
+     "assuranceProfile": "CONSISTENT",
+     "suiteSupport": "SUPPORTED",
+     "retention": "PAYLOAD_PRESENT"
+    }
+   }
+  },
+  {
+   "id": "tampered-summary",
+   "description": "One item of the packet was altered after sealing. The recomputed commitment digest no longer matches what the seal names: NOT_VERIFIED, never a downgrade to partial.",
+   "bundle": "tampered-summary",
+   "options": {
+    "tenant": "tenant-demo",
+    "tsaRoots": true
+   },
+   "expect": {
+    "verdict": "NOT_VERIFIED",
+    "reasonCodes": [
+     "COMMITMENT_MISMATCH",
+     "SEAL_INVALID",
+     "STATE_FIRST_USE"
+    ],
+    "dimensions": {
+     "packet": "VALID",
+     "commitment": "MISMATCH",
+     "seals": "INVALID",
+     "trustRegistry": "ACCEPTED",
+     "logInclusion": "PROVEN",
+     "logConsistency": "PROVEN",
+     "checkpoints": "ACCEPTED",
+     "anchors": "WITNESSED",
+     "assuranceProfile": "CONSISTENT",
+     "suiteSupport": "SUPPORTED",
+     "retention": "PAYLOAD_PRESENT"
+    }
+   }
+  },
+  {
+   "id": "tampered-seal-signature",
+   "description": "A seal signature that does not verify under the registry key is a refusal.",
+   "bundle": "tampered-seal-signature",
+   "options": {
+    "tenant": "tenant-demo",
+    "tsaRoots": true
+   },
+   "expect": {
+    "verdict": "NOT_VERIFIED",
+    "reasonCodes": [
+     "LEAF_SEAL_MISMATCH",
+     "SEAL_INVALID",
+     "SIGNATURE_INVALID",
+     "STATE_FIRST_USE"
+    ],
+    "dimensions": {
+     "packet": "VALID",
+     "commitment": "PARTIAL",
+     "seals": "INVALID",
+     "trustRegistry": "ACCEPTED",
+     "logInclusion": "INVALID",
+     "logConsistency": "PROVEN",
+     "checkpoints": "ACCEPTED",
+     "anchors": "WITNESSED",
+     "assuranceProfile": "CONSISTENT",
+     "suiteSupport": "SUPPORTED",
+     "retention": "PAYLOAD_PRESENT"
+    }
+   }
+  },
+  {
+   "id": "anchor-token-signature-corrupted",
+   "description": "The anchoring runtimeDivergence boundary, at bundle level: the altered token still BINDS (its messageImprint is untouched), so a binding-only implementation accepts it — and a verifier performing authority verification MUST refuse it.",
+   "bundle": "anchor-token-signature-corrupted",
+   "options": {
+    "tenant": "tenant-demo",
+    "tsaRoots": true
+   },
+   "expect": {
+    "verdict": "NOT_VERIFIED",
+    "reasonCodes": [
+     "ANCHOR_INVALID",
+     "ANCHOR_RECEIPT_SIGNATURE_INVALID",
+     "STATE_FIRST_USE"
+    ],
+    "dimensions": {
+     "packet": "VALID",
+     "commitment": "MATCHES",
+     "seals": "VALID",
+     "trustRegistry": "ACCEPTED",
+     "logInclusion": "PROVEN",
+     "logConsistency": "PROVEN",
+     "checkpoints": "ACCEPTED",
+     "anchors": "INVALID",
+     "assuranceProfile": "CONSISTENT",
+     "suiteSupport": "SUPPORTED",
+     "retention": "PAYLOAD_PRESENT"
+    }
+   }
+  },
+  {
+   "id": "proof-only",
+   "description": "Proof material without the packet payload (retention deleted the record; the holder kept the export). Reported honestly as retained proof, never as payload availability.",
+   "bundle": "proof-only",
+   "options": {
+    "tenant": "tenant-demo",
+    "tsaRoots": true
+   },
+   "expect": {
+    "verdict": "PARTIALLY_VERIFIED",
+    "reasonCodes": [
+     "COMMITMENT_NOT_CHECKED",
+     "PACKET_ABSENT",
+     "RETAINED_PROOF_ONLY",
+     "STATE_FIRST_USE"
+    ],
+    "dimensions": {
+     "packet": "ABSENT",
+     "commitment": "NOT_CHECKED",
+     "seals": "PARTIAL",
+     "trustRegistry": "ACCEPTED",
+     "logInclusion": "PROVEN",
+     "logConsistency": "PROVEN",
+     "checkpoints": "ACCEPTED",
+     "anchors": "WITNESSED",
+     "assuranceProfile": "CONSISTENT",
+     "suiteSupport": "SUPPORTED",
+     "retention": "PROOF_ONLY"
+    }
+   }
+  },
+  {
+   "id": "registry-absent",
+   "description": "No trust-registry documents: nothing ties any signature to a recognized identity. Content self-consistency is still checked; origin stays honestly NOT_CHECKED.",
+   "bundle": "registry-absent",
+   "options": {
+    "tenant": "tenant-demo",
+    "tsaRoots": true
+   },
+   "expect": {
+    "verdict": "PARTIALLY_VERIFIED",
+    "reasonCodes": [
+     "ANCHORS_ABSENT",
+     "CHECKPOINT_KEY_UNTRUSTED",
+     "COST_GATED_CAPABILITY_ABSENT",
+     "REGISTRY_ABSENT",
+     "STATE_FIRST_USE"
+    ],
+    "dimensions": {
+     "packet": "VALID",
+     "commitment": "PARTIAL",
+     "seals": "INCOMPLETE",
+     "trustRegistry": "ABSENT",
+     "logInclusion": "PARTIAL",
+     "logConsistency": "PROVEN",
+     "checkpoints": "ACCEPTED",
+     "anchors": "ABSENT",
+     "assuranceProfile": "CONSISTENT",
+     "suiteSupport": "SUPPORTED",
+     "retention": "PAYLOAD_PRESENT"
+    }
+   }
+  },
+  {
+   "id": "wrong-pin",
+   "description": "A pin naming a different trust root refuses the chain outright: a verifier with the wrong anchor must never quietly accept a substituted registry.",
+   "bundle": "full",
+   "options": {
+    "tenant": "tenant-demo",
+    "tsaRoots": true,
+    "pinRootOverride": "sha256:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+   },
+   "expect": {
+    "verdict": "NOT_VERIFIED",
+    "reasonCodes": [
+     "CHECKPOINT_KEY_UNTRUSTED",
+     "REGISTRY_REJECTED",
+     "ROOT_MISMATCH",
+     "STATE_FIRST_USE"
+    ],
+    "dimensions": {
+     "packet": "VALID",
+     "commitment": "PARTIAL",
+     "seals": "INCOMPLETE",
+     "trustRegistry": "REJECTED",
+     "logInclusion": "PARTIAL",
+     "logConsistency": "PROVEN",
+     "checkpoints": "ACCEPTED",
+     "anchors": "WITNESSED",
+     "assuranceProfile": "CONSISTENT",
+     "suiteSupport": "SUPPORTED",
+     "retention": "PAYLOAD_PRESENT"
+    }
+   }
+  }
+ ]
+}

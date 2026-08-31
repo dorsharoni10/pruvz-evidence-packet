@@ -417,7 +417,7 @@ implementation that performs it.
   never sealed has no leaf; a leaf not yet covered by a checkpoint is not yet
   in an anchored tree. Both are "not yet provable", never "proven".
 - **No packet changes.** The Public Evidence Packet schema is untouched;
-  packets keep declaring `packetFormatVersion: "1.4.0"`.
+  packets carry no anchor whatever format they declare (`1.5.0` at this writing).
 - **No verifier product.** How an offline verifier presents an anchor, and how
   it weighs a missing one, is a later, separately released capability. This
   document defines the format and the checks; it does not ship the tool.

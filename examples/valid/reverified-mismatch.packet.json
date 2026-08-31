@@ -1,15 +1,22 @@
 {
-  "packetFormatVersion": "1.4.0",
+  "packetFormatVersion": "1.5.0",
   "action": {
     "actionId": "act_00000000000000000000000000000007",
     "agentId": "billing-refunds-agent",
     "runId": "run_sample_007",
     "correlationId": "pay_74007",
     "actionType": "refund",
-    "subject": { "subjectType": "payment", "subjectId": "pay_74007" },
+    "subject": {
+      "subjectType": "payment",
+      "subjectId": "pay_74007"
+    },
     "decision": {
       "decisionType": "REFUND_APPROVED",
-      "amount": { "amount": 18, "amountExact": "18", "currency": "USD" }
+      "amount": {
+        "amount": 18,
+        "amountExact": "18",
+        "currency": "USD"
+      }
     },
     "crmTicketId": "TICKET-1007",
     "claim": {
@@ -18,7 +25,11 @@
     },
     "expectedOutcome": {
       "outcomeType": "REFUND_SUCCEEDED",
-      "amount": { "amount": 18, "amountExact": "18", "currency": "USD" }
+      "amount": {
+        "amount": 18,
+        "amountExact": "18",
+        "currency": "USD"
+      }
     },
     "observed": {
       "source": "billing-sandbox",
@@ -68,14 +79,22 @@
       "severity": "HIGH",
       "explanation": "The reported manual refund never appeared in the billing system before the fresh re-verification deadline passed.",
       "expectedOutcomeType": "REFUND_SUCCEEDED",
-      "expectedAmount": { "amount": 18, "amountExact": "18", "currency": "USD" },
+      "expectedAmount": {
+        "amount": 18,
+        "amountExact": "18",
+        "currency": "USD"
+      },
       "observedRefundCount": 0,
       "observedQualifyingRefundCount": 0,
       "assertedTicketStatus": "APPROVED",
       "observedTicketStatus": "APPROVED",
       "businessDiscrepancy": {
         "evaluable": true,
-        "amount": { "amount": 18, "amountExact": "18", "currency": "USD" }
+        "amount": {
+          "amount": 18,
+          "amountExact": "18",
+          "currency": "USD"
+        }
       }
     },
     "verificationTiming": {
@@ -97,15 +116,31 @@
       "policyVersion": "1",
       "rules": {
         "maxPurchaseAgeDays": 30,
-        "maxRefundAmount": { "amount": 100, "amountExact": "100", "currency": "USD" },
-        "allowedPaymentStates": ["SETTLED"],
-        "ticket": { "ticketRequired": true, "allowedTicketStatuses": ["OPEN", "APPROVED"] },
+        "maxRefundAmount": {
+          "amount": 100,
+          "amountExact": "100",
+          "currency": "USD"
+        },
+        "allowedPaymentStates": [
+          "SETTLED"
+        ],
+        "ticket": {
+          "ticketRequired": true,
+          "allowedTicketStatuses": [
+            "OPEN",
+            "APPROVED"
+          ]
+        },
         "verificationDeadlineSeconds": null
       },
       "input": {
         "purchasedAtUtc": "2026-07-01T14:00:00Z",
         "evaluatedAtUtc": "2026-07-10T09:30:59Z",
-        "refundAmount": { "amount": 18, "amountExact": "18", "currency": "USD" },
+        "refundAmount": {
+          "amount": 18,
+          "amountExact": "18",
+          "currency": "USD"
+        },
         "paymentState": "SETTLED",
         "ticketStatus": "APPROVED"
       },
@@ -153,7 +188,11 @@
         "sourceReference": null,
         "occurredAtUtc": "2026-07-10T09:30:58Z",
         "recordedAtUtc": "2026-07-10T09:30:58Z",
-        "summary": "Refund requested for payment pay_74007."
+        "summary": "Refund requested for payment pay_74007.",
+        "runId": "run_sample_007",
+        "schemaVersion": 1,
+        "clientOperationId": "op-ingest-0001",
+        "payloadMetadata": {}
       },
       {
         "evidenceId": "evd_00000000000000000000000000000072",
@@ -164,7 +203,11 @@
         "sourceReference": "demo-refund-policy",
         "occurredAtUtc": "2026-07-10T09:30:59Z",
         "recordedAtUtc": "2026-07-10T09:30:59Z",
-        "summary": "Decision-time policy snapshot captured: demo-refund-policy v1, policy passed."
+        "summary": "Decision-time policy snapshot captured: demo-refund-policy v1, policy passed.",
+        "runId": "run_sample_007",
+        "schemaVersion": 1,
+        "clientOperationId": null,
+        "payloadMetadata": {}
       },
       {
         "evidenceId": "evd_00000000000000000000000000000073",
@@ -175,7 +218,11 @@
         "sourceReference": null,
         "occurredAtUtc": "2026-07-10T09:31:12Z",
         "recordedAtUtc": "2026-07-10T09:31:13Z",
-        "summary": "Agent claims refund of USD 18.00 succeeded (REFUND_SUCCEEDED)."
+        "summary": "Agent claims refund of USD 18.00 succeeded (REFUND_SUCCEEDED).",
+        "runId": "run_sample_007",
+        "schemaVersion": 1,
+        "clientOperationId": "op-claim-0003",
+        "payloadMetadata": {}
       },
       {
         "evidenceId": "evd_00000000000000000000000000000074",
@@ -186,7 +233,11 @@
         "sourceReference": "ref_970",
         "occurredAtUtc": "2026-07-10T09:31:19Z",
         "recordedAtUtc": "2026-07-10T09:31:20Z",
-        "summary": "Execution receipt relayed: refund ref_970 submitted to the billing system."
+        "summary": "Execution receipt relayed: refund ref_970 submitted to the billing system.",
+        "runId": "run_sample_007",
+        "schemaVersion": 1,
+        "clientOperationId": "op-receipt-0004",
+        "payloadMetadata": {}
       },
       {
         "evidenceId": "evd_00000000000000000000000000000075",
@@ -197,7 +248,15 @@
         "sourceReference": "pay_74007",
         "occurredAtUtc": "2026-07-12T09:31:00Z",
         "recordedAtUtc": "2026-07-12T09:31:00Z",
-        "summary": "Independent billing read-back found 0 refund(s) for the payment (0 succeeded)."
+        "summary": "Independent billing read-back found 0 refund(s) for the payment (0 succeeded).",
+        "runId": "run_sample_007",
+        "schemaVersion": 1,
+        "clientOperationId": null,
+        "payloadMetadata": {
+          "paymentId": "pay_74007",
+          "refundCount": "0",
+          "succeededRefundCount": "0"
+        }
       },
       {
         "evidenceId": "evd_00000000000000000000000000000076",
@@ -208,7 +267,14 @@
         "sourceReference": null,
         "occurredAtUtc": "2026-07-12T09:31:00Z",
         "recordedAtUtc": "2026-07-12T09:31:00Z",
-        "summary": "OUTCOME_MISMATCH: the expected refund never appeared and the resolved verification deadline passed."
+        "summary": "OUTCOME_MISMATCH: the expected refund never appeared and the resolved verification deadline passed.",
+        "runId": "run_sample_007",
+        "schemaVersion": 1,
+        "clientOperationId": null,
+        "payloadMetadata": {
+          "verificationStatus": "OUTCOME_MISMATCH",
+          "attemptCount": "1"
+        }
       },
       {
         "evidenceId": "evd_00000000000000000000000000000077",
@@ -219,7 +285,20 @@
         "sourceReference": null,
         "occurredAtUtc": "2026-07-13T08:00:00Z",
         "recordedAtUtc": "2026-07-13T08:00:00Z",
-        "summary": "Human review decision: RESOLVED_EXTERNALLY by finance-reviewer"
+        "summary": "Human review decision: RESOLVED_EXTERNALLY by finance-reviewer",
+        "runId": "run_sample_007",
+        "schemaVersion": 1,
+        "clientOperationId": "op-decision-0007",
+        "payloadMetadata": {
+          "decision": "RESOLVED_EXTERNALLY",
+          "reason": "Finance reports the refund was issued manually; please re-verify.",
+          "reviewerId": "finance-reviewer",
+          "previousReviewState": "PENDING_REVIEW",
+          "newReviewState": "AWAITING_REVERIFICATION",
+          "decidedAtUtc": "2026-07-13T08:00:00Z",
+          "reviewedEvidenceId": "evd_00000000000000000000000000000076",
+          "reviewedEvidenceSequence": "6"
+        }
       },
       {
         "evidenceId": "evd_00000000000000000000000000000078",
@@ -230,7 +309,15 @@
         "sourceReference": "pay_74007",
         "occurredAtUtc": "2026-07-15T08:00:01Z",
         "recordedAtUtc": "2026-07-15T08:00:01Z",
-        "summary": "Follow-up independent billing read-back found 0 refund(s) for the payment (0 succeeded)."
+        "summary": "Follow-up independent billing read-back found 0 refund(s) for the payment (0 succeeded).",
+        "runId": "run_sample_007",
+        "schemaVersion": 1,
+        "clientOperationId": null,
+        "payloadMetadata": {
+          "paymentId": "pay_74007",
+          "refundCount": "0",
+          "succeededRefundCount": "0"
+        }
       },
       {
         "evidenceId": "evd_00000000000000000000000000000079",
@@ -241,7 +328,15 @@
         "sourceReference": null,
         "occurredAtUtc": "2026-07-15T08:00:02Z",
         "recordedAtUtc": "2026-07-15T08:00:02Z",
-        "summary": "Re-verification derived OUTCOME_MISMATCH: the reported manual refund never appeared before the fresh deadline passed; the review returns to PENDING_REVIEW."
+        "summary": "Re-verification derived OUTCOME_MISMATCH: the reported manual refund never appeared before the fresh deadline passed; the review returns to PENDING_REVIEW.",
+        "runId": "run_sample_007",
+        "schemaVersion": 1,
+        "clientOperationId": null,
+        "payloadMetadata": {
+          "verificationStatus": "OUTCOME_MISMATCH",
+          "attemptCount": "1",
+          "trigger": "REVERIFICATION"
+        }
       }
     ]
   }

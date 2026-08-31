@@ -1,6 +1,6 @@
 # Versioning and compatibility policy
 
-The Public Evidence Packet format is versioned independently of the Pruvz product, using semantic versioning: `MAJOR.MINOR.PATCH`. The current release is **1.4.0**.
+The Public Evidence Packet format is versioned independently of the Pruvz product, using semantic versioning: `MAJOR.MINOR.PATCH`. The current release is **1.5.0**.
 
 ## What each part means
 

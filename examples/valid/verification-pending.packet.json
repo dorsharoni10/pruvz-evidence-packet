@@ -1,5 +1,5 @@
 {
-  "packetFormatVersion": "1.4.0",
+  "packetFormatVersion": "1.5.0",
   "action": {
     "actionId": "act_00000000000000000000000000000004",
     "agentId": "billing-refunds-agent",
@@ -121,7 +121,11 @@
         "sourceReference": null,
         "occurredAtUtc": "2026-07-10T09:52:00Z",
         "recordedAtUtc": "2026-07-10T09:52:00Z",
-        "summary": "Refund requested for payment pay_74004."
+        "summary": "Refund requested for payment pay_74004.",
+        "runId": "run_sample_004",
+        "schemaVersion": 1,
+        "clientOperationId": "op-ingest-0001",
+        "payloadMetadata": {}
       },
       {
         "evidenceId": "evd_00000000000000000000000000000032",
@@ -132,7 +136,11 @@
         "sourceReference": "demo-refund-policy",
         "occurredAtUtc": "2026-07-10T09:52:01Z",
         "recordedAtUtc": "2026-07-10T09:52:01Z",
-        "summary": "Decision-time policy snapshot captured: demo-refund-policy v1, policy passed."
+        "summary": "Decision-time policy snapshot captured: demo-refund-policy v1, policy passed.",
+        "runId": "run_sample_004",
+        "schemaVersion": 1,
+        "clientOperationId": null,
+        "payloadMetadata": {}
       },
       {
         "evidenceId": "evd_00000000000000000000000000000033",
@@ -143,7 +151,11 @@
         "sourceReference": null,
         "occurredAtUtc": "2026-07-10T09:52:30Z",
         "recordedAtUtc": "2026-07-10T09:52:31Z",
-        "summary": "Agent claims refund of EUR 75.00 succeeded (REFUND_SUCCEEDED)."
+        "summary": "Agent claims refund of EUR 75.00 succeeded (REFUND_SUCCEEDED).",
+        "runId": "run_sample_004",
+        "schemaVersion": 1,
+        "clientOperationId": "op-claim-0003",
+        "payloadMetadata": {}
       },
       {
         "evidenceId": "evd_00000000000000000000000000000034",
@@ -154,7 +166,11 @@
         "sourceReference": "ref_999",
         "occurredAtUtc": "2026-07-10T09:52:43Z",
         "recordedAtUtc": "2026-07-10T09:52:44Z",
-        "summary": "Execution receipt relayed: refund ref_999 submitted to the billing system."
+        "summary": "Execution receipt relayed: refund ref_999 submitted to the billing system.",
+        "runId": "run_sample_004",
+        "schemaVersion": 1,
+        "clientOperationId": "op-receipt-0004",
+        "payloadMetadata": {}
       }
     ]
   }

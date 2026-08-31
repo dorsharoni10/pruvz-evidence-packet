@@ -260,7 +260,7 @@ the golden vectors assert.
   the one most tempting to skip: an append-only log of false records is an
   append-only log of false records.
 - **No packet changes.** The Public Evidence Packet schema is untouched;
-  packets keep declaring `packetFormatVersion: "1.4.0"`. Proofs and
+  packets carry no proof whatever format they declare (`1.5.0` at this writing). Proofs and
   checkpoints are fetched from the issuing deployment, like seals.
 - **No claim of Certificate Transparency compliance** — §2.
 
