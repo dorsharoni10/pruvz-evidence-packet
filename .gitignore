@@ -3,3 +3,17 @@ conformance/results/
 conformance/dotnet/bin/
 conformance/dotnet/obj/
 conformance/python/**/__pycache__/
+conformance/python/pruvz_verifier/_data/
+conformance/python/build/
+conformance/python/dist/
+conformance/python/*.egg-info/
+dotnet/*/bin/
+dotnet/*/obj/
+# artifacts/nupkg itself stays tracked (only via .gitkeep): it is a NuGet
+# folder source in conformance/dotnet/NuGet.config, and a folder source that
+# does not exist fails EVERY restore with NU1301 — including repository-mode
+# restores on a fresh clone that never built a package.
+artifacts/*
+!artifacts/nupkg
+artifacts/nupkg/*
+!artifacts/nupkg/.gitkeep

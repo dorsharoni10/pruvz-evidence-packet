@@ -12,7 +12,7 @@
 using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using PruvzConformance;
+using Pruvz.EvidencePacket;
 
 if (args.Length != 2)
 {
@@ -21,35 +21,42 @@ if (args.Length != 2)
 }
 var repoRoot = args[0];
 var outFile = args[1];
-Validator.SchemaRoot = Path.Combine(repoRoot, "schema");
-
-static JsonNode? ParseStrict(string text)
+if (Environment.GetEnvironmentVariable("PRUVZ_CONFORMANCE_PACKAGED") == "1")
 {
-    var node = JsonNode.Parse(text);
-    AssertUniqueMembers(node);
-    return node;
-}
-
-static void AssertUniqueMembers(JsonNode? node)
-{
-    // System.Text.Json's JsonNode.Parse throws for duplicate properties only
-    // via JsonObject materialization; walking forces it everywhere.
-    switch (node)
+    // Packaged mode (PRUVZ-101): the harness must exercise the built NuGet
+    // package, not the working tree. The build copies the referenced assembly
+    // into the harness output either way, so the proof is byte equality with
+    // the assembly the restore placed in the NuGet packages folder. The
+    // schemas then come from the package's embedded resources — leaving
+    // SchemaRoot null forbids any silent fallback to the repository's schema/
+    // directory, so a package that shipped without its schemas fails loudly
+    // instead of passing against repository files.
+    var loaded = typeof(Verify).Assembly;
+    var version = loaded.GetName().Version!;
+    var packagesRoot = Environment.GetEnvironmentVariable("NUGET_PACKAGES")
+        ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".nuget", "packages");
+    var cached = Path.Combine(
+        packagesRoot, "pruvz.evidencepacket", $"{version.Major}.{version.Minor}.{version.Build}",
+        "lib", "net8.0", "Pruvz.EvidencePacket.dll");
+    if (!File.Exists(cached))
     {
-        case JsonObject obj:
-            foreach (var pair in obj)
-            {
-                AssertUniqueMembers(pair.Value);
-            }
-            break;
-        case JsonArray array:
-            foreach (var item in array)
-            {
-                AssertUniqueMembers(item);
-            }
-            break;
+        Console.Error.WriteLine($"FAIL  PRUVZ_CONFORMANCE_PACKAGED=1 but no restored package assembly exists at {cached}");
+        return 2;
+    }
+    var loadedDigest = SHA256.HashData(File.ReadAllBytes(loaded.Location));
+    var cachedDigest = SHA256.HashData(File.ReadAllBytes(cached));
+    if (!loadedDigest.SequenceEqual(cachedDigest))
+    {
+        Console.Error.WriteLine($"FAIL  PRUVZ_CONFORMANCE_PACKAGED=1 but the loaded verifier assembly is not the restored NuGet package ({loaded.Location} != {cached})");
+        return 2;
     }
 }
+else
+{
+    Validator.SchemaRoot = Path.Combine(repoRoot, "schema");
+}
+
+static JsonNode? ParseStrict(string text) => JsonGuard.ParseStrict(text);
 
 JsonObject LoadVectors(string name) =>
     (JsonObject)ParseStrict(File.ReadAllText(Path.Combine(repoRoot, name, "v1", "golden-vectors.json")))!;

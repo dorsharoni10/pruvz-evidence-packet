@@ -23,9 +23,26 @@ from .canonical import CommitmentError, canonical_decimal, is_money
 SUPPORTED_VERSIONS = ("1.5.0", "1.4.0", "1.3.0", "1.2.0", "1.1.0", "1.0.0")
 
 _here = os.path.dirname(os.path.abspath(__file__))
-_schema_root = os.environ.get(
-    "PRUVZ_SCHEMA_ROOT", os.path.normpath(os.path.join(_here, "..", "..", "..", "schema"))
-)
+
+
+def _resolve_schema_root() -> str:
+    # PRUVZ_SCHEMA_ROOT always wins (explicit override). Otherwise an installed
+    # package carries the published schemas as package data under _data/, so it
+    # is self-sufficient offline (PRUVZ-101); a repository checkout has no
+    # _data and falls back to the repository's schema/ directory.
+    # PRUVZ_SCHEMA_SOURCE=package forbids that fallback, so packaged-mode
+    # conformance runs fail loudly on a wheel that shipped without its schemas
+    # instead of silently passing against repository files.
+    explicit = os.environ.get("PRUVZ_SCHEMA_ROOT")
+    if explicit is not None:
+        return explicit
+    packaged = os.path.join(_here, "_data", "schema")
+    if os.environ.get("PRUVZ_SCHEMA_SOURCE") == "package" or os.path.isdir(packaged):
+        return packaged
+    return os.path.normpath(os.path.join(_here, "..", "..", "..", "schema"))
+
+
+_schema_root = _resolve_schema_root()
 
 _compiled: dict = {}
 

@@ -1,12 +1,25 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <!-- The independent .NET verifier and conformance harness (PRUVZ-97).
-       Implemented from the published specifications in docs/ alone: no code,
-       assemblies or packages from pruvz-core. Cryptography is the maintained
-       platform surface (ECDsa, SignedCms, X509Chain, System.Formats.Asn1);
-       JSON Schema evaluation is the maintained JsonSchema.Net package, pinned.
-       Package provenance and the update policy are documented in
-       docs/CONFORMANCE-SUITE.md. -->
+  <!-- The .NET conformance harness (PRUVZ-97). The verifier implementation
+       lives in dotnet/Pruvz.EvidencePacket (PRUVZ-101 made it an installable
+       library); this project is only the vector-replay harness around it, so
+       the packaged code and the conformance-gated code are the same sources by
+       construction. Implemented from the published specifications in docs/
+       alone: no code, assemblies or packages from pruvz-core.
+
+       Two reference modes:
+       - default: ProjectReference to the working-tree library (repository CI).
+       - -p:UsePackagedVerifier=true -p:PackagedVerifierVersion=X.Y.Z: restore
+         the built Pruvz.EvidencePacket X.Y.Z nupkg instead, so the suite
+         judges the exact bytes that would be published (PRUVZ-101 acceptance
+         criterion 5). NuGet.config in this directory maps Pruvz.* to the
+         repository's artifacts/nupkg folder ONLY, so a same-versioned package
+         already on nuget.org can never satisfy this restore. Pair it with
+         PRUVZ_CONFORMANCE_PACKAGED=1 so the harness refuses a working-tree
+         assembly or repository schemas. The committed lock file covers the
+         default mode only: packaged restore writes its lock under obj/
+         (a lock file's mere presence activates locking, so it must not share
+         the committed path) and passes -p:RestoreLockedMode=false. -->
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -16,11 +29,15 @@
     <RootNamespace>PruvzConformance</RootNamespace>
     <InvariantGlobalization>true</InvariantGlobalization>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <NuGetLockFilePath Condition="'$(UsePackagedVerifier)' == 'true'">obj/packages.packaged.lock.json</NuGetLockFilePath>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="JsonSchema.Net" Version="9.4.0" />
-    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.11" />
+  <ItemGroup Condition="'$(UsePackagedVerifier)' != 'true'">
+    <ProjectReference Include="..\..\dotnet\Pruvz.EvidencePacket\Pruvz.EvidencePacket.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(UsePackagedVerifier)' == 'true'">
+    <PackageReference Include="Pruvz.EvidencePacket" Version="$(PackagedVerifierVersion)" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,54 @@
+# The independent Python Evidence Packet verifier as an installable package
+# (PRUVZ-101). The packaged sources are conformance/python/pruvz_verifier/ —
+# the exact code the three-runtime conformance suite exercises, so the
+# published package and the conformance-gated code cannot drift.
+#
+# The version MUST equal package.json, dotnet/Directory.Build.props and the
+# release tag: bin/check-versions.mjs enforces the equality in npm test and
+# the release workflow re-checks it against the tag.
+#
+# Building a distribution requires the package data (published schemas +
+# verifier/v1 golden vectors) to be vendored first:
+#   python conformance/python/prepare_package_data.py
+# The release workflow re-verifies byte equality between the vendored copies
+# and the repository sources before anything is published.
+
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pruvz-evidence-packet"
+version = "1.6.0"
+description = "Independent offline verifier for Pruvz Evidence Packet export bundles: schema and consistency validation, canonical commitments, signed seals under a pinned trust registry, Merkle log inclusion/consistency, and RFC 3161 anchor verification."
+readme = {text = "Offline verifier for Pruvz Evidence Packet export bundles. Verifies against a caller-pinned trust root only — nothing is fetched from a Pruvz deployment or website. Docs, specifications and golden vectors: https://github.com/dorsharoni10/pruvz-evidence-packet", content-type = "text/markdown"}
+license = {text = "MIT"}
+requires-python = ">=3.10"
+dependencies = [
+    "cryptography>=42",
+    "asn1crypto>=1.5",
+    "jsonschema>=4.18",
+    "referencing>=0.30",
+]
+keywords = ["pruvz", "evidence", "verifier", "audit", "rfc3161", "merkle"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Financial and Insurance Industry",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Topic :: Security :: Cryptography",
+]
+
+[project.urls]
+Homepage = "https://pruvz.ai"
+Repository = "https://github.com/dorsharoni10/pruvz-evidence-packet"
+
+[project.scripts]
+pruvz-verify = "pruvz_verifier.cli:main"
+
+[tool.setuptools]
+packages = ["pruvz_verifier"]
+
+[tool.setuptools.package-data]
+pruvz_verifier = ["_data/schema/*/*.json", "_data/verifier/v1/golden-vectors.json"]

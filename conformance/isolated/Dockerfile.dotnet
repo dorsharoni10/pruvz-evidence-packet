@@ -1,0 +1,23 @@
+# Isolated offline acceptance image for the NuGet packages (PRUVZ-101).
+# The build stage has network (nuget.org resolves the tool's transitive
+# dependencies; the Pruvz packages themselves come only from the local
+# /nupkg source); the check itself runs with `docker run --network none`,
+# and the image contains no repository clone — only the installed tool and
+# check.sh.
+FROM mcr.microsoft.com/dotnet/sdk:8.0
+
+ARG PKG_VERSION
+COPY artifacts/nupkg/ /nupkg/
+# The config's source mapping pins Pruvz.* to /nupkg only, so the tool under
+# test is always the freshly built package — never a same-versioned package
+# nuget.org already carries after a release.
+COPY conformance/isolated/nuget.isolated.config /nuget.config
+RUN dotnet tool install --global Pruvz.EvidencePacket.Tool --version "$PKG_VERSION" --configfile /nuget.config
+ENV PATH="$PATH:/root/.dotnet/tools"
+# The SDK's first-run telemetry attempts a network call; keep the runtime
+# container honest about --network none.
+ENV DOTNET_CLI_TELEMETRY_OPTOUT=1
+ENV DOTNET_NOLOGO=1
+
+COPY conformance/isolated/check.sh /check.sh
+ENTRYPOINT ["/bin/sh", "/check.sh"]

@@ -1,12 +1,14 @@
 # Versioning and compatibility policy
 
-The Public Evidence Packet format is versioned independently of the Pruvz product, using semantic versioning: `MAJOR.MINOR.PATCH`. The current release is **1.5.1**.
+The Public Evidence Packet format is versioned independently of the Pruvz product, using semantic versioning: `MAJOR.MINOR.PATCH`. The current release is **1.6.0**.
 
 ## What each part means
 
 - **MAJOR** — a breaking change to the packet structure: removing or renaming a field, changing a field's type or nullability, removing an enum value, or tightening a constraint so that previously conforming packets no longer conform.
 - **MINOR** — an additive, non-breaking change to what the product exports: a new field, a new evidence type, a new closed-enum value, or a conditional rule relaxed so that a field may now carry values it could not before (for example `1.2.0` admitting review states on a `VERIFICATION_FAILED` action). Packets of format `1.2.0` are **not** guaranteed to validate against the `1.1.0` or `1.0.0` schema (the schemas are strict: undeclared fields are rejected). Compatibility is defined at the consumer level, below.
 - **PATCH** — a repository release (documentation, examples, validator or test changes) that does not alter what conforms. Packet documents keep declaring the `MAJOR.MINOR.0` format version of their structure: a documentation-only release `v1.0.1` of this repository changes nothing about packets, which continue to declare `packetFormatVersion: "1.0.0"`.
+
+Since the release stream became a package stream (release step 6 below), a repository MINOR can also be **additive to the published package surface with the packet format unchanged** — new distribution channels or new verifier/CLI capability, as in `1.6.0` (PRUVZ-101). Such a release adds **no** `schema/vX.Y.0/` directory, and packets keep declaring the newest *format* version, which can therefore be lower than the repository release. The authoritative statement of which format versions exist is the `schema/` directory list, never the repository version.
 
 ## Rules consumers can rely on
 
@@ -25,4 +27,12 @@ The Public Evidence Packet format is versioned independently of the Pruvz produc
 3. `npm test` must pass.
 4. The change is recorded in [`CHANGELOG.md`](../CHANGELOG.md) with its compatibility classification (MAJOR / MINOR / PATCH).
 5. The repository is tagged `vX.Y.Z`. **Published tags are permanent: a tag is never moved, deleted or reused.** A fix after tagging is always a new, higher tag.
-6. **npm distribution (resolved PRUVZ-97 decision).** The Node CLI and library are additionally published to npm as `@pruvz/evidence-packet`; the public Git repository remains cloneable and authoritative. The package version is identical to the repository release and the git tag — one stream, already independent of `packetFormatVersion`, so a verifier bug fix is a repository PATCH release and never implies a format change. Every npm release is built from the immutable reviewed tag and published with 2FA and npm provenance through [`release.yml`](../.github/workflows/release.yml), as a deliberate post-review step — never automatically on merge. A published registry artifact is effectively irreversible, which is exactly why only the tagged, reviewed bytes ever reach it. The .NET and Python conformance verifiers stay repository/CI-only (no NuGet, no PyPI).
+6. **Package distribution (resolved PRUVZ-97 decision, extended by PRUVZ-101).** The verifier is additionally published as installable packages on three channels; the public Git repository remains cloneable and authoritative:
+
+   - **npm** — `@pruvz/evidence-packet` (Node CLI + library);
+   - **PyPI** — `pruvz-evidence-packet` (Python library + the `pruvz-verify` console entry point), built from `conformance/python/pruvz_verifier/` — the exact code the conformance suite exercises;
+   - **NuGet** — `Pruvz.EvidencePacket` (the .NET library) and `Pruvz.EvidencePacket.Tool` (the `pruvz-verify` dotnet tool), built from `dotnet/` — the exact code the conformance harness references.
+
+   **One version stream, eventually complete on every channel.** All four package artifacts carry the identical version, which is identical to the repository release and the git tag (`bin/check-versions.mjs` enforces this mechanically in `npm test` and again in the release workflow against the dispatched tag). The stream is already independent of `packetFormatVersion`, so a verifier bug fix is a repository PATCH release and never implies a format change.
+
+   Every release is built from the immutable reviewed tag and published through [`release.yml`](../.github/workflows/release.yml) as a deliberate human-dispatched post-review step — never automatically on merge — and only after the full conformance gate passes on the tagged bytes three times over: repository mode, packaged mode (installed wheel + restored nupkg), and the isolated offline acceptance (`--network none`, no repository clone). Every artifact is built and verified before the first publish. Because there is no transaction across independent registries, "all channels or none" cannot be atomic; instead, a release version is **not Complete until every channel has published successfully**, every channel's publish step is idempotent (an already-published version is skipped, not failed), and a partial registry failure is resumed by re-dispatching the **same tag** — never a new version, never rebuilt or different artifacts. A published registry artifact is effectively irreversible, which is exactly why only the tagged, reviewed bytes ever reach any registry.

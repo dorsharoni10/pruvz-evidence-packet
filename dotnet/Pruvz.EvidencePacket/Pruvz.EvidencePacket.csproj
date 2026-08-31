@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- The independent .NET Evidence Packet verifier as an installable library
+       (PRUVZ-101). These are the exact sources the three-runtime conformance
+       suite exercises — the harness in conformance/dotnet references this
+       project, so the packaged code and the conformance-gated code cannot
+       drift. Implemented from the published specifications in docs/ alone: no
+       code, assemblies or packages from pruvz-core. Cryptography is the
+       maintained platform surface (ECDsa, SignedCms, X509Chain,
+       System.Formats.Asn1); JSON Schema evaluation is the maintained
+       JsonSchema.Net package, pinned. Package provenance and the update policy
+       are documented in docs/CONFORMANCE-SUITE.md.
+
+       The published schema releases and the verifier/v1 golden vectors are
+       embedded so the installed package verifies bundles completely offline,
+       with no repository clone and no network. -->
+
+  <PropertyGroup>
+    <PackageId>Pruvz.EvidencePacket</PackageId>
+    <Description>Independent offline verifier for Pruvz Evidence Packet export bundles: JSON Schema and consistency validation, canonical commitments, signed seals under a pinned trust registry, Merkle log inclusion/consistency, and RFC 3161 anchor verification. Self-sufficient offline; verifies against a caller-pinned trust root only.</Description>
+    <RootNamespace>Pruvz.EvidencePacket</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="JsonSchema.Net" Version="9.4.0" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.11" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- One explicit item per published schema release: %(RecursiveDir) would
+         produce OS-dependent separators in the logical names, and the release
+         list is deliberately hard-coded anyway (Validator.SupportedVersions). -->
+    <EmbeddedResource Include="..\..\schema\v1.0.0\*.json" LogicalName="pruvz:schema/v1.0.0/%(Filename)%(Extension)" />
+    <EmbeddedResource Include="..\..\schema\v1.1.0\*.json" LogicalName="pruvz:schema/v1.1.0/%(Filename)%(Extension)" />
+    <EmbeddedResource Include="..\..\schema\v1.2.0\*.json" LogicalName="pruvz:schema/v1.2.0/%(Filename)%(Extension)" />
+    <EmbeddedResource Include="..\..\schema\v1.3.0\*.json" LogicalName="pruvz:schema/v1.3.0/%(Filename)%(Extension)" />
+    <EmbeddedResource Include="..\..\schema\v1.4.0\*.json" LogicalName="pruvz:schema/v1.4.0/%(Filename)%(Extension)" />
+    <EmbeddedResource Include="..\..\schema\v1.5.0\*.json" LogicalName="pruvz:schema/v1.5.0/%(Filename)%(Extension)" />
+    <EmbeddedResource Include="..\..\verifier\v1\golden-vectors.json" LogicalName="pruvz:verifier/v1/golden-vectors.json" />
+  </ItemGroup>
+
+</Project>

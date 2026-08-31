@@ -142,6 +142,20 @@ npm run conformance:all      # all three harnesses + the full three-way comparis
 (`conformance:all` needs the .NET 8 SDK and a Python 3.12 with
 `pip install --require-hashes -r conformance/python/requirements.txt`.)
 
+**Packaged mode (PRUVZ-101).** The same harnesses can run against the built
+packages instead of the working tree, which is how CI (`packaged` job) and the
+release workflow prove that the published artifacts carry the conformance-gated
+behavior. `PRUVZ_CONFORMANCE_PACKAGED=1` makes the Python harness import the
+*installed* `pruvz_verifier` (never the working tree, `PRUVZ_SCHEMA_SOURCE=package`
+forbidding any schema fallback to the repository), and makes the .NET harness
+prove the loaded verifier assembly is byte-identical to the restored NuGet
+package (`-p:UsePackagedVerifier=true -p:PackagedVerifierVersion=X.Y.Z`; the
+harness's `NuGet.config` source-maps `Pruvz.*` to the built `artifacts/nupkg`
+folder only, so a same-versioned package already on nuget.org can never
+satisfy the restore — the isolated images pin the same mapping). The isolated
+offline acceptance under `conformance/isolated/` then runs both installed CLIs
+inside `--network none` containers that contain no repository clone.
+
 ## 4. Scope notes, stated honestly
 
 - **Packet schema evaluation** uses a maintained JSON Schema library per
@@ -188,18 +202,65 @@ regenerates the lockfile/hash set with the bundled tooling, and must leave
 the full three-runtime comparison green. Security advisories against a
 pinned package are patched promptly; nothing else moves the pins.
 
-## 6. Distribution (resolved PRUVZ-97 decision)
+## 6. Distribution (resolved PRUVZ-97 decision, extended by PRUVZ-101)
 
-- One repository, one release stream: the npm package version ≡ the git tag
-  ≡ the repository release (`1.5.1` at this writing), a stream already
+- One repository, one release stream: every package version ≡ the git tag
+  ≡ the repository release (`1.6.0` at this writing), a stream already
   independent of `packetFormatVersion` (still `1.5.0`) and of
   `conformance/v1`. A verifier bug fix is a repository PATCH release and
-  never implies a format change.
-- npm publishes the **Node CLI and library only**
-  (`@pruvz/evidence-packet`); the public Git repository remains cloneable
-  and authoritative. The .NET and Python verifiers are conformance harnesses
-  in this repository and in CI — no NuGet or PyPI distribution exists.
-- Every npm release is built from the immutable reviewed git tag, published
-  with 2FA and npm provenance via the release workflow
-  ([`.github/workflows/release.yml`](../.github/workflows/release.yml)).
-  Publication is a deliberate post-review step, never automatic on merge.
+  never implies a format change. `bin/check-versions.mjs` enforces the
+  equality mechanically (in `npm test` and against the tag on release).
+- Three channels, four artifacts, one source (PRUVZ-101):
+  **npm** `@pruvz/evidence-packet` (Node CLI + library), **PyPI**
+  `pruvz-evidence-packet` (built from `conformance/python/pruvz_verifier/`,
+  console entry point `pruvz-verify`), **NuGet** `Pruvz.EvidencePacket`
+  (library, `dotnet/Pruvz.EvidencePacket/`) and `Pruvz.EvidencePacket.Tool`
+  (dotnet tool `pruvz-verify`, referencing the library). The published Python
+  and .NET code is the exact code the conformance suite exercises — the
+  Python harness imports the same package sources, the .NET harness
+  references the same library project — so the packaged code and the gated
+  code cannot drift. The public Git repository remains cloneable and
+  authoritative. Installed packages carry the published schemas (and the
+  verifier/v1 golden vectors) as package data / embedded resources, so they
+  verify bundles completely offline with no repository clone.
+- Every release is built from the immutable reviewed git tag and published
+  via the release workflow
+  ([`.github/workflows/release.yml`](../.github/workflows/release.yml)) on
+  human dispatch only, never automatically on merge, and only after the
+  conformance gate passes on the tagged bytes in repository mode, packaged
+  mode and the isolated offline acceptance. Publication is idempotent per
+  channel; a partial registry failure is resumed by re-dispatching the same
+  tag (see `docs/VERSIONING.md` release step 6).
+
+### One-time publishing setup (out-of-band manual actions, PRUVZ-101 AC 9)
+
+Nothing below lives in chat history or session memory; this list is the
+operational record.
+
+- **npm** — the `@pruvz` scope and account exist with 2FA (PRUVZ-97). After
+  the bootstrap `1.5.1` release: configure the package's **Trusted Publisher**
+  on npmjs.com (`dorsharoni10/pruvz-evidence-packet`, workflow
+  `release.yml`, environment blank), verify a publish succeeds through OIDC,
+  then **revoke the short-lived `NPM_TOKEN` granular token and delete the
+  repository secret** — the workflow no longer reads it, and after
+  revocation no long-lived credential can publish the package.
+- **PyPI** — create the account with 2FA, then add a **pending Trusted
+  Publisher** for the project name `pruvz-evidence-packet` (owner
+  `dorsharoni10`, repository `pruvz-evidence-packet`, workflow
+  `release.yml`, environment blank) at pypi.org → Publishing. A pending
+  publisher creates the project on its first OIDC publish — no API token
+  ever exists. Attestations (PEP 740) are generated by default by
+  `pypa/gh-action-pypi-publish`.
+- **NuGet** — create the nuget.org account with 2FA. Preferred: a **Trusted
+  Publishing policy** (nuget.org → account → Trusted Publishing) for
+  `dorsharoni10/pruvz-evidence-packet`, workflow `release.yml`, then set the
+  repository **variable** `NUGET_USER` to the nuget.org profile name — the
+  workflow exchanges the job's OIDC token for a short-lived push key via
+  `NuGet/login`. Trusted Publishing is still rolling out on nuget.org: if
+  the account does not have it yet, create a **scoped API key** (push only,
+  glob `Pruvz.EvidencePacket*`, shortest practical expiry) and store it as
+  the `NUGET_API_KEY` repository secret; replace it with Trusted Publishing
+  and delete the secret once available. Reserving the `Pruvz.` ID prefix on
+  nuget.org is optional and can be requested later.
+- All of this is free-tier: public packages on npm, PyPI and NuGet cost
+  nothing, and no recurring infrastructure exists (PRUVZ-74 invariant 13).

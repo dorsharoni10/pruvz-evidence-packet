@@ -9,7 +9,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 
-namespace PruvzConformance;
+namespace Pruvz.EvidencePacket;
 
 public sealed class EvidenceLogException(string code, string message) : Exception(message)
 {
