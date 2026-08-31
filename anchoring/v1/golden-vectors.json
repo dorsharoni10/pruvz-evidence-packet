@@ -1,0 +1,901 @@
+{
+  "anchoringFormatVersion": "1",
+  "domainSeparation": {
+    "logCheckpoint": {
+      "tag": "pruvz.ai/log-anchor",
+      "separator": "U+0000",
+      "format": "<tag> NUL <anchoringFormatVersion> NUL <32 raw blinding-nonce bytes> <canonical JSON of { checkpoint, signature }>"
+    },
+    "trustRegistry": {
+      "tag": "pruvz.ai/trust-registry-anchor",
+      "separator": "U+0000",
+      "format": "<tag> NUL <anchoringFormatVersion> NUL <32 raw blinding-nonce bytes> <canonical JSON of { manifest, signatures }>"
+    },
+    "note": "The header is UTF-8 text and the nonce is 32 RAW bytes, not text. No separator follows the nonce because its width is fixed by this format. The two tags are why a checkpoint anchor can never be re-read as a registry anchor: see the deterministic layer, where one subject under two nonces already gives unrelated imprints."
+  },
+  "hashing": {
+    "imprintSuite": "sha-256",
+    "imprintBytes": 32,
+    "blindingNonceBytes": 32,
+    "minRequestNonceBytes": 8
+  },
+  "howTheseWereProduced": {
+    "twoLayers": "Deterministic material — subjects, blinding nonces, anchorInput lengths and digests, and imprints — must be reproduced BYTE FOR BYTE by any runtime. Receipt material must be read or refused IDENTICALLY, with the same reason code.",
+    "blindingNonces": "The blinding nonces here are fixed (0x00..0x1f and 0x20..0x3f) BECAUSE these are vectors and a vector must be reproducible. A deployment generates each blinding nonce from a cryptographically secure source and never regenerates it for a retry. A fixed nonce in production would defeat the property the nonce exists for.",
+    "subjects": "The subjects are copies of already-published vectors: checkpoint-1 from evidence-log/v1/golden-vectors.json and document v1 from trust-registry/v1/golden-vectors.json. No new identifier is introduced, and no real tenant, action or payload identifier appears anywhere — none can, because neither admissible subject has a member to carry one.",
+    "receipts": "The tokens are real RFC 3161 timestamp tokens obtained from a public timestamp authority over the published imprints. They embed the authority certificate chain and are published exactly as received. Their signatures belong to the authority, so they can be verified but never regenerated, and anchoring/v1/ is therefore immutable.",
+    "references": "A receipt.token whose value begins with \"@\" names an entry in `receipts`. Every other string is literal. A case names its subject through `subjectRef`, an entry in `subjects`.",
+    "whatIsNotHere": "Half two of the specification. Not one case in bindingCases or refusals establishes that a token is genuine: they check that a receipt is ABOUT a subject. The signature, the timestamping extended key usage, the certificate validity at genTime, the chain to a PINNED root and the policy are all unchecked by the reference implementation.",
+    "runtimeDivergence": "bindingCases and refusals are the agreement points: every conformant runtime must behave identically on them. runtimeDivergence is the opposite — the one published case where a half-one implementation and a half-two implementation MUST differ, with what each must do. It is separate from bindingCases because calling it agreement would be a false claim about what half one establishes.",
+    "immutability": "anchoring/v1/ is immutable exactly like a released schema directory, commitment/v1/, trust-registry/v1/ and evidence-log/v1/."
+  },
+  "authority": {
+    "note": "Recorded so a reader can tell what produced these tokens. It is not an endorsement, a default, or a statement that any deployment uses this authority: the pinned roots and admissible policies are a verifier configuration, never part of this contract.",
+    "url": "http://timestamp.digicert.com",
+    "policyOid": "2.16.840.1.114412.7.1",
+    "obtainedAt": "2026-08-30T20:24:18Z"
+  },
+  "subjects": {
+    "log-checkpoint": {
+      "checkpoint": {
+        "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+        "checkpointSequence": 1,
+        "issuedAt": "2026-08-10T09:03:30Z",
+        "origin": "pruvz.ai/evidence-log/demo",
+        "rootHash": "sha256:34a806b9e8da1f82db8edd8d270e9f6d71511b21914bcb304741f310f8d17334",
+        "signer": {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/3c4d5e6f708192a3b4c5d6e7f8019203",
+          "provider": "azure-key-vault",
+          "suite": "ES256"
+        },
+        "treeSize": 3,
+        "version": "1"
+      },
+      "signature": "f54xRg1ZpoSbIYwI0Qh3hSZF6INrQKL2XpQBE-1ZCTtXmCk3ZGq62uB2tVfGweszsOx1zcL3HlUlxsKQlce2Xw"
+    },
+    "log-checkpoint-altered": {
+      "checkpoint": {
+        "assuranceProfile": "PRE_CUSTOMER_DEFAULT",
+        "checkpointSequence": 1,
+        "issuedAt": "2026-08-10T09:03:30Z",
+        "origin": "pruvz.ai/evidence-log/demo",
+        "rootHash": "sha256:34a806b9e8da1f82db8edd8d270e9f6d71511b21914bcb304741f310f8d17334",
+        "signer": {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/3c4d5e6f708192a3b4c5d6e7f8019203",
+          "provider": "azure-key-vault",
+          "suite": "ES256"
+        },
+        "treeSize": 4,
+        "version": "1"
+      },
+      "signature": "f54xRg1ZpoSbIYwI0Qh3hSZF6INrQKL2XpQBE-1ZCTtXmCk3ZGq62uB2tVfGweszsOx1zcL3HlUlxsKQlce2Xw"
+    },
+    "trust-registry": {
+      "manifest": {
+        "formatVersion": "1",
+        "issuedAtUtc": "2026-08-01T00:00:00Z",
+        "issuer": "pruvz.ai",
+        "keys": [
+          {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-trust-root/9f1c0a2b7d4e4f0a8b5c6d7e8f901234",
+            "predecessorKeyId": null,
+            "provider": "azure-key-vault",
+            "publicKey": {
+              "crv": "P-256",
+              "kty": "EC",
+              "x": "OrwxCwbE4fHMKNFRySxf-xI1dTaKhq23AccBHpA8uss",
+              "y": "jwn2k4SR4nuLtA7xL3czT6cyKiA3z9TmAJkivlQ2YGs"
+            },
+            "retiredAtUtc": null,
+            "revocationReason": null,
+            "revokedAtUtc": null,
+            "status": "ACTIVE",
+            "suite": "ES256",
+            "thumbprint": "sha256:2A7ZGclH-8L7JIDz0YUHjYglAqsbs1_ugmLkP8tfMqQ",
+            "use": "trust-root",
+            "validFromUtc": "2026-08-01T00:00:00Z"
+          },
+          {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/1a2b3c4d5e6f708192a3b4c5d6e7f801",
+            "predecessorKeyId": null,
+            "provider": "azure-key-vault",
+            "publicKey": {
+              "crv": "P-256",
+              "kty": "EC",
+              "x": "xAHHUILIS8V162_ekTkWlrrz1OqI5wtqnAKm88xgLpk",
+              "y": "dDsBZpWN1hhcRKBe6k008Coa1VSv8cp6JTdmx9GSGOY"
+            },
+            "retiredAtUtc": null,
+            "revocationReason": null,
+            "revokedAtUtc": null,
+            "status": "ACTIVE",
+            "suite": "ES256",
+            "thumbprint": "sha256:4_u504FXPc3aAlCuF9h6EsSxQr7rHkc0uNMICtENykQ",
+            "use": "evidence-signing",
+            "validFromUtc": "2026-08-01T00:00:00Z"
+          }
+        ],
+        "previous": null,
+        "registryVersion": 1
+      },
+      "signatures": [
+        {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-trust-root/9f1c0a2b7d4e4f0a8b5c6d7e8f901234",
+          "signature": "s0UWAWIp4t4yK5uGJBGgfL3LsRnnrzBDPxw257eTy3avMbB4GKAx-UJ0ndrRiBxYoil9bk4F_nIz9SlhB2K5VA",
+          "suite": "ES256"
+        }
+      ]
+    },
+    "trust-registry-whole-document": {
+      "manifest": {
+        "formatVersion": "1",
+        "issuedAtUtc": "2026-08-01T00:00:00Z",
+        "issuer": "pruvz.ai",
+        "keys": [
+          {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-trust-root/9f1c0a2b7d4e4f0a8b5c6d7e8f901234",
+            "predecessorKeyId": null,
+            "provider": "azure-key-vault",
+            "publicKey": {
+              "crv": "P-256",
+              "kty": "EC",
+              "x": "OrwxCwbE4fHMKNFRySxf-xI1dTaKhq23AccBHpA8uss",
+              "y": "jwn2k4SR4nuLtA7xL3czT6cyKiA3z9TmAJkivlQ2YGs"
+            },
+            "retiredAtUtc": null,
+            "revocationReason": null,
+            "revokedAtUtc": null,
+            "status": "ACTIVE",
+            "suite": "ES256",
+            "thumbprint": "sha256:2A7ZGclH-8L7JIDz0YUHjYglAqsbs1_ugmLkP8tfMqQ",
+            "use": "trust-root",
+            "validFromUtc": "2026-08-01T00:00:00Z"
+          },
+          {
+            "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-evidence-signing/1a2b3c4d5e6f708192a3b4c5d6e7f801",
+            "predecessorKeyId": null,
+            "provider": "azure-key-vault",
+            "publicKey": {
+              "crv": "P-256",
+              "kty": "EC",
+              "x": "xAHHUILIS8V162_ekTkWlrrz1OqI5wtqnAKm88xgLpk",
+              "y": "dDsBZpWN1hhcRKBe6k008Coa1VSv8cp6JTdmx9GSGOY"
+            },
+            "retiredAtUtc": null,
+            "revocationReason": null,
+            "revokedAtUtc": null,
+            "status": "ACTIVE",
+            "suite": "ES256",
+            "thumbprint": "sha256:4_u504FXPc3aAlCuF9h6EsSxQr7rHkc0uNMICtENykQ",
+            "use": "evidence-signing",
+            "validFromUtc": "2026-08-01T00:00:00Z"
+          }
+        ],
+        "previous": null,
+        "registryVersion": 1
+      },
+      "signatures": [
+        {
+          "keyId": "https://pruvz-kv-example.vault.azure.net/keys/pruvz-trust-root/9f1c0a2b7d4e4f0a8b5c6d7e8f901234",
+          "signature": "s0UWAWIp4t4yK5uGJBGgfL3LsRnnrzBDPxw257eTy3avMbB4GKAx-UJ0ndrRiBxYoil9bk4F_nIz9SlhB2K5VA",
+          "suite": "ES256"
+        }
+      ],
+      "attestations": {
+        "publications": [
+          {
+            "channel": "git",
+            "location": "https://github.com/dorsharoni10/pruvz-evidence-packet",
+            "reference": "refs/tags/example-trust-v1",
+            "digest": "sha256:1eca1b63c8ed6a4f846924bae24f141006f9d40e6a760d7121ef35b4c3517b48"
+          }
+        ],
+        "witnesses": []
+      }
+    }
+  },
+  "deterministic": [
+    {
+      "id": "checkpoint-1",
+      "subjectRef": "log-checkpoint",
+      "blindingNonce": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+      "anchorInputLength": 588,
+      "anchorInputSha256": "e601ca57a2c89d41d444c5fde3e27e4b006db4b7c1ce5725d3e370bb2c946e9e",
+      "imprint": "e601ca57a2c89d41d444c5fde3e27e4b006db4b7c1ce5725d3e370bb2c946e9e"
+    },
+    {
+      "id": "registry-1",
+      "subjectRef": "trust-registry",
+      "blindingNonce": "ICEiIyQlJicoKSorLC0uLzAxMjM0NTY3ODk6Ozw9Pj8",
+      "anchorInputLength": 1495,
+      "anchorInputSha256": "6b0dbf9cd22bceafd4b1ea0a6fab3ebaa1d61d9640303260677e99834976fce5",
+      "imprint": "6b0dbf9cd22bceafd4b1ea0a6fab3ebaa1d61d9640303260677e99834976fce5"
+    },
+    {
+      "id": "checkpoint-1-other-nonce",
+      "subjectRef": "log-checkpoint",
+      "blindingNonce": "q6urq6urq6urq6urq6urq6urq6urq6urq6urq6urq6s",
+      "anchorInputLength": 588,
+      "anchorInputSha256": "509caaf8ac4ef635428f1bd41f95d406fdf13134559c3c1f9a982491ab31f8fe",
+      "imprint": "509caaf8ac4ef635428f1bd41f95d406fdf13134559c3c1f9a982491ab31f8fe"
+    }
+  ],
+  "receipts": {
+    "checkpoint": "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",
+    "registry": "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",
+    "sha512-imprint": "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",
+    "checkpoint-signature-corrupted": "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",
+    "checkpoint-structurally-corrupted": "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",
+    "checkpoint-truncated": "MIIXaQYJKoZIhvcNAQcCoIIXWjCCF1YCAQMxDzANBglghkgBZQMEAgEFADCBgQYLKoZIhvcNAQkQAQSgcgRwMG4CAQEGCWCGSAGG/WwHATAxMA0GCWCGSAFlAwQCAQUABCDmAcpXosidQdRExf3j4n5LAG20t8HOVyXT43C7LJRungIQDAsbp4Kt7TRiYqIxZakZgBgPMjAyNjA4MzAyMDI0MThaAghqIPr0VgkMCKCCEzowggbtMIIE1aADAgECAhAKgO8YS43xBYLRxHanlXRoMA0GCSqGSIb3DQEBCwUAMGkxCzAJBgNVBAYTAlVTMRcwFQYDVQQKEw5EaWdpQ2VydCwgSW5jLjFBMD8GA1UEAxM4RGlnaUNlcnQgVHJ1c3RlZCBHNCBUaW1lU3RhbXBpbmcgUlNBNDA5NiBTSEEyNTYgMjAyNSBDQTEwHhcNMjUwNjA0MDAwMDAwWhcNMzYwOTAzMjM1OTU5WjBjMQswCQYDVQQGEwJVUzEXMBUGA1UEChMORGlnaUNlcnQsIA==",
+    "not-base64": "not a token at all!!"
+  },
+  "bindingCases": [
+    {
+      "id": "checkpoint-anchored",
+      "description": "a signed checkpoint witnessed by a real public timestamp authority: the imprint the subject and blinding nonce produce is the imprint inside the token, and the token answers the request the record names",
+      "record": {
+        "version": "1",
+        "anchorId": "anc_checkpoint_1_digicert",
+        "subject": {
+          "kind": "log-checkpoint",
+          "origin": "pruvz.ai/evidence-log/demo",
+          "subjectVersion": 1
+        },
+        "trustDomain": "digicert-tsa",
+        "status": "ANCHORED",
+        "blindingNonce": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+        "requestNonce": "aiD69FYJDAg",
+        "receipt": {
+          "kind": "rfc3161-timestamp-token",
+          "token": "@checkpoint"
+        }
+      },
+      "subjectRef": "log-checkpoint",
+      "expect": {
+        "imprint": "e601ca57a2c89d41d444c5fde3e27e4b006db4b7c1ce5725d3e370bb2c946e9e",
+        "genTime": "2026-08-30T20:24:18Z",
+        "policyOid": "2.16.840.1.114412.7.1",
+        "authorityVerified": false
+      }
+    },
+    {
+      "id": "registry-anchored",
+      "description": "a signed trust-registry document witnessed under the other domain tag, over { manifest, signatures } — the attestations the receipt itself lands in are excluded",
+      "record": {
+        "version": "1",
+        "anchorId": "anc_registry_1_digicert",
+        "subject": {
+          "kind": "trust-registry",
+          "origin": "pruvz.ai",
+          "subjectVersion": 1
+        },
+        "trustDomain": "digicert-tsa",
+        "status": "ANCHORED",
+        "blindingNonce": "ICEiIyQlJicoKSorLC0uLzAxMjM0NTY3ODk6Ozw9Pj8",
+        "requestNonce": "ZVEf8bkE0wM",
+        "receipt": {
+          "kind": "rfc3161-timestamp-token",
+          "token": "@registry"
+        }
+      },
+      "subjectRef": "trust-registry",
+      "expect": {
+        "imprint": "6b0dbf9cd22bceafd4b1ea0a6fab3ebaa1d61d9640303260677e99834976fce5",
+        "genTime": "2026-08-30T20:24:19Z",
+        "policyOid": "2.16.840.1.114412.7.1",
+        "authorityVerified": false
+      }
+    },
+    {
+      "id": "registry-anchored-from-whole-document",
+      "description": "the same anchor checked against the whole published document rather than the subject pair: attestations are dropped on the way in, so a document that has since GAINED a witness still verifies against the anchor it gained",
+      "record": {
+        "version": "1",
+        "anchorId": "anc_registry_1_digicert",
+        "subject": {
+          "kind": "trust-registry",
+          "origin": "pruvz.ai",
+          "subjectVersion": 1
+        },
+        "trustDomain": "digicert-tsa",
+        "status": "ANCHORED",
+        "blindingNonce": "ICEiIyQlJicoKSorLC0uLzAxMjM0NTY3ODk6Ozw9Pj8",
+        "requestNonce": "ZVEf8bkE0wM",
+        "receipt": {
+          "kind": "rfc3161-timestamp-token",
+          "token": "@registry"
+        }
+      },
+      "subjectRef": "trust-registry-whole-document",
+      "expect": {
+        "imprint": "6b0dbf9cd22bceafd4b1ea0a6fab3ebaa1d61d9640303260677e99834976fce5",
+        "genTime": "2026-08-30T20:24:19Z",
+        "policyOid": "2.16.840.1.114412.7.1",
+        "authorityVerified": false
+      }
+    }
+  ],
+  "runtimeDivergence": [
+    {
+      "id": "checkpoint-token-signature-corrupted",
+      "description": "THE BOUNDARY, PUBLISHED AS A VECTOR: a token whose signature bytes were altered still BINDS — the messageImprint is untouched, so half one has nothing to object to. An implementation that performs half one only accepts it, and is therefore not a verifier. An implementation that performs half two MUST refuse it. Both behaviours are conformant; accepting it while calling the result verification is not.",
+      "record": {
+        "version": "1",
+        "anchorId": "anc_checkpoint_1_digicert",
+        "subject": {
+          "kind": "log-checkpoint",
+          "origin": "pruvz.ai/evidence-log/demo",
+          "subjectVersion": 1
+        },
+        "trustDomain": "digicert-tsa",
+        "status": "ANCHORED",
+        "blindingNonce": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+        "requestNonce": "aiD69FYJDAg",
+        "receipt": {
+          "kind": "rfc3161-timestamp-token",
+          "token": "@checkpoint-signature-corrupted"
+        }
+      },
+      "subjectRef": "log-checkpoint",
+      "halfOne": {
+        "accepts": true,
+        "imprint": "e601ca57a2c89d41d444c5fde3e27e4b006db4b7c1ce5725d3e370bb2c946e9e",
+        "genTime": "2026-08-30T20:24:18Z",
+        "policyOid": "2.16.840.1.114412.7.1",
+        "authorityVerified": false
+      },
+      "halfTwo": {
+        "accepts": false,
+        "expect": "ANCHOR_SIGNATURE_INVALID",
+        "alsoAcceptable": [
+          "ANCHOR_RECEIPT_MALFORMED"
+        ],
+        "note": "ANCHOR_SIGNATURE_INVALID is the accurate code and the one to prefer. ANCHOR_RECEIPT_MALFORMED is permitted because some platforms verify the CMS signature inside the token DECODER — .NET Rfc3161TimestampToken.TryDecode returns false for a bad signature — so a runtime built on such a decoder cannot separate \"unreadable\" from \"not genuine\" without decoding twice. It must still refuse; only the code may differ."
+      }
+    }
+  ],
+  "refusals": [
+    {
+      "id": "unknown-version",
+      "expect": "UNKNOWN_ANCHOR_VERSION",
+      "description": "a record declaring an anchoring version this implementation does not speak",
+      "record": {
+        "version": "2",
+        "anchorId": "anc_checkpoint_1_digicert",
+        "subject": {
+          "kind": "log-checkpoint",
+          "origin": "pruvz.ai/evidence-log/demo",
+          "subjectVersion": 1
+        },
+        "trustDomain": "digicert-tsa",
+        "status": "ANCHORED",
+        "blindingNonce": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+        "requestNonce": "aiD69FYJDAg",
+        "receipt": {
+          "kind": "rfc3161-timestamp-token",
+          "token": "@checkpoint"
+        }
+      },
+      "subjectRef": "log-checkpoint"
+    },
+    {
+      "id": "absent-version",
+      "expect": "UNKNOWN_ANCHOR_VERSION",
+      "description": "a record with no version at all — refused as an unknown version before the member set is examined, never as a malformed record",
+      "record": {
+        "anchorId": "anc_checkpoint_1_digicert",
+        "subject": {
+          "kind": "log-checkpoint",
+          "origin": "pruvz.ai/evidence-log/demo",
+          "subjectVersion": 1
+        },
+        "trustDomain": "digicert-tsa",
+        "status": "ANCHORED",
+        "blindingNonce": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+        "requestNonce": "aiD69FYJDAg",
+        "receipt": {
+          "kind": "rfc3161-timestamp-token",
+          "token": "@checkpoint"
+        }
+      },
+      "subjectRef": "log-checkpoint"
+    },
+    {
+      "id": "unknown-member",
+      "expect": "ANCHOR_MALFORMED",
+      "description": "a record carrying a member the closed set does not define",
+      "record": {
+        "version": "1",
+        "anchorId": "anc_checkpoint_1_digicert",
+        "subject": {
+          "kind": "log-checkpoint",
+          "origin": "pruvz.ai/evidence-log/demo",
+          "subjectVersion": 1
+        },
+        "trustDomain": "digicert-tsa",
+        "status": "ANCHORED",
+        "blindingNonce": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+        "requestNonce": "aiD69FYJDAg",
+        "receipt": {
+          "kind": "rfc3161-timestamp-token",
+          "token": "@checkpoint"
+        },
+        "imprint": "sha256:0000"
+      },
+      "subjectRef": "log-checkpoint"
+    },
+    {
+      "id": "missing-member",
+      "expect": "ANCHOR_MALFORMED",
+      "description": "a record missing a required member",
+      "record": {
+        "version": "1",
+        "anchorId": "anc_checkpoint_1_digicert",
+        "subject": {
+          "kind": "log-checkpoint",
+          "origin": "pruvz.ai/evidence-log/demo",
+          "subjectVersion": 1
+        },
+        "status": "ANCHORED",
+        "blindingNonce": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+        "requestNonce": "aiD69FYJDAg",
+        "receipt": {
+          "kind": "rfc3161-timestamp-token",
+          "token": "@checkpoint"
+        }
+      },
+      "subjectRef": "log-checkpoint"
+    },
+    {
+      "id": "unknown-status",
+      "expect": "ANCHOR_MALFORMED",
+      "description": "a status outside the closed set",
+      "record": {
+        "version": "1",
+        "anchorId": "anc_checkpoint_1_digicert",
+        "subject": {
+          "kind": "log-checkpoint",
+          "origin": "pruvz.ai/evidence-log/demo",
+          "subjectVersion": 1
+        },
+        "trustDomain": "digicert-tsa",
+        "status": "WITNESSED",
+        "blindingNonce": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+        "requestNonce": "aiD69FYJDAg",
+        "receipt": {
+          "kind": "rfc3161-timestamp-token",
+          "token": "@checkpoint"
+        }
+      },
+      "subjectRef": "log-checkpoint"
+    },
+    {
+      "id": "unknown-subject-kind",
+      "expect": "ANCHOR_MALFORMED",
+      "description": "a subject kind this format does not anchor — a per-record anchor, for instance",
+      "record": {
+        "version": "1",
+        "anchorId": "anc_checkpoint_1_digicert",
+        "subject": {
+          "kind": "evidence-record",
+          "origin": "x",
+          "subjectVersion": 1
+        },
+        "trustDomain": "digicert-tsa",
+        "status": "ANCHORED",
+        "blindingNonce": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+        "requestNonce": "aiD69FYJDAg",
+        "receipt": {
+          "kind": "rfc3161-timestamp-token",
+          "token": "@checkpoint"
+        }
+      },
+      "subjectRef": "log-checkpoint"
+    },
+    {
+      "id": "blinding-nonce-too-short",
+      "expect": "ANCHOR_MALFORMED",
+      "description": "a blinding nonce of 31 bytes; the width is exactly 32 and is what makes the header unambiguous",
+      "record": {
+        "version": "1",
+        "anchorId": "anc_checkpoint_1_digicert",
+        "subject": {
+          "kind": "log-checkpoint",
+          "origin": "pruvz.ai/evidence-log/demo",
+          "subjectVersion": 1
+        },
+        "trustDomain": "digicert-tsa",
+        "status": "ANCHORED",
+        "blindingNonce": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHg",
+        "requestNonce": "aiD69FYJDAg",
+        "receipt": {
+          "kind": "rfc3161-timestamp-token",
+          "token": "@checkpoint"
+        }
+      },
+      "subjectRef": "log-checkpoint"
+    },
+    {
+      "id": "blinding-nonce-not-canonical",
+      "expect": "ANCHOR_MALFORMED",
+      "description": "a blinding nonce that is not canonical unpadded base64url",
+      "record": {
+        "version": "1",
+        "anchorId": "anc_checkpoint_1_digicert",
+        "subject": {
+          "kind": "log-checkpoint",
+          "origin": "pruvz.ai/evidence-log/demo",
+          "subjectVersion": 1
+        },
+        "trustDomain": "digicert-tsa",
+        "status": "ANCHORED",
+        "blindingNonce": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8=",
+        "requestNonce": "aiD69FYJDAg",
+        "receipt": {
+          "kind": "rfc3161-timestamp-token",
+          "token": "@checkpoint"
+        }
+      },
+      "subjectRef": "log-checkpoint"
+    },
+    {
+      "id": "request-nonce-too-short",
+      "expect": "ANCHOR_MALFORMED",
+      "description": "a request nonce shorter than the minimum this format carries",
+      "record": {
+        "version": "1",
+        "anchorId": "anc_checkpoint_1_digicert",
+        "subject": {
+          "kind": "log-checkpoint",
+          "origin": "pruvz.ai/evidence-log/demo",
+          "subjectVersion": 1
+        },
+        "trustDomain": "digicert-tsa",
+        "status": "ANCHORED",
+        "blindingNonce": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+        "requestNonce": "AQEBAQ",
+        "receipt": {
+          "kind": "rfc3161-timestamp-token",
+          "token": "@checkpoint"
+        }
+      },
+      "subjectRef": "log-checkpoint"
+    },
+    {
+      "id": "anchored-without-receipt",
+      "expect": "ANCHOR_MALFORMED",
+      "description": "a record claiming ANCHORED while carrying no receipt",
+      "record": {
+        "version": "1",
+        "anchorId": "anc_checkpoint_1_digicert",
+        "subject": {
+          "kind": "log-checkpoint",
+          "origin": "pruvz.ai/evidence-log/demo",
+          "subjectVersion": 1
+        },
+        "trustDomain": "digicert-tsa",
+        "status": "ANCHORED",
+        "blindingNonce": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+        "requestNonce": "aiD69FYJDAg",
+        "receipt": null
+      },
+      "subjectRef": "log-checkpoint"
+    },
+    {
+      "id": "pending-with-receipt",
+      "expect": "ANCHOR_MALFORMED",
+      "description": "a PENDING record carrying a receipt — incoherent rather than helpful: it invites a reader to conclude from the receipt what the status denies",
+      "record": {
+        "version": "1",
+        "anchorId": "anc_checkpoint_1_digicert",
+        "subject": {
+          "kind": "log-checkpoint",
+          "origin": "pruvz.ai/evidence-log/demo",
+          "subjectVersion": 1
+        },
+        "trustDomain": "digicert-tsa",
+        "status": "PENDING",
+        "blindingNonce": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+        "requestNonce": "aiD69FYJDAg",
+        "receipt": {
+          "kind": "rfc3161-timestamp-token",
+          "token": "@checkpoint"
+        }
+      },
+      "subjectRef": "log-checkpoint"
+    },
+    {
+      "id": "unknown-receipt-kind",
+      "expect": "ANCHOR_MALFORMED",
+      "description": "a receipt of a kind this version does not define",
+      "record": {
+        "version": "1",
+        "anchorId": "anc_checkpoint_1_digicert",
+        "subject": {
+          "kind": "log-checkpoint",
+          "origin": "pruvz.ai/evidence-log/demo",
+          "subjectVersion": 1
+        },
+        "trustDomain": "digicert-tsa",
+        "status": "ANCHORED",
+        "blindingNonce": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+        "requestNonce": "aiD69FYJDAg",
+        "receipt": {
+          "kind": "blockchain-inclusion",
+          "token": "@checkpoint"
+        }
+      },
+      "subjectRef": "log-checkpoint"
+    },
+    {
+      "id": "origin-disagrees-with-subject",
+      "expect": "ANCHOR_MALFORMED",
+      "description": "a record naming one origin while the subject it is checked against is from another — without this check a record could point every lookup at the wrong subject",
+      "record": {
+        "version": "1",
+        "anchorId": "anc_checkpoint_1_digicert",
+        "subject": {
+          "kind": "log-checkpoint",
+          "origin": "pruvz.ai/evidence-log/other",
+          "subjectVersion": 1
+        },
+        "trustDomain": "digicert-tsa",
+        "status": "ANCHORED",
+        "blindingNonce": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+        "requestNonce": "aiD69FYJDAg",
+        "receipt": {
+          "kind": "rfc3161-timestamp-token",
+          "token": "@checkpoint"
+        }
+      },
+      "subjectRef": "log-checkpoint"
+    },
+    {
+      "id": "version-disagrees-with-subject",
+      "expect": "ANCHOR_MALFORMED",
+      "description": "a record naming one subject version while the subject document is another",
+      "record": {
+        "version": "1",
+        "anchorId": "anc_checkpoint_1_digicert",
+        "subject": {
+          "kind": "log-checkpoint",
+          "origin": "pruvz.ai/evidence-log/demo",
+          "subjectVersion": 9
+        },
+        "trustDomain": "digicert-tsa",
+        "status": "ANCHORED",
+        "blindingNonce": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+        "requestNonce": "aiD69FYJDAg",
+        "receipt": {
+          "kind": "rfc3161-timestamp-token",
+          "token": "@checkpoint"
+        }
+      },
+      "subjectRef": "log-checkpoint"
+    },
+    {
+      "id": "pending-anchor-required",
+      "expect": "ANCHOR_NOT_PRESENT",
+      "description": "an anchor that has not been witnessed yet. A subject without a witnessed anchor is never fully verified — a pending anchor is not a weaker anchor, it is no anchor",
+      "record": {
+        "version": "1",
+        "anchorId": "anc_checkpoint_1_digicert",
+        "subject": {
+          "kind": "log-checkpoint",
+          "origin": "pruvz.ai/evidence-log/demo",
+          "subjectVersion": 1
+        },
+        "trustDomain": "digicert-tsa",
+        "status": "PENDING",
+        "blindingNonce": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+        "requestNonce": "aiD69FYJDAg",
+        "receipt": null
+      },
+      "subjectRef": "log-checkpoint"
+    },
+    {
+      "id": "failed-anchor-required",
+      "expect": "ANCHOR_NOT_PRESENT",
+      "description": "an anchor whose attempt failed, presented where an anchor was required",
+      "record": {
+        "version": "1",
+        "anchorId": "anc_checkpoint_1_digicert",
+        "subject": {
+          "kind": "log-checkpoint",
+          "origin": "pruvz.ai/evidence-log/demo",
+          "subjectVersion": 1
+        },
+        "trustDomain": "digicert-tsa",
+        "status": "FAILED",
+        "blindingNonce": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+        "requestNonce": "aiD69FYJDAg",
+        "receipt": null
+      },
+      "subjectRef": "log-checkpoint"
+    },
+    {
+      "id": "binding-wrong-blinding-nonce",
+      "expect": "ANCHOR_BINDING_MISMATCH",
+      "description": "the right subject and the right token under the wrong blinding nonce. The nonce is part of the imprint, so it cannot be replaced after the fact",
+      "record": {
+        "version": "1",
+        "anchorId": "anc_checkpoint_1_digicert",
+        "subject": {
+          "kind": "log-checkpoint",
+          "origin": "pruvz.ai/evidence-log/demo",
+          "subjectVersion": 1
+        },
+        "trustDomain": "digicert-tsa",
+        "status": "ANCHORED",
+        "blindingNonce": "q6urq6urq6urq6urq6urq6urq6urq6urq6urq6urq6s",
+        "requestNonce": "aiD69FYJDAg",
+        "receipt": {
+          "kind": "rfc3161-timestamp-token",
+          "token": "@checkpoint"
+        }
+      },
+      "subjectRef": "log-checkpoint"
+    },
+    {
+      "id": "binding-token-from-another-subject",
+      "expect": "ANCHOR_BINDING_MISMATCH",
+      "description": "the checkpoint token presented as the registry anchor. Both were witnessed by the same authority seconds apart; the domain tags and the subjects still keep them apart",
+      "record": {
+        "version": "1",
+        "anchorId": "anc_registry_1_digicert",
+        "subject": {
+          "kind": "trust-registry",
+          "origin": "pruvz.ai",
+          "subjectVersion": 1
+        },
+        "trustDomain": "digicert-tsa",
+        "status": "ANCHORED",
+        "blindingNonce": "ICEiIyQlJicoKSorLC0uLzAxMjM0NTY3ODk6Ozw9Pj8",
+        "requestNonce": "ZVEf8bkE0wM",
+        "receipt": {
+          "kind": "rfc3161-timestamp-token",
+          "token": "@checkpoint"
+        }
+      },
+      "subjectRef": "trust-registry"
+    },
+    {
+      "id": "binding-wrong-subject-document",
+      "expect": "ANCHOR_BINDING_MISMATCH",
+      "description": "a subject whose bytes were altered after it was witnessed — a checkpoint claiming a larger tree than the one that was anchored",
+      "record": {
+        "version": "1",
+        "anchorId": "anc_checkpoint_1_digicert",
+        "subject": {
+          "kind": "log-checkpoint",
+          "origin": "pruvz.ai/evidence-log/demo",
+          "subjectVersion": 1
+        },
+        "trustDomain": "digicert-tsa",
+        "status": "ANCHORED",
+        "blindingNonce": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+        "requestNonce": "aiD69FYJDAg",
+        "receipt": {
+          "kind": "rfc3161-timestamp-token",
+          "token": "@checkpoint"
+        }
+      },
+      "subjectRef": "log-checkpoint-altered"
+    },
+    {
+      "id": "nonce-mismatch",
+      "expect": "ANCHOR_NONCE_MISMATCH",
+      "description": "a token that answers a different request than the record names — what a replayed response looks like",
+      "record": {
+        "version": "1",
+        "anchorId": "anc_checkpoint_1_digicert",
+        "subject": {
+          "kind": "log-checkpoint",
+          "origin": "pruvz.ai/evidence-log/demo",
+          "subjectVersion": 1
+        },
+        "trustDomain": "digicert-tsa",
+        "status": "ANCHORED",
+        "blindingNonce": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+        "requestNonce": "ABEiM0RVZnc",
+        "receipt": {
+          "kind": "rfc3161-timestamp-token",
+          "token": "@checkpoint"
+        }
+      },
+      "subjectRef": "log-checkpoint"
+    },
+    {
+      "id": "unsupported-imprint-suite",
+      "expect": "ANCHOR_SUITE_UNSUPPORTED",
+      "description": "a real token from the same authority whose messageImprint is SHA-512. The format defines one digest suite, and a suite it does not define is a refusal rather than a silent success on an imprint nobody compared",
+      "record": {
+        "version": "1",
+        "anchorId": "anc_checkpoint_1_digicert",
+        "subject": {
+          "kind": "log-checkpoint",
+          "origin": "pruvz.ai/evidence-log/demo",
+          "subjectVersion": 1
+        },
+        "trustDomain": "digicert-tsa",
+        "status": "ANCHORED",
+        "blindingNonce": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+        "requestNonce": "vTKraJGV3qE",
+        "receipt": {
+          "kind": "rfc3161-timestamp-token",
+          "token": "@sha512-imprint"
+        }
+      },
+      "subjectRef": "log-checkpoint"
+    },
+    {
+      "id": "receipt-truncated",
+      "expect": "ANCHOR_RECEIPT_MALFORMED",
+      "description": "a token cut short — a value extends past the end of the token",
+      "record": {
+        "version": "1",
+        "anchorId": "anc_checkpoint_1_digicert",
+        "subject": {
+          "kind": "log-checkpoint",
+          "origin": "pruvz.ai/evidence-log/demo",
+          "subjectVersion": 1
+        },
+        "trustDomain": "digicert-tsa",
+        "status": "ANCHORED",
+        "blindingNonce": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+        "requestNonce": "aiD69FYJDAg",
+        "receipt": {
+          "kind": "rfc3161-timestamp-token",
+          "token": "@checkpoint-truncated"
+        }
+      },
+      "subjectRef": "log-checkpoint"
+    },
+    {
+      "id": "receipt-structurally-corrupted",
+      "expect": "ANCHOR_RECEIPT_MALFORMED",
+      "description": "a token whose contentType was altered: the bytes no longer say they are a CMS SignedData, so there is nothing here this implementation can claim to have read",
+      "record": {
+        "version": "1",
+        "anchorId": "anc_checkpoint_1_digicert",
+        "subject": {
+          "kind": "log-checkpoint",
+          "origin": "pruvz.ai/evidence-log/demo",
+          "subjectVersion": 1
+        },
+        "trustDomain": "digicert-tsa",
+        "status": "ANCHORED",
+        "blindingNonce": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+        "requestNonce": "aiD69FYJDAg",
+        "receipt": {
+          "kind": "rfc3161-timestamp-token",
+          "token": "@checkpoint-structurally-corrupted"
+        }
+      },
+      "subjectRef": "log-checkpoint"
+    },
+    {
+      "id": "receipt-not-base64",
+      "expect": "ANCHOR_RECEIPT_MALFORMED",
+      "description": "a receipt token that is not base64 at all",
+      "record": {
+        "version": "1",
+        "anchorId": "anc_checkpoint_1_digicert",
+        "subject": {
+          "kind": "log-checkpoint",
+          "origin": "pruvz.ai/evidence-log/demo",
+          "subjectVersion": 1
+        },
+        "trustDomain": "digicert-tsa",
+        "status": "ANCHORED",
+        "blindingNonce": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+        "requestNonce": "aiD69FYJDAg",
+        "receipt": {
+          "kind": "rfc3161-timestamp-token",
+          "token": "@not-base64"
+        }
+      },
+      "subjectRef": "log-checkpoint"
+    }
+  ]
+}
