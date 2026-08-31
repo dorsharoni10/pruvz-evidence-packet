@@ -1,5 +1,5 @@
 {
-  "packetFormatVersion": "1.4.0",
+  "packetFormatVersion": "1.5.0",
   "action": {
     "actionId": "act_00000000000000000000000000000005",
     "agentId": "billing-refunds-agent",
@@ -175,7 +175,11 @@
         "sourceReference": null,
         "occurredAtUtc": "2026-07-10T09:30:58Z",
         "recordedAtUtc": "2026-07-10T09:30:58Z",
-        "summary": "Refund requested for payment pay_74005."
+        "summary": "Refund requested for payment pay_74005.",
+        "runId": "run_sample_005",
+        "schemaVersion": 1,
+        "clientOperationId": "op-ingest-0001",
+        "payloadMetadata": {}
       },
       {
         "evidenceId": "evd_00000000000000000000000000000052",
@@ -186,7 +190,11 @@
         "sourceReference": "demo-refund-policy",
         "occurredAtUtc": "2026-07-10T09:30:59Z",
         "recordedAtUtc": "2026-07-10T09:30:59Z",
-        "summary": "Decision-time policy snapshot captured: demo-refund-policy v1, policy passed."
+        "summary": "Decision-time policy snapshot captured: demo-refund-policy v1, policy passed.",
+        "runId": "run_sample_005",
+        "schemaVersion": 1,
+        "clientOperationId": null,
+        "payloadMetadata": {}
       },
       {
         "evidenceId": "evd_00000000000000000000000000000053",
@@ -197,7 +205,11 @@
         "sourceReference": null,
         "occurredAtUtc": "2026-07-10T09:31:12Z",
         "recordedAtUtc": "2026-07-10T09:31:13Z",
-        "summary": "Agent claims refund of USD 19.99 succeeded (REFUND_SUCCEEDED)."
+        "summary": "Agent claims refund of USD 19.99 succeeded (REFUND_SUCCEEDED).",
+        "runId": "run_sample_005",
+        "schemaVersion": 1,
+        "clientOperationId": "op-claim-0003",
+        "payloadMetadata": {}
       },
       {
         "evidenceId": "evd_00000000000000000000000000000054",
@@ -208,7 +220,11 @@
         "sourceReference": "ref_890",
         "occurredAtUtc": "2026-07-10T09:31:19Z",
         "recordedAtUtc": "2026-07-10T09:31:20Z",
-        "summary": "Execution receipt relayed: refund ref_890 submitted to the billing system."
+        "summary": "Execution receipt relayed: refund ref_890 submitted to the billing system.",
+        "runId": "run_sample_005",
+        "schemaVersion": 1,
+        "clientOperationId": "op-receipt-0004",
+        "payloadMetadata": {}
       },
       {
         "evidenceId": "evd_00000000000000000000000000000055",
@@ -219,7 +235,14 @@
         "sourceReference": null,
         "occurredAtUtc": "2026-07-10T09:45:00Z",
         "recordedAtUtc": "2026-07-10T09:45:00Z",
-        "summary": "VERIFICATION_FAILED: billing system unreadable after 3 attempts; no business outcome was proven or disproven."
+        "summary": "VERIFICATION_FAILED: billing system unreadable after 3 attempts; no business outcome was proven or disproven.",
+        "runId": "run_sample_005",
+        "schemaVersion": 1,
+        "clientOperationId": null,
+        "payloadMetadata": {
+          "verificationStatus": "VERIFICATION_FAILED",
+          "attemptCount": "1"
+        }
       },
       {
         "evidenceId": "evd_00000000000000000000000000000056",
@@ -230,7 +253,20 @@
         "sourceReference": null,
         "occurredAtUtc": "2026-07-10T10:15:00Z",
         "recordedAtUtc": "2026-07-10T10:15:00Z",
-        "summary": "Human review decision: NEEDS_CORRECTION by ops-lead"
+        "summary": "Human review decision: NEEDS_CORRECTION by ops-lead",
+        "runId": "run_sample_005",
+        "schemaVersion": 1,
+        "clientOperationId": "op-decision-0006",
+        "payloadMetadata": {
+          "decision": "NEEDS_CORRECTION",
+          "reason": "The billing connector is rejecting our credentials; rotate them before a recheck.",
+          "reviewerId": "ops-lead",
+          "previousReviewState": "PENDING_REVIEW",
+          "newReviewState": "NEEDS_CORRECTION",
+          "decidedAtUtc": "2026-07-10T10:15:00Z",
+          "reviewedEvidenceId": "evd_00000000000000000000000000000055",
+          "reviewedEvidenceSequence": "5"
+        }
       },
       {
         "evidenceId": "evd_00000000000000000000000000000057",
@@ -241,7 +277,20 @@
         "sourceReference": null,
         "occurredAtUtc": "2026-07-10T11:30:00Z",
         "recordedAtUtc": "2026-07-10T11:30:00Z",
-        "summary": "Human review decision: RESOLVED_EXTERNALLY by ops-lead"
+        "summary": "Human review decision: RESOLVED_EXTERNALLY by ops-lead",
+        "runId": "run_sample_005",
+        "schemaVersion": 1,
+        "clientOperationId": "op-decision-0007",
+        "payloadMetadata": {
+          "decision": "RESOLVED_EXTERNALLY",
+          "reason": "Billing API credentials were rotated; Pruvz can read the billing system again.",
+          "reviewerId": "ops-lead",
+          "previousReviewState": "NEEDS_CORRECTION",
+          "newReviewState": "AWAITING_REVERIFICATION",
+          "decidedAtUtc": "2026-07-10T11:30:00Z",
+          "reviewedEvidenceId": "evd_00000000000000000000000000000056",
+          "reviewedEvidenceSequence": "6"
+        }
       }
     ]
   }

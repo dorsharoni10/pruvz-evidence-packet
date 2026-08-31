@@ -22,11 +22,11 @@ The packet's parts:
 | `evidence` | The ordered evidence timeline (`GET /api/actions/{actionId}/evidence`): every append-only evidence item in sequence order, each with its server-assigned trust level. |
 | `packetFormatVersion` | Metadata of the packet file itself — the format release it conforms to. |
 
-Schemas live in [`schema/v1.4.0/`](schema/v1.4.0/) (current release; [`schema/v1.3.0/`](schema/v1.3.0/), [`schema/v1.2.0/`](schema/v1.2.0/), [`schema/v1.1.0/`](schema/v1.1.0/) and [`schema/v1.0.0/`](schema/v1.0.0/) remain published and immutable):
+Schemas live in [`schema/v1.5.0/`](schema/v1.5.0/) (current release; [`schema/v1.4.0/`](schema/v1.4.0/), [`schema/v1.3.0/`](schema/v1.3.0/), [`schema/v1.2.0/`](schema/v1.2.0/), [`schema/v1.1.0/`](schema/v1.1.0/) and [`schema/v1.0.0/`](schema/v1.0.0/) remain published and immutable):
 
-- [`evidence-packet.schema.json`](schema/v1.4.0/evidence-packet.schema.json) — the packet envelope
-- [`action.schema.json`](schema/v1.4.0/action.schema.json) — the action record
-- [`evidence.schema.json`](schema/v1.4.0/evidence.schema.json) — the evidence timeline
+- [`evidence-packet.schema.json`](schema/v1.5.0/evidence-packet.schema.json) — the packet envelope
+- [`action.schema.json`](schema/v1.5.0/action.schema.json) — the action record
+- [`evidence.schema.json`](schema/v1.5.0/evidence.schema.json) — the evidence timeline
 
 Field-by-field meaning, every enum value, and the type-to-trust mapping are documented in [`docs/FIELDS.md`](docs/FIELDS.md). Versioning and compatibility rules are in [`docs/VERSIONING.md`](docs/VERSIONING.md). How one logical record becomes one deterministic byte string — the canonical commitment and its cross-runtime golden vectors — is specified in [`docs/COMMITMENT.md`](docs/COMMITMENT.md). How a signing key is recognized without asking the Pruvz deployment — the pinned root, the signed key history, rotation and time-aware revocation — is specified in [`docs/TRUST-REGISTRY.md`](docs/TRUST-REGISTRY.md). How a sealed record becomes a leaf of an append-only Merkle log, and how signed checkpoints with inclusion and consistency proofs make deletion, insertion, reordering and forked history detectable, is specified in [`docs/EVIDENCE-LOG.md`](docs/EVIDENCE-LOG.md). How a checkpoint or a key history is witnessed outside the deployment that produced it, under a blinding nonce that keeps the witnessed value opaque and uncorrelatable, is specified in [`docs/ANCHORING.md`](docs/ANCHORING.md).
 
@@ -59,6 +59,23 @@ Compose a packet from the two saved API responses of a live product run (see [`d
 npm run compose -- action.json evidence.json my-action.packet.json
 ```
 
+## Verify a packet cryptographically — offline
+
+Beyond structural validation, this repository ships the **independent offline verifier**: it checks an exported packet against the cryptographic material the producing deployment served — evidence seals, the append-only log’s inclusion and consistency proofs, signed checkpoints, the published trust-registry chain, and external anchors where they exist — and answers with a dimensional assurance report, never a bare boolean. The specification, the bundle format, every reason code and the verdict semantics are in [`docs/VERIFIER.md`](docs/VERIFIER.md); the published cross-runtime cases live in [`verifier/v1/`](verifier/v1/).
+
+The trust anchor is a pinned `{ issuer, root }` established out of band ([`docs/TRUST-REGISTRY.md`](docs/TRUST-REGISTRY.md) §4) — never taken from the bundle, never fetched from the website. Everything runs on your machine, offline: verifying a Pruvz record must never depend on asking Pruvz.
+
+```bash
+# Compose a verification bundle from the saved API responses of an export session
+npm run bundle -- ./export-dir verification.bundle.json
+
+# Verify it against your pinned trust anchor (and, optionally, pinned TSA roots)
+npm run verify -- verification.bundle.json \
+  --issuer pruvz.ai --root sha256:<pinned-root-thumbprint> \
+  --tenant <your-tenant> --tsa-roots tsa-roots.pem --state verifier-state.json
+```
+
+Exit codes: `0` FULLY_VERIFIED, `3` PARTIALLY_VERIFIED (nothing failed, something could not be checked — absent anchors, missing material, a pre-1.5.0 packet), `1` NOT_VERIFIED (something checked and failed). A valid signature with missing required anchor, consistency or trust material is never reported as fully verified. `--state` keeps what the verifier accepted across runs, which is what turns a rolled-back or forked history into a refusal instead of a surprise.
 ## Examples
 
 The authored examples are synthetic — every identifier, amount and timestamp is fabricated. The captured example is real product output from the deterministic demo environment, which generates its own payments, tickets and refunds per run; nothing anywhere comes from a real customer, a real payment system, or real operational data.
@@ -80,14 +97,15 @@ It does **not** prove:
 
 **A packet carries no signature, no hash chaining and no external anchor**, and validating one therefore proves none of them. Inside the product, evidence integrity rests on append-only, atomically-sequenced, server-assigned-trust storage; those properties belong to the running system and cannot be established after the fact from a JSON file alone.
 
-Four of the pieces those capabilities need are now specified here, and all are deliberately separate from the packet format:
+Five of the pieces those capabilities need are now specified here, and all are deliberately separate from the packet format:
 
 - **The canonical commitment** — [`docs/COMMITMENT.md`](docs/COMMITMENT.md). One logical record becomes one deterministic byte string and one digest, in every runtime; format `1.4.0` states every money amount exactly, as text, so that this is possible at all. A commitment answers *are these the exact values Pruvz committed to* — never *is what Pruvz recorded true*.
 - **The public trust registry** — [`docs/TRUST-REGISTRY.md`](docs/TRUST-REGISTRY.md). A signed, versioned, hash-linked key history with a pinned out-of-band root, so that a signing key can be recognized without asking the Pruvz deployment whether its own key is genuine. It defines key rotation and time-aware revocation, and the rules that make a rolled-back, forked or substituted key history a refusal.
 - **The append-only evidence log** — [`docs/EVIDENCE-LOG.md`](docs/EVIDENCE-LOG.md). Every seal becomes a leaf of a Merkle tree in the published RFC 6962 construction, tree heads are periodically signed as checkpoints, and inclusion and consistency proofs make deletion, insertion, reordering and forked history cryptographically detectable — for a verifier that holds checkpoint history.
+- **The offline verifier** — [`docs/VERIFIER.md`](docs/VERIFIER.md). One entry point composes all of the above over an exported bundle and answers with a dimensional report: what was proven, what failed, and what could not be checked — each stated separately, with machine-readable reason codes. Format `1.5.0` is what makes the content dimension possible: the timeline now exposes every field the evidence-item commitment binds, so a seal’s digest is recomputable from the packet alone.
 - **External anchoring** — [`docs/ANCHORING.md`](docs/ANCHORING.md). A signed checkpoint or a signed key history is witnessed outside the deployment that produced it, under a 32-byte blinding nonce, so that the 32 bytes reaching the witness identify nothing and correlate with nothing. It defines what may be witnessed (aggregate documents only, never one record and never one tenant), how a receipt is bound to its subject, and what still has to be checked before a receipt may be believed.
 
-What that adds up to today, stated exactly: the product signs evidence commitments, publishes the key history that identifies the signer, appends every seal to an append-only log and periodically signs its head — so a seal fetched from a deployment can be checked offline against a pinned registry, and deleting, altering or reordering checkpointed records breaks proofs. The anchoring **format** is now specified and has a reference implementation, but **a format is not a deployment**: whether any given deployment actually anchors, and to which authority, is that deployment's configuration, and no packet or document here asserts that it does. A witness proves that bytes existed *no later than* the witness time — never that a self-asserted `committedAt` or `issuedAt` is exact, and never that records which were never sealed are covered by anything. Absolute language such as *tamper-proof* is never accurate here and is not used.
+What that adds up to today, stated exactly: the product signs evidence commitments, publishes the key history that identifies the signer, appends every seal to an append-only log and periodically signs its head — so a seal fetched from a deployment can be checked offline against a pinned registry, and deleting, altering or reordering checkpointed records breaks proofs. All of it is checkable end to end with `npm run verify`, offline, against a pinned trust anchor. The anchoring **format** is specified and has a reference implementation, but **a format is not a deployment**: whether any given deployment actually anchors, and to which authority, is that deployment's configuration, and no packet or document here asserts that it does. A witness proves that bytes existed *no later than* the witness time — never that a self-asserted `committedAt` or `issuedAt` is exact, and never that records which were never sealed are covered by anything. Absolute language such as *tamper-proof* is never accurate here and is not used.
 
 ## Related material
 

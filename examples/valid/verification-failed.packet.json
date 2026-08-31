@@ -1,5 +1,5 @@
 {
-  "packetFormatVersion": "1.4.0",
+  "packetFormatVersion": "1.5.0",
   "action": {
     "actionId": "act_00000000000000000000000000000003",
     "agentId": "billing-refunds-agent",
@@ -133,7 +133,11 @@
         "sourceReference": null,
         "occurredAtUtc": "2026-07-10T09:30:58Z",
         "recordedAtUtc": "2026-07-10T09:30:58Z",
-        "summary": "Refund requested for payment pay_74003."
+        "summary": "Refund requested for payment pay_74003.",
+        "runId": "run_sample_003",
+        "schemaVersion": 1,
+        "clientOperationId": "op-ingest-0001",
+        "payloadMetadata": {}
       },
       {
         "evidenceId": "evd_00000000000000000000000000000022",
@@ -144,7 +148,11 @@
         "sourceReference": "demo-refund-policy",
         "occurredAtUtc": "2026-07-10T09:30:59Z",
         "recordedAtUtc": "2026-07-10T09:30:59Z",
-        "summary": "Decision-time policy snapshot captured: demo-refund-policy v1, policy passed."
+        "summary": "Decision-time policy snapshot captured: demo-refund-policy v1, policy passed.",
+        "runId": "run_sample_003",
+        "schemaVersion": 1,
+        "clientOperationId": null,
+        "payloadMetadata": {}
       },
       {
         "evidenceId": "evd_00000000000000000000000000000023",
@@ -155,7 +163,11 @@
         "sourceReference": null,
         "occurredAtUtc": "2026-07-10T09:31:12Z",
         "recordedAtUtc": "2026-07-10T09:31:13Z",
-        "summary": "Agent claims refund of USD 19.99 succeeded (REFUND_SUCCEEDED)."
+        "summary": "Agent claims refund of USD 19.99 succeeded (REFUND_SUCCEEDED).",
+        "runId": "run_sample_003",
+        "schemaVersion": 1,
+        "clientOperationId": "op-claim-0003",
+        "payloadMetadata": {}
       },
       {
         "evidenceId": "evd_00000000000000000000000000000024",
@@ -166,7 +178,11 @@
         "sourceReference": "ref_888",
         "occurredAtUtc": "2026-07-10T09:31:19Z",
         "recordedAtUtc": "2026-07-10T09:31:20Z",
-        "summary": "Execution receipt relayed: refund ref_888 submitted to the billing system."
+        "summary": "Execution receipt relayed: refund ref_888 submitted to the billing system.",
+        "runId": "run_sample_003",
+        "schemaVersion": 1,
+        "clientOperationId": "op-receipt-0004",
+        "payloadMetadata": {}
       },
       {
         "evidenceId": "evd_00000000000000000000000000000025",
@@ -177,7 +193,14 @@
         "sourceReference": null,
         "occurredAtUtc": "2026-07-10T09:45:00Z",
         "recordedAtUtc": "2026-07-10T09:45:00Z",
-        "summary": "VERIFICATION_FAILED: billing system unreadable after 3 attempts; no business outcome was proven or disproven."
+        "summary": "VERIFICATION_FAILED: billing system unreadable after 3 attempts; no business outcome was proven or disproven.",
+        "runId": "run_sample_003",
+        "schemaVersion": 1,
+        "clientOperationId": null,
+        "payloadMetadata": {
+          "verificationStatus": "VERIFICATION_FAILED",
+          "attemptCount": "1"
+        }
       }
     ]
   }

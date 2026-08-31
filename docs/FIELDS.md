@@ -1,12 +1,12 @@
-# Field and enum reference — packet format v1.4.0
+# Field and enum reference — packet format v1.5.0
 
-Every field of the Public Evidence Packet, what it means, and every closed enum value. The authoritative structural rules are the schemas themselves; this document explains intent and semantics. Fields new in formats `1.4.0`, `1.3.0`, `1.2.0` and `1.1.0` are marked; everything else is unchanged from `1.0.0`.
+Every field of the Public Evidence Packet, what it means, and every closed enum value. The authoritative structural rules are the schemas themselves; this document explains intent and semantics. Fields new in formats `1.5.0`, `1.4.0`, `1.3.0`, `1.2.0` and `1.1.0` are marked; everything else is unchanged from `1.0.0`.
 
 ## Envelope
 
 | Field | Meaning |
 |---|---|
-| `packetFormatVersion` | The packet format release this document conforms to. Fixed to `"1.4.0"` in this release. Metadata of the file, not a product field. |
+| `packetFormatVersion` | The packet format release this document conforms to. Fixed to `"1.5.0"` in this release. Metadata of the file, not a product field. |
 | `action` | The action record — see below. |
 | `evidence` | The ordered evidence timeline — see below. |
 
@@ -191,6 +191,12 @@ Each item:
 | `occurredAtUtc` | When the event occurred or was observed. Agent-asserted for claims. |
 | `recordedAtUtc` | Server time Pruvz recorded the evidence. |
 | `summary` | Business-readable one-line summary. |
+| `runId` | **New in 1.5.0.** The run the item was recorded under, matching the `runId` on the action record. |
+| `schemaVersion` | **New in 1.5.0.** The internal record-schema version of the item. No business meaning of its own. |
+| `clientOperationId` | **New in 1.5.0.** The idempotency key the submitting client supplied when the item was submitted externally; `null` for items Pruvz recorded as internal observations. |
+| `payloadMetadata` | **New in 1.5.0.** The item’s structured metadata exactly as recorded: a flat string-to-string map, minimized at write time — independent read-back items carry only the allowlisted identifiers and statuses (product PRUVZ-79), and nothing else is ever materialized. May be empty. |
+
+The four fields new in `1.5.0` exist for one reason: they complete the set of fields the canonical evidence-item commitment binds ([`docs/COMMITMENT.md`](COMMITMENT.md)), so the commitment digest a seal names can be recomputed from the packet alone and checked by the offline verifier ([`docs/VERIFIER.md`](VERIFIER.md)). A packet that hid any committed field could never be independently verified against its own seals.
 
 Evidence type → trust level (the schema enforces every row):
 

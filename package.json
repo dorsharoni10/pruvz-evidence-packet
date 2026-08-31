@@ -1,6 +1,6 @@
 {
   "name": "pruvz-evidence-packet",
-  "version": "1.4.3",
+  "version": "1.5.0",
   "private": true,
   "description": "Public JSON Schema, synthetic examples and local structural validator for the Pruvz Public Evidence Packet export contract.",
   "type": "module",
@@ -12,10 +12,14 @@
   "scripts": {
     "validate": "node bin/validate.mjs",
     "compose": "node bin/compose.mjs",
-    "test": "node --test test/validator.test.mjs test/compose.test.mjs test/canonical.test.mjs test/trust-registry.test.mjs test/evidence-log.test.mjs test/anchoring.test.mjs"
+    "test": "node --test test/validator.test.mjs test/compose.test.mjs test/canonical.test.mjs test/trust-registry.test.mjs test/evidence-log.test.mjs test/anchoring.test.mjs test/verify.test.mjs",
+    "verify": "node bin/verify.mjs",
+    "bundle": "node bin/bundle.mjs"
   },
   "dependencies": {
     "ajv": "^8.17.1",
-    "ajv-formats": "^3.0.1"
+    "ajv-formats": "^3.0.1",
+    "asn1js": "^3.0.10",
+    "pkijs": "^3.4.0"
   }
 }

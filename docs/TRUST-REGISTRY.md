@@ -316,7 +316,7 @@ maps `VALID` and only `VALID` onto its strongest result.
 - **No ordering or completeness proof for evidence.** A record can still be
   missing entirely; a seal proves nothing about records that were never sealed.
 - **`committedAt` is self-asserted** — see §7.
-- **No packet format change.** A packet of format `1.4.0` carries no seal and no
+- **No packet format change.** A packet — `1.5.0` included — carries no seal and no
   trust metadata. Seals are fetched from the deployment's own API and verified
   against a pinned registry; the packet format is untouched by this release.
 
