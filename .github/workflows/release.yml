@@ -52,5 +52,14 @@ jobs:
         run: python -m pip install --require-hashes -r conformance/python/requirements.txt
       - name: Full three-runtime conformance gate on the tagged bytes
         run: npm run conformance:all
+      # BOOTSTRAP ONLY. npm cannot configure a trusted publisher for a package
+      # that does not exist yet, so the very first release authenticates with a
+      # short-lived granular token held as a repository secret. Provenance is
+      # unaffected: it comes from the OIDC id-token above, not from the auth
+      # method. Once 1.5.1 exists on the registry the trusted publisher is
+      # configured, this env block is deleted and the token is revoked — after
+      # which no long-lived credential can publish this package.
       - name: Publish to npm with provenance
         run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
