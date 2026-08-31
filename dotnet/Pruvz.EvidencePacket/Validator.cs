@@ -5,13 +5,17 @@
 using System.Text.Json.Nodes;
 using Json.Schema;
 
-namespace PruvzConformance;
+namespace Pruvz.EvidencePacket;
 
 public static class Validator
 {
     public static readonly string[] SupportedVersions = ["1.5.0", "1.4.0", "1.3.0", "1.2.0", "1.1.0", "1.0.0"];
 
-    public static string SchemaRoot = "schema";
+    // null (the default) reads the published schemas embedded in this assembly,
+    // so an installed package is self-sufficient offline (PRUVZ-101). The
+    // conformance harness points this at the repository's schema/ directory
+    // instead, so repository-mode runs judge the working-tree bytes.
+    public static string? SchemaRoot = null;
 
     private static readonly Dictionary<string, (JsonSchema Schema, EvaluationOptions Options)> Compiled = [];
 
@@ -35,18 +39,30 @@ public static class Validator
         }
         if (!Compiled.TryGetValue(version, out var cached))
         {
-            var directory = Path.GetFullPath(Path.Combine(SchemaRoot, $"v{version}"));
             var options = new EvaluationOptions { OutputFormat = OutputFormat.List };
             foreach (var name in new[] { "action.schema.json", "evidence.schema.json" })
             {
-                SchemaRegistry.Global.Register(JsonSchema.FromFile(Path.Combine(directory, name)));
+                SchemaRegistry.Global.Register(JsonSchema.FromText(SchemaText(version, name)));
             }
-            var packetSchema = JsonSchema.FromFile(Path.Combine(directory, "evidence-packet.schema.json"));
+            var packetSchema = JsonSchema.FromText(SchemaText(version, "evidence-packet.schema.json"));
             SchemaRegistry.Global.Register(packetSchema);
             cached = (packetSchema, options);
             Compiled[version] = cached;
         }
         return cached;
+    }
+
+    private static string SchemaText(string version, string name)
+    {
+        if (SchemaRoot is not null)
+        {
+            return File.ReadAllText(Path.GetFullPath(Path.Combine(SchemaRoot, $"v{version}", name)));
+        }
+        var resource = $"pruvz:schema/v{version}/{name}";
+        using var stream = typeof(Validator).Assembly.GetManifestResourceStream(resource)
+            ?? throw new InvalidOperationException($"embedded schema resource {resource} is missing from this build");
+        using var reader = new StreamReader(stream);
+        return reader.ReadToEnd();
     }
 
     private static JsonObject ConsistencyError(string instancePath, string message) => new()

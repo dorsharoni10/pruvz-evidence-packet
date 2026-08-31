@@ -26,3 +26,11 @@ verifier/** -text
 
 # The adversarial conformance vectors (release 1.5.1, product PRUVZ-97).
 conformance/v1/** -text
+
+# PRUVZ-101: sources whose line endings are load-bearing and must stay LF on
+# every checkout, Windows included — check.sh runs under /bin/sh inside the
+# isolated containers, and the release version line in pyproject.toml is read
+# byte-literally by bin/check-versions.mjs.
+conformance/isolated/*.sh text eol=lf
+conformance/isolated/*.config text eol=lf
+conformance/python/pyproject.toml text eol=lf

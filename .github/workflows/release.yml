@@ -1,25 +1,41 @@
-# npm publication of @pruvz/evidence-packet (resolved PRUVZ-97 distribution
-# decision, docs/VERSIONING.md release step 6).
+# Publication of one release version to every distribution channel:
+# npm (@pruvz/evidence-packet), PyPI (pruvz-evidence-packet) and NuGet
+# (Pruvz.EvidencePacket + Pruvz.EvidencePacket.Tool). PRUVZ-101, following the
+# PRUVZ-97 npm release process; docs/VERSIONING.md release step 6.
 #
-# Deliberately manual: publishing a registry artifact is effectively
+# Deliberately manual: publishing registry artifacts is effectively
 # irreversible, so it happens only from an immutable reviewed tag, only when a
-# human dispatches this workflow, and only after the full conformance gate
-# passes again on the exact tagged bytes. The npm side uses Trusted Publishing
-# (OIDC) so the release carries npm provenance and no long-lived token exists;
-# configuring the trusted publisher and the @pruvz scope (with 2FA on the
-# account) is a one-time manual step recorded in docs/CONFORMANCE-SUITE.md §6.
+# human dispatches this workflow, and only after the full conformance gate —
+# repository mode AND packaged mode AND the isolated offline acceptance —
+# passes again on the exact tagged bytes.
+#
+# One version stream, eventually complete on every channel (PRUVZ-101
+# invariant 1): there is no transaction across independent registries, so
+# every artifact is built and verified BEFORE the first publish, and each
+# channel's publish is idempotent (an already-published version is skipped,
+# not failed). If a registry outage leaves a channel unpublished, re-dispatch
+# THIS SAME TAG: the finished channels skip, only the missing ones publish.
+# Never a new version, never rebuilt or different artifacts. A release version
+# is Complete only when the summary at the end shows every channel published.
+#
+# Authentication (one-time manual setup recorded in docs/CONFORMANCE-SUITE.md §6):
+# - npm: Trusted Publishing (OIDC) — no token, provenance from the id-token.
+# - PyPI: Trusted Publishing (OIDC) with attestations — no token.
+# - NuGet: Trusted Publishing where enabled for the account (set the NUGET_USER
+#   repository variable to the nuget.org profile that owns the publishing
+#   policy); otherwise a scoped push-only API key in the NUGET_API_KEY secret.
 name: release
 
 on:
   workflow_dispatch:
     inputs:
       tag:
-        description: "The immutable release tag to publish (e.g. v1.5.1)"
+        description: "The immutable release tag to publish (e.g. v1.6.0)"
         required: true
 
 permissions:
   contents: read
-  id-token: write # npm provenance
+  id-token: write # npm provenance, PyPI trusted publishing, NuGet trusted publishing
 
 jobs:
   publish:
@@ -44,22 +60,116 @@ jobs:
         with:
           python-version: '3.12'
       - run: npm ci
-      - name: The tag's version must be the package version
-        run: |
-          test "v$(node -p "require('./package.json').version")" = "${{ inputs.tag }}"
+      - name: One version stream, and the tag is that version
+        run: node bin/check-versions.mjs "${{ inputs.tag }}"
       - run: npm test
       - name: Install hash-pinned Python dependencies
         run: python -m pip install --require-hashes -r conformance/python/requirements.txt
-      - name: Full three-runtime conformance gate on the tagged bytes
+      - name: Full three-runtime conformance gate on the tagged bytes (repository mode)
         run: npm run conformance:all
-      # BOOTSTRAP ONLY. npm cannot configure a trusted publisher for a package
-      # that does not exist yet, so the very first release authenticates with a
-      # short-lived granular token held as a repository secret. Provenance is
-      # unaffected: it comes from the OIDC id-token above, not from the auth
-      # method. Once 1.5.1 exists on the registry the trusted publisher is
-      # configured, this env block is deleted and the token is revoked — after
-      # which no long-lived credential can publish this package.
-      - name: Publish to npm with provenance
-        run: npm publish
+
+      # ---- Build EVERY artifact before publishing ANY artifact --------------
+      - name: Build the npm tarball
+        run: |
+          mkdir -p artifacts/npm
+          npm pack --pack-destination artifacts/npm
+      - name: Build the Python distribution (vendored package data, byte-checked)
+        run: |
+          python -m pip install --quiet build
+          python conformance/python/prepare_package_data.py
+          python -m build conformance/python
+          python conformance/python/prepare_package_data.py --check
+      - name: Build the NuGet packages (library + dotnet tool)
+        run: |
+          dotnet pack dotnet/Pruvz.EvidencePacket -c Release -o artifacts/nupkg
+          dotnet pack dotnet/Pruvz.EvidencePacket.Tool -c Release -o artifacts/nupkg
+
+      # ---- The conformance gate again, against the BUILT packages -----------
+      - name: Install the built wheel
+        run: python -m pip install conformance/python/dist/*.whl
+      - name: Node harness (reference for the packaged comparison)
+        run: node conformance/node/run.mjs conformance/results/results-node.json
+      - name: Python harness against the INSTALLED wheel
+        run: python conformance/python/run.py conformance/results/results-python-packaged.json
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          PRUVZ_CONFORMANCE_PACKAGED: '1'
+      - name: .NET harness against the RESTORED nupkg
+        run: |
+          # conformance/dotnet/NuGet.config maps Pruvz.* to artifacts/nupkg
+          # ONLY — on a re-dispatch of a tag whose NuGet channel already
+          # published, the harness still judges the artifacts built here.
+          VERSION="$(node -p "require('./package.json').version")"
+          dotnet run --project conformance/dotnet -c Release \
+            -p:UsePackagedVerifier=true -p:PackagedVerifierVersion="$VERSION" \
+            -p:RestoreLockedMode=false \
+            -- . conformance/results/results-dotnet-packaged.json
+        env:
+          PRUVZ_CONFORMANCE_PACKAGED: '1'
+      - name: Three-way comparison, packaged runtimes against the golden expectations
+        run: node bin/conformance-compare.mjs conformance/results/results-node.json conformance/results/results-dotnet-packaged.json conformance/results/results-python-packaged.json
+      - name: Isolated offline acceptance — fixture out of the wheel
+        run: python conformance/isolated/extract-fixture.py conformance/python/dist/*.whl conformance/results/isolated
+      - name: Isolated offline acceptance — PyPI package, --network none, no clone
+        run: |
+          docker build -f conformance/isolated/Dockerfile.python -t pruvz-isolated-python .
+          docker run --rm --network none -v "$PWD/conformance/results/isolated:/fixture:ro" pruvz-isolated-python
+      - name: Isolated offline acceptance — NuGet tool, --network none, no clone
+        run: |
+          VERSION="$(node -p "require('./package.json').version")"
+          docker build -f conformance/isolated/Dockerfile.dotnet --build-arg PKG_VERSION="$VERSION" -t pruvz-isolated-dotnet .
+          docker run --rm --network none -v "$PWD/conformance/results/isolated:/fixture:ro" pruvz-isolated-dotnet
+
+      # ---- Publish, idempotently, channel by channel ------------------------
+      - name: Publish to npm with provenance (Trusted Publishing; skip if this version exists)
+        run: |
+          VERSION="$(node -p "require('./package.json').version")"
+          # `npm view pkg@version` exits 0 with EMPTY output for a nonexistent
+          # version of an existing package — only non-empty output proves the
+          # version is really on the registry.
+          if [ -n "$(npm view "@pruvz/evidence-packet@$VERSION" version 2>/dev/null || true)" ]; then
+            echo "npm: @pruvz/evidence-packet@$VERSION already published — skipping (idempotent resume)"
+          else
+            npm publish
+          fi
+      - name: Publish to PyPI (Trusted Publishing with attestations; skip-existing)
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: conformance/python/dist
+          skip-existing: true
+      - name: NuGet Trusted Publishing login (only when the NUGET_USER variable is set)
+        id: nuget-login
+        if: vars.NUGET_USER != ''
+        uses: NuGet/login@v1
+        with:
+          user: ${{ vars.NUGET_USER }}
+      - name: Publish to NuGet (library + tool; --skip-duplicate makes the resume idempotent)
+        run: |
+          dotnet nuget push "artifacts/nupkg/*.nupkg" \
+            --source https://api.nuget.org/v3/index.json \
+            --api-key "$NUGET_PUSH_KEY" \
+            --skip-duplicate
+        env:
+          NUGET_PUSH_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY || secrets.NUGET_API_KEY }}
+
+      - name: Release completeness summary (the release is Complete only when every channel shows published)
+        run: |
+          VERSION="$(node -p "require('./package.json').version")"
+          echo "== $VERSION =="
+          [ -n "$(npm view "@pruvz/evidence-packet@$VERSION" version 2>/dev/null || true)" ] \
+            && echo "npm   @pruvz/evidence-packet     $VERSION  published" \
+            || { echo "npm   @pruvz/evidence-packet     $VERSION  MISSING"; MISSING=1; }
+          curl -sf "https://pypi.org/pypi/pruvz-evidence-packet/$VERSION/json" >/dev/null \
+            && echo "PyPI  pruvz-evidence-packet      $VERSION  published" \
+            || { echo "PyPI  pruvz-evidence-packet      $VERSION  MISSING"; MISSING=1; }
+          # NuGet validates and indexes asynchronously, so a just-pushed package
+          # legitimately shows as not-listed here for a few minutes. The push
+          # step above already failed the job on a rejected push; this line is
+          # informational only. If a package is still missing hours later,
+          # re-dispatch this same tag — the finished channels skip.
+          curl -sf "https://api.nuget.org/v3-flatcontainer/pruvz.evidencepacket/$VERSION/pruvz.evidencepacket.nuspec" >/dev/null \
+            && echo "NuGet Pruvz.EvidencePacket       $VERSION  published" \
+            || echo "NuGet Pruvz.EvidencePacket       $VERSION  not indexed yet (push accepted; validation can take minutes)"
+          curl -sf "https://api.nuget.org/v3-flatcontainer/pruvz.evidencepacket.tool/$VERSION/pruvz.evidencepacket.tool.nuspec" >/dev/null \
+            && echo "NuGet Pruvz.EvidencePacket.Tool  $VERSION  published" \
+            || echo "NuGet Pruvz.EvidencePacket.Tool  $VERSION  not indexed yet (push accepted; validation can take minutes)"
+          exit "${MISSING:-0}"

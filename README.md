@@ -75,11 +75,36 @@ npm run verify -- verification.bundle.json \
   --tenant <your-tenant> --tsa-roots tsa-roots.pem --state verifier-state.json
 ```
 
-Exit codes: `0` FULLY_VERIFIED, `3` PARTIALLY_VERIFIED (nothing failed, something could not be checked — absent anchors, missing material, a pre-1.5.0 packet), `1` NOT_VERIFIED (something checked and failed). A valid signature with missing required anchor, consistency or trust material is never reported as fully verified. `--state` keeps what the verifier accepted across runs, which is what turns a rolled-back or forked history into a refusal instead of a surprise.
+Exit codes: `0` FULLY_VERIFIED, `3` PARTIALLY_VERIFIED (nothing failed, something could not be checked — absent anchors, missing material, a pre-1.5.0 packet), `1` NOT_VERIFIED (something checked and failed), `2` usage or unusable input. A valid signature with missing required anchor, consistency or trust material is never reported as fully verified. `--state` keeps what the verifier accepted across runs, which is what turns a rolled-back or forked history into a refusal instead of a surprise.
+
+## Install the verifier from your own ecosystem
+
+You do not need this repository to verify a packet. The verifier is published on three channels — same code, same conformance gate, same version as the git tag — and every installed package is self-sufficient offline: the published schemas ship inside it, nothing is fetched from anywhere, and the CLI surface and exit codes are identical everywhere.
+
+```bash
+# Node (CLI + library)
+npm install -g @pruvz/evidence-packet
+
+# Python (library + CLI)
+pip install pruvz-evidence-packet
+
+# .NET (CLI as a dotnet tool; Pruvz.EvidencePacket is the library package)
+dotnet tool install --global Pruvz.EvidencePacket.Tool
+```
+
+Each of the three installs a `pruvz-verify` command that takes the same arguments as shown above:
+
+```bash
+pruvz-verify verification.bundle.json \
+  --issuer pruvz.ai --root sha256:<pinned-root-thumbprint> \
+  --tenant <your-tenant> --tsa-roots tsa-roots.pem --state verifier-state.json
+```
+
+As a library: `import { verifyBundle } from '@pruvz/evidence-packet'` (Node), `from pruvz_verifier import verify` (Python), `Pruvz.EvidencePacket.Verify.VerifyBundle(...)` (.NET). Distribution and release rules — one version stream, publication only from an immutable reviewed tag after the full three-runtime conformance gate — are in [`docs/VERSIONING.md`](docs/VERSIONING.md) and [`docs/CONFORMANCE-SUITE.md`](docs/CONFORMANCE-SUITE.md) §6.
 
 ## Break it yourself — three independent verifiers, one answer
 
-Since release `1.5.1` (PRUVZ-97) this repository carries the **adversarial conformance suite**: [`conformance/v1/`](conformance/v1/) publishes 41 frozen attack cases — tampered records, replayed seals, substituted signing keys, rolled-back registries, forked and shrunken Merkle histories, swapped and corrupted anchor receipts, assurance-profile downgrades — and **three full, independent verifier implementations** must produce the identical verdict, reason codes, dimension statuses and returned state on every one of them: the Node reference in [`lib/`](lib/), a .NET 8 implementation in [`conformance/dotnet/`](conformance/dotnet/) and a Python implementation in [`conformance/python/`](conformance/python/). Each covers the complete chain — canonicalization, ES256, key lifecycle, Merkle proofs, stateful fork detection and RFC 3161 authority verification — and none shares code with the others. [`docs/CONFORMANCE-SUITE.md`](docs/CONFORMANCE-SUITE.md) is the specification.
+Since release `1.5.1` (PRUVZ-97) this repository carries the **adversarial conformance suite**: [`conformance/v1/`](conformance/v1/) publishes 41 frozen attack cases — tampered records, replayed seals, substituted signing keys, rolled-back registries, forked and shrunken Merkle histories, swapped and corrupted anchor receipts, assurance-profile downgrades — and **three full, independent verifier implementations** must produce the identical verdict, reason codes, dimension statuses and returned state on every one of them: the Node reference in [`lib/`](lib/), a .NET 8 implementation in [`dotnet/Pruvz.EvidencePacket/`](dotnet/Pruvz.EvidencePacket/) (published to NuGet, with its conformance harness in [`conformance/dotnet/`](conformance/dotnet/)) and a Python implementation in [`conformance/python/`](conformance/python/) (published to PyPI). Each covers the complete chain — canonicalization, ES256, key lifecycle, Merkle proofs, stateful fork detection and RFC 3161 authority verification — and none shares code with the others. [`docs/CONFORMANCE-SUITE.md`](docs/CONFORMANCE-SUITE.md) is the specification.
 
 Reproduce a few of the published failures yourself, through the same CLI a customer runs:
 

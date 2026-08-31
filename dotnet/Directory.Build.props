@@ -1,0 +1,22 @@
+<Project>
+
+  <!-- The single .NET version source for the PRUVZ-101 distribution split.
+       This version MUST equal package.json, conformance/python/pyproject.toml
+       and the release tag: bin/check-versions.mjs enforces the equality in
+       npm test and the release workflow re-checks it against the tag. -->
+
+  <PropertyGroup>
+    <Version>1.6.0</Version>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <Authors>Pruvz</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://pruvz.ai</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/dorsharoni10/pruvz-evidence-packet</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+</Project>

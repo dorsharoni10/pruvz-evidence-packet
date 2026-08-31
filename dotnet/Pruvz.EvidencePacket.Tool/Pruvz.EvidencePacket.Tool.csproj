@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- The offline verifier CLI as a dotnet tool (PRUVZ-101): the same argument
+       surface and exit codes as the npm `pruvz-verify` (0 FULLY_VERIFIED,
+       3 PARTIALLY_VERIFIED, 1 NOT_VERIFIED, 2 usage or unusable input). All
+       verification logic lives in the referenced library — the tool only
+       parses arguments, reads files and renders the report. -->
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <PackageId>Pruvz.EvidencePacket.Tool</PackageId>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>pruvz-verify</ToolCommandName>
+    <RootNamespace>Pruvz.EvidencePacket.Tool</RootNamespace>
+    <Description>Offline verifier CLI for Pruvz Evidence Packet export bundles (dotnet tool `pruvz-verify`): verifies a bundle against a caller-pinned trust root with no network access, mirroring the npm CLI's argument surface and exit codes.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Pruvz.EvidencePacket\Pruvz.EvidencePacket.csproj" />
+  </ItemGroup>
+
+</Project>

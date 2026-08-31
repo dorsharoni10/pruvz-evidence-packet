@@ -13,7 +13,7 @@ using System.Security.Cryptography.Pkcs;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
 
-namespace PruvzConformance;
+namespace Pruvz.EvidencePacket;
 
 public static class Authority
 {

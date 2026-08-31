@@ -1,6 +1,6 @@
 {
   "name": "@pruvz/evidence-packet",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "description": "Public JSON Schema, synthetic examples, local structural validator and independent offline verifier for the Pruvz Public Evidence Packet export contract.",
   "type": "module",
   "license": "MIT",
@@ -52,7 +52,7 @@
   "scripts": {
     "validate": "node bin/validate.mjs",
     "compose": "node bin/compose.mjs",
-    "test": "node --test test/validator.test.mjs test/compose.test.mjs test/canonical.test.mjs test/trust-registry.test.mjs test/evidence-log.test.mjs test/anchoring.test.mjs test/verify.test.mjs test/conformance.test.mjs",
+    "test": "node --test test/validator.test.mjs test/compose.test.mjs test/canonical.test.mjs test/trust-registry.test.mjs test/evidence-log.test.mjs test/anchoring.test.mjs test/verify.test.mjs test/conformance.test.mjs test/versions.test.mjs",
     "verify": "node bin/verify.mjs",
     "bundle": "node bin/bundle.mjs",
     "attack-demo": "node bin/attack-demo.mjs",

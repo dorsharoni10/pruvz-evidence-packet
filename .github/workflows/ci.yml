@@ -53,3 +53,70 @@ jobs:
         run: node bin/conformance-compare.mjs conformance/results/results-node.json conformance/results/results-dotnet.json conformance/results/results-python.json
       - name: Reproducible attack demonstrations (README)
         run: npm run attack-demo
+
+  # PRUVZ-101: the same three-runtime agreement, but with the Python and .NET
+  # sides running as the BUILT PACKAGES (installed wheel, restored nupkg) —
+  # never the working tree — plus the isolated offline acceptance: the
+  # installed CLIs must verify the golden bundle inside --network none
+  # containers that contain no repository clone. Everything runs on the free
+  # runner — no persistent paid infrastructure.
+  packaged:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: npm ci
+      - name: One version stream (npm = PyPI = NuGet)
+        run: node bin/check-versions.mjs
+      - name: Build the Python distribution (vendored package data, byte-checked)
+        run: |
+          python -m pip install --quiet build
+          python conformance/python/prepare_package_data.py
+          python -m build conformance/python
+          python conformance/python/prepare_package_data.py --check
+      - name: Build the NuGet packages (library + dotnet tool)
+        run: |
+          dotnet pack dotnet/Pruvz.EvidencePacket -c Release -o artifacts/nupkg
+          dotnet pack dotnet/Pruvz.EvidencePacket.Tool -c Release -o artifacts/nupkg
+      - name: Install the built wheel
+        run: python -m pip install conformance/python/dist/*.whl
+      - name: Node harness (reference for the packaged comparison)
+        run: node conformance/node/run.mjs conformance/results/results-node.json
+      - name: Python harness against the INSTALLED wheel
+        run: python conformance/python/run.py conformance/results/results-python-packaged.json
+        env:
+          PRUVZ_CONFORMANCE_PACKAGED: '1'
+      - name: .NET harness against the RESTORED nupkg
+        run: |
+          # conformance/dotnet/NuGet.config maps Pruvz.* to artifacts/nupkg
+          # ONLY, so a same-versioned package already on nuget.org can never
+          # satisfy this restore instead of the freshly built one.
+          VERSION="$(node -p "require('./package.json').version")"
+          dotnet run --project conformance/dotnet -c Release \
+            -p:UsePackagedVerifier=true -p:PackagedVerifierVersion="$VERSION" \
+            -p:RestoreLockedMode=false \
+            -- . conformance/results/results-dotnet-packaged.json
+        env:
+          PRUVZ_CONFORMANCE_PACKAGED: '1'
+      - name: Three-way comparison, packaged runtimes against the golden expectations
+        run: node bin/conformance-compare.mjs conformance/results/results-node.json conformance/results/results-dotnet-packaged.json conformance/results/results-python-packaged.json
+      - name: Isolated offline acceptance — fixture out of the wheel
+        run: python conformance/isolated/extract-fixture.py conformance/python/dist/*.whl conformance/results/isolated
+      - name: Isolated offline acceptance — PyPI package, --network none, no clone
+        run: |
+          docker build -f conformance/isolated/Dockerfile.python -t pruvz-isolated-python .
+          docker run --rm --network none -v "$PWD/conformance/results/isolated:/fixture:ro" pruvz-isolated-python
+      - name: Isolated offline acceptance — NuGet tool, --network none, no clone
+        run: |
+          VERSION="$(node -p "require('./package.json').version")"
+          docker build -f conformance/isolated/Dockerfile.dotnet --build-arg PKG_VERSION="$VERSION" -t pruvz-isolated-dotnet .
+          docker run --rm --network none -v "$PWD/conformance/results/isolated:/fixture:ro" pruvz-isolated-dotnet

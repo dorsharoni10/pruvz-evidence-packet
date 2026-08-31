@@ -19,9 +19,41 @@ import json
 import os
 import sys
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+REPO_ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
+
+if os.environ.get("PRUVZ_CONFORMANCE_PACKAGED") == "1":
+    # Packaged mode (PRUVZ-101): the harness must exercise the installed wheel,
+    # not the working tree — so the working-tree package is NOT put on the
+    # path, and the schemas must come from the wheel's package data (the
+    # "package" source forbids any silent fallback to the repository's
+    # schema/ directory, so a wheel that shipped without its schemas fails
+    # loudly instead of passing against repository files).
+    #
+    # Python itself puts this script's directory at sys.path[0], which holds
+    # the working-tree pruvz_verifier/ and would shadow the installed wheel —
+    # strip it before importing anything.
+    _here = os.path.normcase(os.path.dirname(os.path.abspath(__file__)))
+    sys.path[:] = [
+        entry for entry in sys.path if os.path.normcase(os.path.abspath(entry or os.getcwd())) != _here
+    ]
+    os.environ["PRUVZ_SCHEMA_SOURCE"] = "package"
+    os.environ.pop("PRUVZ_SCHEMA_ROOT", None)
+else:
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    # Judge the repository's schema/ bytes explicitly, even when a locally
+    # built wheel left vendored package data lying in the working tree.
+    os.environ.setdefault("PRUVZ_SCHEMA_ROOT", os.path.join(REPO_ROOT, "schema"))
 
 from pruvz_verifier import anchoring, authority, evidence_log, json_io, registry, verify
+
+if os.environ.get("PRUVZ_CONFORMANCE_PACKAGED") == "1" and os.path.normcase(os.path.abspath(verify.__file__)).startswith(
+    os.path.normcase(REPO_ROOT) + os.sep
+):
+    print(
+        f"FAIL  PRUVZ_CONFORMANCE_PACKAGED=1 but pruvz_verifier resolved to the working tree: {verify.__file__}",
+        file=sys.stderr,
+    )
+    raise SystemExit(2)
 from pruvz_verifier.canonical import (
     CommitmentError,
     canonical_decimal,
@@ -32,8 +64,6 @@ from pruvz_verifier.canonical import (
     evidence_packet_document,
     require_supported,
 )
-
-REPO_ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 
 
 def load_vectors(name: str) -> dict:

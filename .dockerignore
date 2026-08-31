@@ -1,0 +1,8 @@
+# The isolated-offline images (PRUVZ-101) copy only built artifacts and
+# check.sh — keep everything else out of the build context so no repository
+# content can leak into the images and the context stays tiny.
+*
+!conformance/python/dist
+!artifacts/nupkg
+!conformance/isolated/check.sh
+!conformance/isolated/nuget.isolated.config
