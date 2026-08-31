@@ -605,6 +605,9 @@ var resultsDocument = new JsonObject
     ["conformance"] = RunConformanceCases(),
 };
 
+// The results directory is generated output and is not in git, so a fresh
+// clone has to create it before the first harness writes into it.
+Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(outFile))!);
 File.WriteAllText(outFile, resultsDocument.ToJsonString(new JsonSerializerOptions
 {
     WriteIndented = true,

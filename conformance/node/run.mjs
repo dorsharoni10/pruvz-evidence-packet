@@ -11,7 +11,7 @@
 //
 // Usage: node conformance/node/run.mjs <out-file.json>
 import { createHash } from 'node:crypto'
-import { readFileSync, writeFileSync } from 'node:fs'
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
@@ -455,5 +455,8 @@ const results = {
   conformance: await runConformanceCases(),
 }
 
+// The results directory is generated output and is not in git, so a fresh
+// clone has to create it before the first harness writes into it.
+mkdirSync(path.dirname(path.resolve(outFile)), { recursive: true })
 writeFileSync(outFile, `${JSON.stringify(results, null, 1)}\n`)
 console.log(`node harness: wrote ${outFile}`)

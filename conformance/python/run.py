@@ -392,6 +392,9 @@ def main() -> None:
         "verifierV1": run_verifier_cases(),
         "conformance": run_conformance_cases(),
     }
+    # The results directory is generated output and is not in git, so a fresh
+    # clone has to create it before the first harness writes into it.
+    os.makedirs(os.path.dirname(os.path.abspath(sys.argv[1])), exist_ok=True)
     with open(sys.argv[1], "w", encoding="utf-8") as handle:
         json.dump(results, handle, indent=1, ensure_ascii=False)
         handle.write("\n")
