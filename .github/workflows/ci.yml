@@ -21,3 +21,35 @@ jobs:
       - run: npm test
       - name: Validate every published valid example via the documented command
         run: npm run validate -- examples/valid/*.packet.json examples/captured/*.packet.json
+
+  # The PRUVZ-97 conformance gate: three independent verifiers (Node, .NET,
+  # Python) replay every published vector and must agree with the golden
+  # expectations and with each other over the entire normalized output.
+  # Everything runs on the free runner — no persistent paid infrastructure.
+  conformance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: npm ci
+      - name: Install hash-pinned Python dependencies
+        run: python -m pip install --require-hashes -r conformance/python/requirements.txt
+      - name: Node harness
+        run: node conformance/node/run.mjs conformance/results/results-node.json
+      - name: .NET harness
+        run: dotnet run --project conformance/dotnet -c Release -- . conformance/results/results-dotnet.json
+      - name: Python harness
+        run: python conformance/python/run.py conformance/results/results-python.json
+      - name: Three-way comparison against the golden expectations
+        run: node bin/conformance-compare.mjs conformance/results/results-node.json conformance/results/results-dotnet.json conformance/results/results-python.json
+      - name: Reproducible attack demonstrations (README)
+        run: npm run attack-demo

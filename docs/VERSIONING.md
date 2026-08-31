@@ -1,6 +1,6 @@
 # Versioning and compatibility policy
 
-The Public Evidence Packet format is versioned independently of the Pruvz product, using semantic versioning: `MAJOR.MINOR.PATCH`. The current release is **1.5.0**.
+The Public Evidence Packet format is versioned independently of the Pruvz product, using semantic versioning: `MAJOR.MINOR.PATCH`. The current release is **1.5.1**.
 
 ## What each part means
 
@@ -25,3 +25,4 @@ The Public Evidence Packet format is versioned independently of the Pruvz produc
 3. `npm test` must pass.
 4. The change is recorded in [`CHANGELOG.md`](../CHANGELOG.md) with its compatibility classification (MAJOR / MINOR / PATCH).
 5. The repository is tagged `vX.Y.Z`. **Published tags are permanent: a tag is never moved, deleted or reused.** A fix after tagging is always a new, higher tag.
+6. **npm distribution (resolved PRUVZ-97 decision).** The Node CLI and library are additionally published to npm as `@pruvz/evidence-packet`; the public Git repository remains cloneable and authoritative. The package version is identical to the repository release and the git tag — one stream, already independent of `packetFormatVersion`, so a verifier bug fix is a repository PATCH release and never implies a format change. Every npm release is built from the immutable reviewed tag and published with 2FA and npm provenance through [`release.yml`](../.github/workflows/release.yml), as a deliberate post-review step — never automatically on merge. A published registry artifact is effectively irreversible, which is exactly why only the tagged, reviewed bytes ever reach it. The .NET and Python conformance verifiers stay repository/CI-only (no NuGet, no PyPI).

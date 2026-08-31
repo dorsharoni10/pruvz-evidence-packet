@@ -22,6 +22,7 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import process from 'node:process'
 
 import { verifyBundle } from '../lib/verify.mjs'
+import { assertUniqueMembers } from '../lib/json-guard.mjs'
 
 const usage = () => {
   console.error(
@@ -68,7 +69,12 @@ if (bundleFile === null || issuer === null || root === null) usage()
 
 const readJson = (file, what) => {
   try {
-    return JSON.parse(readFileSync(file, 'utf8'))
+    const text = readFileSync(file, 'utf8')
+    // One byte string that parses as two different documents (duplicate
+    // member names) is unusable input at a trust boundary, not a nuance —
+    // conformance/v1 `duplicate-member-refused`.
+    assertUniqueMembers(text)
+    return JSON.parse(text)
   } catch (error) {
     console.error(`FAIL  ${what} ${file} is not readable as JSON: ${error.message}`)
     process.exit(2)

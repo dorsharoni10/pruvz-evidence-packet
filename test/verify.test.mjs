@@ -29,6 +29,15 @@ const dimensionStatuses = (report) =>
 
 // ── The published golden cases, replayed exactly ────────────────────────────
 
+// Documented erratum (docs/VERIFIER.md, PRUVZ-97): the immutable verifier/v1
+// vectors pinned `ANCHOR_RECEIPT_SIGNATURE_INVALID`, a code outside the
+// anchoring layer's closed vocabulary. The accurate code — the one
+// docs/ANCHORING.md §10 and the immutable anchoring/v1 runtimeDivergence
+// require — is `ANCHOR_SIGNATURE_INVALID`, and every replay of verifier/v1
+// substitutes it. conformance/v1 pins the corrected code directly.
+const VERIFIER_V1_ERRATA = { ANCHOR_RECEIPT_SIGNATURE_INVALID: 'ANCHOR_SIGNATURE_INVALID' }
+const withErrata = (reasonCodes) => reasonCodes.map((code) => VERIFIER_V1_ERRATA[code] ?? code).sort()
+
 for (const goldenCase of vectors.cases) {
   test(`golden case: ${goldenCase.id}`, async () => {
     const report = await verifyBundle(clone(vectors.bundles[goldenCase.bundle]), {
@@ -39,7 +48,7 @@ for (const goldenCase of vectors.cases) {
       tsaRoots: goldenCase.options.tsaRoots ? vectors.tsaRoots : null,
     })
     assert.equal(report.verdict, goldenCase.expect.verdict, goldenCase.description)
-    assert.deepEqual(report.reasonCodes, goldenCase.expect.reasonCodes)
+    assert.deepEqual(report.reasonCodes, withErrata(goldenCase.expect.reasonCodes))
     assert.deepEqual(dimensionStatuses(report), goldenCase.expect.dimensions)
   })
 }
@@ -323,7 +332,7 @@ test('the published runtimeDivergence boundary: half one binds, half two refuses
       roots: [chain[chain.length - 1]],
       imprintInput: anchorInput(record.subject.kind, record.blindingNonce, subject),
     }),
-    (error) => error.code === 'ANCHOR_RECEIPT_SIGNATURE_INVALID',
+    (error) => error.code === 'ANCHOR_SIGNATURE_INVALID',
   )
 })
 
@@ -336,7 +345,7 @@ test('a token from an unpinned authority is refused however valid it is', async 
     tsaRoots: [stranger.rootPem], // valid tokens, wrong pinned root
   })
   assert.equal(report.verdict, 'NOT_VERIFIED')
-  assert.ok(report.reasonCodes.includes('ANCHOR_AUTHORITY_UNTRUSTED'))
+  assert.ok(report.reasonCodes.includes('ANCHOR_UNTRUSTED_AUTHORITY'))
   void tsaRoots
 })
 
@@ -350,7 +359,7 @@ test('a non-critical timestamping purpose is refused', async () => {
   })
   await assert.rejects(
     verifyTimestampAuthority({ token, roots: [authority.rootPem], imprintInput: Buffer.from([1]) }),
-    (error) => error.code === 'ANCHOR_AUTHORITY_UNTRUSTED' && /critical/u.test(error.message),
+    (error) => error.code === 'ANCHOR_UNTRUSTED_AUTHORITY' && /critical/u.test(error.message),
   )
 })
 
@@ -363,14 +372,14 @@ test('a certificate whose purposes exceed timestamping is refused', async () => 
   })
   await assert.rejects(
     verifyTimestampAuthority({ token, roots: [authority.rootPem], imprintInput: Buffer.from([1]) }),
-    (error) => error.code === 'ANCHOR_AUTHORITY_UNTRUSTED' && /purposes/u.test(error.message),
+    (error) => error.code === 'ANCHOR_UNTRUSTED_AUTHORITY' && /purposes/u.test(error.message),
   )
 })
 
 test('authority verification without a pinned root is a refusal, never a default store', async () => {
   await assert.rejects(
     verifyTimestampAuthority({ token: 'AAAA', roots: [], imprintInput: Buffer.from([1]) }),
-    (error) => error.code === 'ANCHOR_AUTHORITY_UNTRUSTED',
+    (error) => error.code === 'ANCHOR_UNTRUSTED_AUTHORITY',
   )
 })
 

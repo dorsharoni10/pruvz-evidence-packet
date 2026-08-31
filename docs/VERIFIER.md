@@ -18,7 +18,7 @@ The reference implementation is [`lib/verify.mjs`](../lib/verify.mjs) with the C
 
 ## 2. The verification bundle
 
-One JSON document holding everything the producing deployment served, verbatim. The member set is closed:
+One JSON document holding everything the producing deployment served, verbatim. A bundle file whose JSON serialization carries a **duplicated member name** — compared on decoded values, so an escape spelling such as `"\u0061"` for `"a"` hides nothing — is unusable input (exit `2`), refused before parsing: RFC 8259 leaves duplicates undefined and real parsers disagree, so one byte string could be two different documents — the reviewer reads the first occurrence while a last-wins parser commits to the second (PRUVZ-97, conformance case `duplicate-member-refused`). The member set is closed:
 
 ```jsonc
 {
@@ -88,7 +88,7 @@ Rotation and revocation follow the registry layer exactly, and the verifier surf
 
 Half one (binding — [`ANCHORING.md`](ANCHORING.md) §6) is checked always. Half two — the CMS signature over the token, the sole and critical timestamping purpose, certificate validity **at the token's own `genTime`**, and a chain ending at a **caller-pinned root** — is implemented in [`lib/anchor-authority.mjs`](../lib/anchor-authority.mjs) (composition of maintained libraries: `node:crypto` and `pkijs`; nothing cryptographic is invented here) and runs when `--tsa-roots` is given. Without pinned roots the anchors dimension honestly reports `BINDING_ONLY` / `ANCHOR_AUTHORITY_NOT_EVALUATED`.
 
-The published `runtimeDivergence` boundary holds at bundle level and is pinned by a golden case: a token with altered signature bytes still binds, and this verifier refuses it (`ANCHOR_RECEIPT_SIGNATURE_INVALID`).
+The published `runtimeDivergence` boundary holds at bundle level and is pinned by a golden case: a token with altered signature bytes still binds, and this verifier refuses it (`ANCHOR_SIGNATURE_INVALID`).
 
 ## 7. Held state
 
@@ -120,7 +120,9 @@ No Pruvz account, API key, private key or network connection is required, and th
 
 ## 9. The golden vectors
 
-[`verifier/v1/golden-vectors.json`](../verifier/v1/golden-vectors.json) publishes complete bundles and the exact expected report for each — verdict, the full reason-code set, and every dimension status. The cases pin the boundaries this format is about: the one reachable `FULLY_VERIFIED`; honest degradation for absent anchors, absent registry, absent payload and unpinned authorities; and refusals for a tampered record, a tampered seal signature, a corrupted receipt and a wrong pin. `verifier/v1/` is immutable exactly like a released schema directory; the adversarial breadth beyond these boundaries, and the mandatory second-runtime verifier that must reproduce every case exactly, are the follow-up conformance work (product PRUVZ-97).
+[`verifier/v1/golden-vectors.json`](../verifier/v1/golden-vectors.json) publishes complete bundles and the exact expected report for each — verdict, the full reason-code set, and every dimension status. The cases pin the boundaries this format is about: the one reachable `FULLY_VERIFIED`; honest degradation for absent anchors, absent registry, absent payload and unpinned authorities; and refusals for a tampered record, a tampered seal signature, a corrupted receipt and a wrong pin. `verifier/v1/` is immutable exactly like a released schema directory. The adversarial breadth beyond these boundaries is [`docs/CONFORMANCE-SUITE.md`](CONFORMANCE-SUITE.md) (product PRUVZ-97): `conformance/v1/` publishes the attack-matrix cases, and three independent verifiers — this one, .NET and Python — must reproduce every case identically.
+
+**Erratum (recorded under PRUVZ-97, the file itself is immutable):** the `anchor-token-signature-corrupted` case in `verifier/v1` pinned the reason code `ANCHOR_RECEIPT_SIGNATURE_INVALID`, a code outside the anchoring layer's closed vocabulary. The accurate code — the one [`ANCHORING.md`](ANCHORING.md) §10 and the immutable `anchoring/v1` `runtimeDivergence` vector require — is `ANCHOR_SIGNATURE_INVALID`. Every replay of `verifier/v1` substitutes the corrected code for that one case; `conformance/v1` pins the corrected code directly.
 
 ## 10. What this format does not do
 

@@ -1,1 +1,5 @@
 node_modules/
+conformance/results/
+conformance/dotnet/bin/
+conformance/dotnet/obj/
+conformance/python/**/__pycache__/

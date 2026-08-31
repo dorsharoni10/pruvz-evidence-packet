@@ -1,0 +1,56 @@
+# npm publication of @pruvz/evidence-packet (resolved PRUVZ-97 distribution
+# decision, docs/VERSIONING.md release step 6).
+#
+# Deliberately manual: publishing a registry artifact is effectively
+# irreversible, so it happens only from an immutable reviewed tag, only when a
+# human dispatches this workflow, and only after the full conformance gate
+# passes again on the exact tagged bytes. The npm side uses Trusted Publishing
+# (OIDC) so the release carries npm provenance and no long-lived token exists;
+# configuring the trusted publisher and the @pruvz scope (with 2FA on the
+# account) is a one-time manual step recorded in docs/CONFORMANCE-SUITE.md §6.
+name: release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "The immutable release tag to publish (e.g. v1.5.1)"
+        required: true
+
+permissions:
+  contents: read
+  id-token: write # npm provenance
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag }}
+          fetch-depth: 0
+      - name: The tag must point at a commit that is on main (reviewed history only)
+        run: |
+          git fetch origin main
+          git merge-base --is-ancestor HEAD origin/main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: npm ci
+      - name: The tag's version must be the package version
+        run: |
+          test "v$(node -p "require('./package.json').version")" = "${{ inputs.tag }}"
+      - run: npm test
+      - name: Install hash-pinned Python dependencies
+        run: python -m pip install --require-hashes -r conformance/python/requirements.txt
+      - name: Full three-runtime conformance gate on the tagged bytes
+        run: npm run conformance:all
+      - name: Publish to npm with provenance
+        run: npm publish
