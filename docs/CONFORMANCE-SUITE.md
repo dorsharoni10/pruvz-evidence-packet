@@ -243,7 +243,12 @@ operational record.
   `release.yml`, environment blank), verify a publish succeeds through OIDC,
   then **revoke the short-lived `NPM_TOKEN` granular token and delete the
   repository secret** — the workflow no longer reads it, and after
-  revocation no long-lived credential can publish the package.
+  revocation no long-lived credential can publish the package. The publish
+  job must not let anything write an auth token into `.npmrc` (in particular
+  `actions/setup-node`'s `registry-url` input, which also exports a
+  placeholder `NODE_AUTH_TOKEN`): npm would authenticate with that value
+  instead of exchanging the job's OIDC token, and fail with a misleading
+  `E404 ... or you do not have permission`.
 - **PyPI** — create the account with 2FA, then add a **pending Trusted
   Publisher** for the project name `pruvz-evidence-packet` (owner
   `dorsharoni10`, repository `pruvz-evidence-packet`, workflow

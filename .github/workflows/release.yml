@@ -49,10 +49,15 @@ jobs:
         run: |
           git fetch origin main
           git merge-base --is-ancestor HEAD origin/main
+      # Deliberately WITHOUT registry-url: that input makes setup-node write an
+      # .npmrc containing `_authToken=${NODE_AUTH_TOKEN}` and export
+      # NODE_AUTH_TOKEN as a placeholder. npm then authenticates with that
+      # placeholder instead of exchanging the job's OIDC token, and the publish
+      # dies with a misleading `E404 ... or you do not have permission`.
+      # registry.npmjs.org is npm's default registry, so nothing is lost.
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-          registry-url: https://registry.npmjs.org
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
@@ -120,6 +125,10 @@ jobs:
           docker run --rm --network none -v "$PWD/conformance/results/isolated:/fixture:ro" pruvz-isolated-dotnet
 
       # ---- Publish, idempotently, channel by channel ------------------------
+      - name: npm CLI 11.5.1+ (OIDC trusted publishing landed there; Node 24 may bundle an older one)
+        run: |
+          npm install -g npm@latest
+          npm --version
       - name: Publish to npm with provenance (Trusted Publishing; skip if this version exists)
         run: |
           VERSION="$(node -p "require('./package.json').version")"
