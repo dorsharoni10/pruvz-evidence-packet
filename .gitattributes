@@ -17,3 +17,6 @@ trust-registry/** -text
 
 # The evidence-log golden vectors (release 1.4.2, product PRUVZ-87).
 evidence-log/** -text
+
+# The anchoring golden vectors (release 1.4.3, product PRUVZ-96).
+anchoring/** -text

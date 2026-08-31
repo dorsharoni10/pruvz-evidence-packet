@@ -248,10 +248,14 @@ the golden vectors assert.
 
 - **No anchoring, no witnessing, no timestamps anyone must believe.** A
   checkpoint proves internal consistency of a history; it does not prove
-  when that history existed. Until checkpoints are externally witnessed — a
-  later, separately released capability — a deployment that signs a fork and
-  shows each half to a different audience is detected only when the two
-  audiences compare checkpoints (§1, honesty note).
+  when that history existed. Until checkpoints are externally witnessed, a
+  deployment that signs a fork and shows each half to a different audience is
+  detected only when the two audiences compare checkpoints (§1, honesty note).
+  Witnessing is now specified separately, in
+  [`docs/ANCHORING.md`](ANCHORING.md), and remains outside *this* format: a
+  checkpoint is unchanged by being anchored, `issuedAt` stays self-asserted
+  whether or not an anchor exists, and whether a deployment anchors at all is
+  its own configuration.
 - **No truth about the world.** §1's second limit, restated because it is
   the one most tempting to skip: an append-only log of false records is an
   append-only log of false records.
