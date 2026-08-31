@@ -23,3 +23,6 @@ anchoring/** -text
 
 # The verifier golden vectors (release 1.5.0, product PRUVZ-88).
 verifier/** -text
+
+# The adversarial conformance vectors (release 1.5.1, product PRUVZ-97).
+conformance/v1/** -text

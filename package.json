@@ -1,20 +1,63 @@
 {
-  "name": "pruvz-evidence-packet",
-  "version": "1.5.0",
-  "private": true,
-  "description": "Public JSON Schema, synthetic examples and local structural validator for the Pruvz Public Evidence Packet export contract.",
+  "name": "@pruvz/evidence-packet",
+  "version": "1.5.1",
+  "description": "Public JSON Schema, synthetic examples, local structural validator and independent offline verifier for the Pruvz Public Evidence Packet export contract.",
   "type": "module",
   "license": "MIT",
   "homepage": "https://pruvz.ai",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dorsharoni10/pruvz-evidence-packet.git"
+  },
   "engines": {
     "node": ">=18"
+  },
+  "bin": {
+    "pruvz-verify": "bin/verify.mjs",
+    "pruvz-validate": "bin/validate.mjs",
+    "pruvz-compose": "bin/compose.mjs",
+    "pruvz-bundle": "bin/bundle.mjs"
+  },
+  "main": "lib/verify.mjs",
+  "exports": {
+    ".": "./lib/verify.mjs",
+    "./validator": "./lib/validator.mjs",
+    "./canonical": "./lib/canonical.mjs",
+    "./trust-registry": "./lib/trust-registry.mjs",
+    "./evidence-log": "./lib/evidence-log.mjs",
+    "./anchoring": "./lib/anchoring.mjs",
+    "./anchor-authority": "./lib/anchor-authority.mjs",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "bin/",
+    "lib/",
+    "schema/",
+    "docs/",
+    "examples/",
+    "commitment/",
+    "trust-registry/",
+    "evidence-log/",
+    "anchoring/",
+    "verifier/",
+    "conformance/v1/",
+    "conformance/node/",
+    "CHANGELOG.md",
+    "SECURITY.md"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   },
   "scripts": {
     "validate": "node bin/validate.mjs",
     "compose": "node bin/compose.mjs",
-    "test": "node --test test/validator.test.mjs test/compose.test.mjs test/canonical.test.mjs test/trust-registry.test.mjs test/evidence-log.test.mjs test/anchoring.test.mjs test/verify.test.mjs",
+    "test": "node --test test/validator.test.mjs test/compose.test.mjs test/canonical.test.mjs test/trust-registry.test.mjs test/evidence-log.test.mjs test/anchoring.test.mjs test/verify.test.mjs test/conformance.test.mjs",
     "verify": "node bin/verify.mjs",
-    "bundle": "node bin/bundle.mjs"
+    "bundle": "node bin/bundle.mjs",
+    "attack-demo": "node bin/attack-demo.mjs",
+    "conformance": "node conformance/node/run.mjs conformance/results/results-node.json && node bin/conformance-compare.mjs conformance/results/results-node.json",
+    "conformance:all": "node conformance/node/run.mjs conformance/results/results-node.json && dotnet run --project conformance/dotnet -c Release -- . conformance/results/results-dotnet.json && python conformance/python/run.py conformance/results/results-python.json && node bin/conformance-compare.mjs conformance/results/results-node.json conformance/results/results-dotnet.json conformance/results/results-python.json"
   },
   "dependencies": {
     "ajv": "^8.17.1",

@@ -76,6 +76,26 @@ npm run verify -- verification.bundle.json \
 ```
 
 Exit codes: `0` FULLY_VERIFIED, `3` PARTIALLY_VERIFIED (nothing failed, something could not be checked — absent anchors, missing material, a pre-1.5.0 packet), `1` NOT_VERIFIED (something checked and failed). A valid signature with missing required anchor, consistency or trust material is never reported as fully verified. `--state` keeps what the verifier accepted across runs, which is what turns a rolled-back or forked history into a refusal instead of a surprise.
+
+## Break it yourself — three independent verifiers, one answer
+
+Since release `1.5.1` (PRUVZ-97) this repository carries the **adversarial conformance suite**: [`conformance/v1/`](conformance/v1/) publishes 41 frozen attack cases — tampered records, replayed seals, substituted signing keys, rolled-back registries, forked and shrunken Merkle histories, swapped and corrupted anchor receipts, assurance-profile downgrades — and **three full, independent verifier implementations** must produce the identical verdict, reason codes, dimension statuses and returned state on every one of them: the Node reference in [`lib/`](lib/), a .NET 8 implementation in [`conformance/dotnet/`](conformance/dotnet/) and a Python implementation in [`conformance/python/`](conformance/python/). Each covers the complete chain — canonicalization, ES256, key lifecycle, Merkle proofs, stateful fork detection and RFC 3161 authority verification — and none shares code with the others. [`docs/CONFORMANCE-SUITE.md`](docs/CONFORMANCE-SUITE.md) is the specification.
+
+Reproduce a few of the published failures yourself, through the same CLI a customer runs:
+
+```bash
+npm ci
+npm run attack-demo
+```
+
+That extracts three frozen adversarial bundles and verifies each against the published pins:
+
+1. **A tampered record** (`mutated-evidence-field`) — one summary edited after sealing → `NOT_VERIFIED`, `COMMITMENT_MISMATCH`.
+2. **A forked log history** (`checkpoint-fork-held-state`) — a second, *genuinely signed* checkpoint at an already-held sequence, refused only because the verifier kept state → `NOT_VERIFIED`, `CHECKPOINT_FORK`.
+3. **A substituted signing key** (`substituted-registry`) — a complete, internally consistent registry under a different root; everything verifies under *its* root and nothing verifies under the pin → `NOT_VERIFIED`, `ROOT_MISMATCH`.
+
+`npm run attack-demo -- <case-id>` runs any other published case; `npm run conformance` replays the whole suite through the Node implementation, and `npm run conformance:all` runs all three runtimes plus the cross-runtime comparison (needs .NET 8 and Python 3.12).
+
 ## Examples
 
 The authored examples are synthetic — every identifier, amount and timestamp is fabricated. The captured example is real product output from the deterministic demo environment, which generates its own payments, tickets and refunds per run; nothing anywhere comes from a real customer, a real payment system, or real operational data.

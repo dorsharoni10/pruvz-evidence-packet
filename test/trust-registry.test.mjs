@@ -165,6 +165,35 @@ test('a rolled-back manifest is refused even though it verifies on its own', () 
   )
 })
 
+test('a re-served full history is accepted against held state; an out-of-order chain is not', () => {
+  // The PRUVZ-97 boundary, from both sides. A deployment legitimately serves
+  // its documents from version 1, so history below the HELD watermark inside
+  // a longer chain never reads as rollback…
+  const fullHistory = ['v1', 'v2', 'v3'].map((id) => documentFor(id))
+  const state = acceptChain(fullHistory, { pin: vectors.pin }).state
+  const again = acceptChain(fullHistory, { pin: vectors.pin, state })
+  assert.equal(again.state.registryVersion, 3)
+  assert.equal(again.state.digest, state.digest)
+
+  // …but an older document appearing after a NEWER one in the same served
+  // chain got no linkage walk and gets no tolerance — with or without state.
+  assert.equal(
+    refusalCode(() =>
+      acceptChain([documentFor('v2'), documentFor('v1')], { pin: vectors.pin }),
+    ),
+    'REGISTRY_ROLLBACK',
+  )
+  assert.equal(
+    refusalCode(() =>
+      acceptChain(
+        [documentFor('v3'), documentFor('v1'), documentFor('v2')],
+        { pin: vectors.pin },
+      ),
+    ),
+    'REGISTRY_ROLLBACK',
+  )
+})
+
 test('verifier state may only be continued under the anchor that produced it', () => {
   // Two roots are two histories, and their version numbers say nothing about
   // each other. Without this rule a verifier handed state from another trust

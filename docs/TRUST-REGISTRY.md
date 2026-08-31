@@ -248,7 +248,17 @@ verifier already holds makes it a refusal — which is why the state has to be
 kept, and why a verifier that starts fresh every time is not a verifier.
 
 Being handed the manifest already held is neither an attack nor a change; the
-state does not move and nothing is refused.
+state does not move and nothing is refused. The same applies to a served
+**full history**: a deployment legitimately serves its documents from version
+1, so manifests *below the held watermark* — the version the verifier's state
+already recorded when the walk began — are verified but never judged as
+rollback; the rollback presentation is a chain whose NEWEST document is older
+than the held version (clarified under PRUVZ-97, whose conformance suite found
+the earlier reading refusing every re-verification of a multi-version chain).
+The tolerance is exactly that wide: a document older than an **earlier
+document of the same served chain** is `REGISTRY_ROLLBACK` as before — a
+deployment serves its history in order, and an out-of-order document whose
+linkage was never walked is not waved through as if it had been.
 
 **State belongs to the anchor that produced it.** The state records the
 `{ issuer, root }` it was established under, and continuing it under a different

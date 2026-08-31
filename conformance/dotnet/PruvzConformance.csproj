@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- The independent .NET verifier and conformance harness (PRUVZ-97).
+       Implemented from the published specifications in docs/ alone: no code,
+       assemblies or packages from pruvz-core. Cryptography is the maintained
+       platform surface (ECDsa, SignedCms, X509Chain, System.Formats.Asn1);
+       JSON Schema evaluation is the maintained JsonSchema.Net package, pinned.
+       Package provenance and the update policy are documented in
+       docs/CONFORMANCE-SUITE.md. -->
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>PruvzConformance</RootNamespace>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="JsonSchema.Net" Version="9.4.0" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.11" />
+  </ItemGroup>
+
+</Project>
