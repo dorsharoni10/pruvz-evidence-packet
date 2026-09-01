@@ -19,7 +19,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pruvz-evidence-packet"
-version = "1.6.0"
+version = "1.6.1"
 description = "Independent offline verifier for Pruvz Evidence Packet export bundles: schema and consistency validation, canonical commitments, signed seals under a pinned trust registry, Merkle log inclusion/consistency, and RFC 3161 anchor verification."
 readme = {text = "Offline verifier for Pruvz Evidence Packet export bundles. Verifies against a caller-pinned trust root only — nothing is fetched from a Pruvz deployment or website. Docs, specifications and golden vectors: https://github.com/dorsharoni10/pruvz-evidence-packet", content-type = "text/markdown"}
 license = {text = "MIT"}

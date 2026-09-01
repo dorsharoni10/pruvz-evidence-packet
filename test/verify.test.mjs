@@ -349,6 +349,34 @@ test('a token from an unpinned authority is refused however valid it is', async 
   void tsaRoots
 })
 
+test('a cross-signed copy of the pinned root embedded in the token cannot displace the anchor', async () => {
+  // Public authorities embed their root twice: self-signed, and cross-signed
+  // by an older root nobody pins (DigiCert Trusted Root G4 under DigiCert
+  // Assured ID Root CA). The pinned root is the anchor; the look-alike is at
+  // most an intermediate and must never turn a genuine token into a refusal.
+  const { bundle, pin, tsaRoots } = await mintBundle({ authorityOptions: { crossSignedRoot: true } })
+  const token = bundle.anchors.checkpoints['2'].anchors[0].receipt.token
+  const embedded = embeddedCertificates(token)
+  assert.equal(embedded.length, 3, 'the minted token embeds root, cross-signed root and leaf')
+
+  const report = await verifyBundle(bundle, { pin, expectedTenantId: 'tenant-demo', tsaRoots })
+  assert.equal(report.verdict, 'FULLY_VERIFIED')
+  assert.equal(report.dimensions.anchors.status, 'WITNESSED')
+
+  // Still a refusal against a stranger's root that carries the SAME NAME as
+  // the real one but a different key: the name-based exclusion drops both
+  // embedded copies of the root, the leaf's signature does not verify under
+  // the stranger, and nothing is admitted by name alone.
+  const stranger = await makeAuthority()
+  const refused = await verifyBundle(bundle, {
+    pin,
+    expectedTenantId: 'tenant-demo',
+    tsaRoots: [stranger.rootPem],
+  })
+  assert.equal(refused.verdict, 'NOT_VERIFIED')
+  assert.ok(refused.reasonCodes.includes('ANCHOR_UNTRUSTED_AUTHORITY'))
+})
+
 test('a non-critical timestamping purpose is refused', async () => {
   const authority = await makeAuthority({ ekuCritical: false })
   const imprint = Buffer.alloc(32, 7)
