@@ -205,7 +205,7 @@ pinned package are patched promptly; nothing else moves the pins.
 ## 6. Distribution (resolved PRUVZ-97 decision, extended by PRUVZ-101)
 
 - One repository, one release stream: every package version ≡ the git tag
-  ≡ the repository release (`1.6.0` at this writing), a stream already
+  ≡ the repository release (`1.6.1` at this writing), a stream already
   independent of `packetFormatVersion` (still `1.5.0`) and of
   `conformance/v1`. A verifier bug fix is a repository PATCH release and
   never implies a format change. `bin/check-versions.mjs` enforces the

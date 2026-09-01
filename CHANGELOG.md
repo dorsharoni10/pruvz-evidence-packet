@@ -2,6 +2,13 @@
 
 All notable changes to the Public Evidence Packet format and this repository are recorded here. Format releases follow the policy in [`docs/VERSIONING.md`](docs/VERSIONING.md).
 
+## 1.6.1 — 2026-09-01
+
+**PATCH (verifier bug fix — the packet format, the vectors and the package surface are unchanged)** — found by the first end-to-end live acceptance of the full evidence chain against a public timestamp authority (product PRUVZ-102). Packets keep declaring `packetFormatVersion: "1.5.0"`.
+
+- **Fixed: the npm verifier refused genuine DigiCert timestamp tokens as `ANCHOR_UNTRUSTED_AUTHORITY`.** DigiCert's timestamp responder embeds, beside the chain that ends at the self-signed *DigiCert Trusted Root G4*, a second copy of that root cross-signed by *DigiCert Assured ID Root CA*. `lib/anchor-authority.mjs` handed every embedded certificate to pkijs's path builder, which selects issuers by name; the cross-signed copy displaced the root the caller had pinned and the path ran on towards an issuer nobody pinned — "no valid certificate paths found" for a token whose chain to the pinned root was intact. An embedded certificate that carries a pinned root's name is now excluded from the intermediate candidates: the pinned root is the anchor by definition, and a path must still end in a pinned root, so the change admits nothing it did not admit before. This is the behaviour the Python and .NET verifiers already had (both terminate at a pinned root before consulting embedded certificates, and both reach `FULLY_VERIFIED` on the same bundle); the three runtimes now agree on it. Regression test: a minted authority that embeds a cross-signed look-alike of its root (`test/helpers/mint.mjs`, `crossSignedRoot`), verified `FULLY_VERIFIED` against the real root and still `NOT_VERIFIED` against a stranger's.
+- Nothing else changed. The Python and .NET packages are re-published at 1.6.1 solely to keep the one version stream (`docs/VERSIONING.md` release step 6).
+
 ## 1.6.0 — 2026-08-31
 
 **MINOR (package surface only — the packet format is unchanged)** — the Python and .NET verifiers become first-class installable products (product PRUVZ-101). Packets keep declaring `packetFormatVersion: "1.5.0"`; there is no `schema/v1.6.0/` directory and no schema or vector changed. This is the first release where a repository MINOR is additive to the *published package surface* rather than to the packet format.

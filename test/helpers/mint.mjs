@@ -231,13 +231,28 @@ const makeCertificate = async ({ subject, issuer, serial, publicKey, extensions 
  * `ekuCritical: false` drops the criticality half two requires, and
  * `extraPurpose: true` adds a second key purpose so timestamping is no longer
  * the sole one. The default mints a conformant authority.
+ *
+ * `crossSignedRoot: true` mints a CONFORMANT authority shaped like a public
+ * one: beside the chain that ends at the self-signed root, the token also
+ * embeds a second certificate with the root's exact name and key, issued by
+ * an older root nobody pins (DigiCert's responder embeds "DigiCert Trusted
+ * Root G4" issued by "DigiCert Assured ID Root CA" this way). A verifier that
+ * lets the look-alike displace the pinned anchor refuses a genuine token.
  */
-export const makeAuthority = async ({ ekuCritical = true, extraPurpose = false } = {}) => {
+export const makeAuthority = async ({
+  ekuCritical = true,
+  extraPurpose = false,
+  crossSignedRoot = false,
+} = {}) => {
   const rootKeys = await webcrypto.subtle.generateKey({ name: 'ECDSA', namedCurve: 'P-256' }, true, [
     'sign',
     'verify',
   ])
   const leafKeys = await webcrypto.subtle.generateKey({ name: 'ECDSA', namedCurve: 'P-256' }, true, [
+    'sign',
+    'verify',
+  ])
+  const legacyRootKeys = await webcrypto.subtle.generateKey({ name: 'ECDSA', namedCurve: 'P-256' }, true, [
     'sign',
     'verify',
   ])
@@ -278,6 +293,28 @@ export const makeAuthority = async ({ ekuCritical = true, extraPurpose = false }
   })
   await leafCertificate.sign(rootKeys.privateKey, 'SHA-256')
 
+  // The cross-signed look-alike: same subject and same public key as the
+  // root, but issued (and signed) by a legacy root that is never pinned.
+  // Listed FIRST among the embedded certificates, where DigiCert puts it.
+  const embedded = [rootCertificate, leafCertificate]
+  if (crossSignedRoot) {
+    const crossSigned = await makeCertificate({
+      subject: 'Pruvz Mint TSA Root',
+      issuer: 'Pruvz Mint Legacy Root',
+      serial: 3,
+      publicKey: rootKeys.publicKey,
+      extensions: [
+        new pkijs.Extension({
+          extnID: '2.5.29.19', // basicConstraints
+          critical: true,
+          extnValue: new pkijs.BasicConstraints({ cA: true }).toSchema().toBER(false),
+        }),
+      ],
+    })
+    await crossSigned.sign(legacyRootKeys.privateKey, 'SHA-256')
+    embedded.unshift(crossSigned)
+  }
+
   const rootPem =
     '-----BEGIN CERTIFICATE-----\n' +
     Buffer.from(rootCertificate.toSchema().toBER(false)).toString('base64') +
@@ -314,7 +351,7 @@ export const makeAuthority = async ({ ekuCritical = true, extraPurpose = false }
           }),
         }),
       ],
-      certificates: [rootCertificate, leafCertificate],
+      certificates: embedded,
     })
     await signedData.sign(leafKeys.privateKey, 0, 'SHA-256', tstDer)
     const contentInfo = new pkijs.ContentInfo({
@@ -359,7 +396,7 @@ export const makeAnchor = async ({ authority, kind, subject, subjectVersion, anc
  * inclusion and consistency proofs, and — when `withAnchors` — a witnessed
  * anchor for the covering checkpoint and for the registry version.
  */
-export const mintBundle = async ({ withAnchors = true, packetName } = {}) => {
+export const mintBundle = async ({ withAnchors = true, packetName, authorityOptions = {} } = {}) => {
   const packet = loadExamplePacket(packetName)
   const registry = makeRegistry()
   const seals = makeSeals(packet, registry.evidence)
@@ -378,7 +415,7 @@ export const mintBundle = async ({ withAnchors = true, packetName } = {}) => {
 
   let authority = null
   if (withAnchors) {
-    authority = await makeAuthority()
+    authority = await makeAuthority(authorityOptions)
     const covering = log.checkpoints[log.checkpoints.length - 1]
     const checkpointAnchor = await makeAnchor({
       authority,

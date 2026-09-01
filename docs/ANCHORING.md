@@ -259,6 +259,18 @@ pinned root is part of the verifier's configuration, alongside the registry
 pin, and comes from the same kind of out-of-band channel
 ([`TRUST-REGISTRY.md`](TRUST-REGISTRY.md) §5).
 
+Rule 7 has one practical corollary for path building. Public authorities
+routinely embed their own root twice: self-signed, and cross-signed by an
+older root (DigiCert's timestamp responder ships *DigiCert Trusted Root G4*
+issued by *DigiCert Assured ID Root CA* beside the chain that ends at the
+self-signed G4). The pinned root is the anchor by definition; an embedded
+certificate is at most an intermediate. A path builder that lets an embedded
+look-alike of the pinned root displace the anchor and then chases the
+look-alike's issuer refuses a genuine token. A conforming verifier
+terminates at a pinned root as soon as an issuer matches it, and never treats
+an embedded copy of a pinned root's name as the thing to chain *through*.
+This admits nothing: the path must still end in a pinned root.
+
 ### What the reference implementation does and does not do
 
 [`lib/anchoring.mjs`](../lib/anchoring.mjs) implements **half one** in full,

@@ -1,6 +1,6 @@
 {
   "name": "@pruvz/evidence-packet",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "Public JSON Schema, synthetic examples, local structural validator and independent offline verifier for the Pruvz Public Evidence Packet export contract.",
   "type": "module",
   "license": "MIT",
