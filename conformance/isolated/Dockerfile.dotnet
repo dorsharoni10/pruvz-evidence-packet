@@ -1,4 +1,4 @@
-# Isolated offline acceptance image for the NuGet packages (PRUVZ-101).
+# Isolated offline acceptance image for the NuGet packages.
 # The build stage has network (nuget.org resolves the tool's transitive
 # dependencies; the Pruvz packages themselves come only from the local
 # /nupkg source); the check itself runs with `docker run --network none`,

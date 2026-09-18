@@ -1,4 +1,4 @@
-"""The independent offline verifier — Python implementation (PRUVZ-97).
+"""The independent offline verifier — Python implementation.
 
 One entry point composes every verification layer over an exported bundle and
 answers with the dimensional assurance report of docs/VERIFIER.md: verdict

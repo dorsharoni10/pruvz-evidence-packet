@@ -1,4 +1,4 @@
-// The offline verifier (PRUVZ-88): the published verifier/v1 golden cases are
+// The offline verifier: the published verifier/v1 golden cases are
 // replayed exactly, and the behaviours no static vector can pin — held-state
 // continuity, defective authorities, freshly minted tampering — are exercised
 // through the minting fixture. Everything here runs without any network
@@ -29,7 +29,7 @@ const dimensionStatuses = (report) =>
 
 // ── The published golden cases, replayed exactly ────────────────────────────
 
-// Documented erratum (docs/VERIFIER.md, PRUVZ-97): the immutable verifier/v1
+// Documented erratum (docs/VERIFIER.md): the immutable verifier/v1
 // vectors pinned `ANCHOR_RECEIPT_SIGNATURE_INVALID`, a code outside the
 // anchoring layer's closed vocabulary. The accurate code — the one
 // docs/ANCHORING.md §10 and the immutable anchoring/v1 runtimeDivergence

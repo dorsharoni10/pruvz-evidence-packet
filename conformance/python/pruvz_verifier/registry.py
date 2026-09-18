@@ -1,6 +1,6 @@
 """Public Trust Registry, format version 1 — independent Python implementation.
 
-Implemented from docs/TRUST-REGISTRY.md (PRUVZ-97). ECDSA verification comes
+Implemented from docs/TRUST-REGISTRY.md. ECDSA verification comes
 from the maintained ``cryptography`` library; nothing cryptographic is
 implemented here. Signatures travel in the fixed-width IEEE P1363 form
 (r || s) and are converted to the DER form the library verifies.

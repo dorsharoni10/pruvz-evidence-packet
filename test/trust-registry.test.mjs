@@ -3,7 +3,7 @@
 // every one it says must be refused — with the same reason code.
 //
 // These vectors are the agreement point between two independent
-// implementations: this one and the .NET implementation inside pruvz-core,
+// implementations: this one and the .NET implementation inside the product,
 // which vendors this same file and runs the same case tables. A rotation one
 // runtime honours and the other does not is a broken trust registry, and the
 // vectors are how that shows up as a failing test instead of as a customer
@@ -166,7 +166,7 @@ test('a rolled-back manifest is refused even though it verifies on its own', () 
 })
 
 test('a re-served full history is accepted against held state; an out-of-order chain is not', () => {
-  // The PRUVZ-97 boundary, from both sides. A deployment legitimately serves
+  // The conformance boundary, from both sides. A deployment legitimately serves
   // its documents from version 1, so history below the HELD watermark inside
   // a longer chain never reads as rollback…
   const fullHistory = ['v1', 'v2', 'v3'].map((id) => documentFor(id))
@@ -278,7 +278,7 @@ test('seal cases produce exactly the published verdicts', () => {
       assert.deepEqual(result.dimensions, scenario.expectedDimensions, `${scenario.id}: dimensions`)
     }
     // Nothing that failed or was left unchecked may ever be reported as the
-    // strongest verdict. This is the rule PRUVZ-88 maps onto FULLY_VERIFIED, so
+    // strongest verdict. This is the rule the verifier maps onto FULLY_VERIFIED, so
     // it is asserted here rather than trusted downstream.
     if (result.verdict === 'VALID') {
       assert.equal(result.dimensions.content, 'MATCHES', `${scenario.id}: VALID requires content`)

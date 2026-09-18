@@ -1,4 +1,4 @@
-// The adversarial conformance suite (PRUVZ-97), replayed through the Node
+// The adversarial conformance suite, replayed through the Node
 // implementation as part of the ordinary test run: every published case must
 // produce exactly the frozen verdict, reason codes, dimension statuses and
 // returned state. The full three-runtime comparison (Node, .NET, Python) is

@@ -27,4 +27,4 @@ Composition adds the `packetFormatVersion` envelope and nothing else, then runs 
 ## Honest limits, and the standing guard
 
 - The examples in [`examples/valid/`](../examples/valid/) and [`examples/invalid/`](../examples/invalid/) are synthetic, authored to the same contract; the captured packet above is real product output from the deterministic demo environment.
-- The durable guard against silent drift belongs on the product side: a contract test in the product repository that validates its serialized API responses against this published schema on every product change. Until that test exists, conformance rests on the derivation above plus the captured-packet proof, which is repeatable on demand against any demo run.
+- The durable guard against silent drift lives on the product side: a contract test in the product repository validates its serialized API responses against this published schema on every product change. Conformance therefore rests on three legs: the derivation above, that product-side contract test, and the captured-packet proof, which is repeatable on demand against any demo run.

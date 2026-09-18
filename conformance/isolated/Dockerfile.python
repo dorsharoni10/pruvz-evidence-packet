@@ -1,4 +1,4 @@
-# Isolated offline acceptance image for the PyPI package (PRUVZ-101).
+# Isolated offline acceptance image for the PyPI package.
 # The build stage has network (pip resolves the wheel's dependencies); the
 # check itself runs with `docker run --network none`, and the image contains
 # no repository clone — only the installed package and check.sh.

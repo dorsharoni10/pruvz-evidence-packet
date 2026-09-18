@@ -1,5 +1,5 @@
 // The verifier/v1 golden vectors, embedded so an installed package can prove
-// itself against the published expectations completely offline (PRUVZ-101).
+// itself against the published expectations completely offline.
 // The vectors are data, not behavior: nothing in the verifier reads them to
 // produce an answer.
 

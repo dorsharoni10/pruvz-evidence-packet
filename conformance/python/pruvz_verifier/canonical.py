@@ -1,7 +1,7 @@
 """Canonical commitment, format version 1 — independent Python implementation.
 
-Implemented from docs/COMMITMENT.md alone (PRUVZ-97). This module shares no
-code with the Node reference implementation or with pruvz-core; agreement is
+Implemented from docs/COMMITMENT.md alone. This module shares no
+code with the Node reference implementation or with the product; agreement is
 proven byte for byte against commitment/v1/golden-vectors.json, which is the
 whole point of it existing.
 

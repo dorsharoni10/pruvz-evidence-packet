@@ -12,7 +12,7 @@ public static class Validator
     public static readonly string[] SupportedVersions = ["1.5.0", "1.4.0", "1.3.0", "1.2.0", "1.1.0", "1.0.0"];
 
     // null (the default) reads the published schemas embedded in this assembly,
-    // so an installed package is self-sufficient offline (PRUVZ-101). The
+    // so an installed package is self-sufficient offline. The
     // conformance harness points this at the repository's schema/ directory
     // instead, so repository-mode runs judge the working-tree bytes.
     public static string? SchemaRoot = null;

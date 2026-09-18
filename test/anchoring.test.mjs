@@ -3,7 +3,7 @@
 // everything it says must be refused — with the same reason code.
 //
 // These vectors are the agreement point between two independent
-// implementations: this one and the .NET implementation inside pruvz-core,
+// implementations: this one and the .NET implementation inside the product,
 // which vendors this same file and runs the same case tables. An anchor one
 // runtime accepts and the other refuses is a broken anchor, and the vectors
 // are how that shows up as a failing test instead of as a dispute over whether

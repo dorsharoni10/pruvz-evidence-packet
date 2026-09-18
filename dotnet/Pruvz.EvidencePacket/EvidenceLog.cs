@@ -1,5 +1,5 @@
 // Append-only evidence log, format version 1 — independent .NET implementation
-// (PRUVZ-97), from docs/EVIDENCE-LOG.md: RFC 6962 / RFC 9162 tree composition
+//, from docs/EVIDENCE-LOG.md: RFC 6962 / RFC 9162 tree composition
 // over domain-separated leaves, signed checkpoints, and the stateful
 // acceptance rules.
 

@@ -1,5 +1,5 @@
 # The independent Python Evidence Packet verifier as an installable package
-# (PRUVZ-101). The packaged sources are conformance/python/pruvz_verifier/ —
+#. The packaged sources are conformance/python/pruvz_verifier/ —
 # the exact code the three-runtime conformance suite exercises, so the
 # published package and the conformance-gated code cannot drift.
 #

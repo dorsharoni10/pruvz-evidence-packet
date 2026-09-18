@@ -1,4 +1,4 @@
-// The independent offline verifier — .NET implementation (PRUVZ-97), from
+// The independent offline verifier — .NET implementation, from
 // docs/VERIFIER.md: one entry point composes every layer over an exported
 // bundle into the dimensional assurance report. Missing material weakens and
 // never passes; presented material that fails is a refusal, never a

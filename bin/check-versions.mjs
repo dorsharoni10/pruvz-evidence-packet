@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Usage: node bin/check-versions.mjs [vX.Y.Z]
 //
-// PRUVZ-101 invariant: one version stream. The npm package, the Python
+// Invariant: one version stream. The npm package, the Python
 // package and the .NET packages must carry the same version — and on release,
 // that version must be the dispatched tag. This check is mechanical, not a
 // convention: npm test runs it on every change (via test/versions.test.mjs)

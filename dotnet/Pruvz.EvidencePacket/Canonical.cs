@@ -1,7 +1,7 @@
 // Canonical commitment, format version 1 — independent .NET implementation.
 //
-// Implemented from docs/COMMITMENT.md (PRUVZ-97). Shares no code with the
-// Node reference implementation or with pruvz-core; agreement is proven byte
+// Implemented from docs/COMMITMENT.md. Shares no code with the
+// Node reference implementation or with the product; agreement is proven byte
 // for byte against commitment/v1/golden-vectors.json.
 //
 // JSON documents are handled as System.Text.Json JsonNode trees. Numbers keep

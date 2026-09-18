@@ -1,6 +1,6 @@
 """Append-only evidence log, format version 1 — independent Python implementation.
 
-Implemented from docs/EVIDENCE-LOG.md (PRUVZ-97): RFC 6962 / RFC 9162 tree
+Implemented from docs/EVIDENCE-LOG.md: RFC 6962 / RFC 9162 tree
 composition over domain-separated leaves, signed checkpoints, and the
 stateful acceptance rules that turn fork, rollback and stale presentation
 into refusals.

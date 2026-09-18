@@ -1,5 +1,5 @@
 // External anchoring, format version 1 — independent .NET implementation
-// (PRUVZ-97), from docs/ANCHORING.md. Half one (the binding) is the
+//, from docs/ANCHORING.md. Half one (the binding) is the
 // Pruvz-specific composition; the RFC 3161 token is read with the platform's
 // System.Formats.Asn1 reader, and half two lives in Authority.cs.
 
