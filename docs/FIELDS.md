@@ -194,7 +194,7 @@ Each item:
 | `runId` | **New in 1.5.0.** The run the item was recorded under, matching the `runId` on the action record. |
 | `schemaVersion` | **New in 1.5.0.** The internal record-schema version of the item. No business meaning of its own. |
 | `clientOperationId` | **New in 1.5.0.** The idempotency key the submitting client supplied when the item was submitted externally; `null` for items Pruvz recorded as internal observations. |
-| `payloadMetadata` | **New in 1.5.0.** The item’s structured metadata exactly as recorded: a flat string-to-string map, minimized at write time — independent read-back items carry only the allowlisted identifiers and statuses (product PRUVZ-79), and nothing else is ever materialized. May be empty. |
+| `payloadMetadata` | **New in 1.5.0.** The item’s structured metadata exactly as recorded: a flat string-to-string map, minimized at write time — independent read-back items carry only the allowlisted identifiers and statuses, and nothing else is ever materialized. May be empty. |
 
 The four fields new in `1.5.0` exist for one reason: they complete the set of fields the canonical evidence-item commitment binds ([`docs/COMMITMENT.md`](COMMITMENT.md)), so the commitment digest a seal names can be recomputed from the packet alone and checked by the offline verifier ([`docs/VERIFIER.md`](VERIFIER.md)). A packet that hid any committed field could never be independently verified against its own seals.
 

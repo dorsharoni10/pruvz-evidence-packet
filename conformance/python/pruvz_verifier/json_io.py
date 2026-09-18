@@ -1,4 +1,4 @@
-"""JSON parsing that keeps what the value model judges (PRUVZ-97).
+"""JSON parsing that keeps what the value model judges.
 
 ``json.loads`` with default hooks discards two distinctions this contract's
 canonical layer must judge:

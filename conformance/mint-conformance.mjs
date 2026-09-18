@@ -1,5 +1,5 @@
 // One-time minting of conformance/v1/golden-vectors.json — the adversarial
-// cross-runtime conformance suite (PRUVZ-97).
+// cross-runtime conformance suite.
 //
 // This script is committed for provenance, not for re-running: ECDSA is
 // randomized and the blinding nonces are drawn fresh, so re-running produces

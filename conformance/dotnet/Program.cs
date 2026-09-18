@@ -1,4 +1,4 @@
-// The .NET conformance harness (PRUVZ-97).
+// The .NET conformance harness.
 //
 // Replays every published vector — the four layer packs, the verifier/v1
 // golden cases and the conformance/v1 adversarial suite — through the
@@ -23,7 +23,7 @@ var repoRoot = args[0];
 var outFile = args[1];
 if (Environment.GetEnvironmentVariable("PRUVZ_CONFORMANCE_PACKAGED") == "1")
 {
-    // Packaged mode (PRUVZ-101): the harness must exercise the built NuGet
+    // Packaged mode: the harness must exercise the built NuGet
     // package, not the working tree. The build copies the referenced assembly
     // into the harness output either way, so the proof is byte equality with
     // the assembly the restore placed in the NuGet packages folder. The

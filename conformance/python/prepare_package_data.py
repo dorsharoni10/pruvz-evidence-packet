@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Vendors the package data the installed Python verifier needs (PRUVZ-101).
+"""Vendors the package data the installed Python verifier needs.
 
 Copies the published schema releases and the verifier/v1 golden vectors from
 the repository into pruvz_verifier/_data/, so the built wheel is

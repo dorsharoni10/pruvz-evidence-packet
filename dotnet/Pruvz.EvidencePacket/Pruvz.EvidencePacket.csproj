@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <!-- The independent .NET Evidence Packet verifier as an installable library
-       (PRUVZ-101). These are the exact sources the three-runtime conformance
+      . These are the exact sources the three-runtime conformance
        suite exercises — the harness in conformance/dotnet references this
        project, so the packaged code and the conformance-gated code cannot
        drift. Implemented from the published specifications in docs/ alone: no
-       code, assemblies or packages from pruvz-core. Cryptography is the
+       code, assemblies or packages from the product. Cryptography is the
        maintained platform surface (ECDsa, SignedCms, X509Chain,
        System.Formats.Asn1); JSON Schema evaluation is the maintained
        JsonSchema.Net package, pinned. Package provenance and the update policy

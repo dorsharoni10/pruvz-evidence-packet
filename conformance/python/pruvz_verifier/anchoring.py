@@ -1,6 +1,6 @@
 """External anchoring, format version 1 — independent Python implementation.
 
-Implemented from docs/ANCHORING.md (PRUVZ-97). Half one (the binding) is the
+Implemented from docs/ANCHORING.md. Half one (the binding) is the
 Pruvz-specific composition; the RFC 3161 token is parsed with the maintained
 ``asn1crypto`` library, and half two (the authority) lives in authority.py.
 """

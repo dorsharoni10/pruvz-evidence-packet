@@ -9,25 +9,25 @@
 # The released Public Evidence Packet schemas.
 schema/** -text
 
-# The commitment golden vectors (packet format 1.4.0, product PRUVZ-26).
+# The commitment golden vectors (packet format 1.4.0).
 commitment/** -text
 
-# The trust-registry golden vectors (release 1.4.1, product PRUVZ-95).
+# The trust-registry golden vectors (release 1.4.1).
 trust-registry/** -text
 
-# The evidence-log golden vectors (release 1.4.2, product PRUVZ-87).
+# The evidence-log golden vectors (release 1.4.2).
 evidence-log/** -text
 
-# The anchoring golden vectors (release 1.4.3, product PRUVZ-96).
+# The anchoring golden vectors (release 1.4.3).
 anchoring/** -text
 
-# The verifier golden vectors (release 1.5.0, product PRUVZ-88).
+# The verifier golden vectors (release 1.5.0).
 verifier/** -text
 
-# The adversarial conformance vectors (release 1.5.1, product PRUVZ-97).
+# The adversarial conformance vectors (release 1.5.1).
 conformance/v1/** -text
 
-# PRUVZ-101: sources whose line endings are load-bearing and must stay LF on
+# Sources whose line endings are load-bearing and must stay LF on
 # every checkout, Windows included — check.sh runs under /bin/sh inside the
 # isolated containers, and the release version line in pyproject.toml is read
 # byte-literally by bin/check-versions.mjs.

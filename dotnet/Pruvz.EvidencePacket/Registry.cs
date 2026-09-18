@@ -1,5 +1,5 @@
 // Public Trust Registry, format version 1 — independent .NET implementation
-// (PRUVZ-97), from docs/TRUST-REGISTRY.md. ECDSA verification is the
+//, from docs/TRUST-REGISTRY.md. ECDSA verification is the
 // platform's ECDsa over IEEE P1363 signatures; nothing cryptographic is
 // implemented here.
 

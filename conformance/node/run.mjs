@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// The Node conformance harness (PRUVZ-97).
+// The Node conformance harness.
 //
 // Replays every published vector — the four layer vector packs, the
 // verifier/v1 golden cases and the conformance/v1 adversarial suite — through

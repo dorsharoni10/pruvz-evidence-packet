@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Extracts the isolated-offline fixture from a built wheel (PRUVZ-101).
+"""Extracts the isolated-offline fixture from a built wheel.
 
 Usage: python conformance/isolated/extract-fixture.py <wheel> <out-dir>
 

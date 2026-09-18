@@ -1,5 +1,5 @@
 #!/bin/sh
-# The isolated offline acceptance (PRUVZ-101 acceptance criterion 3).
+# The isolated offline acceptance (the packaging acceptance criterion 3).
 #
 # Runs INSIDE a container started with --network none that contains only the
 # installed package and this script — no repository clone, no schema files, no

@@ -1,4 +1,4 @@
-"""The offline Evidence Packet verifier CLI (PRUVZ-101).
+"""The offline Evidence Packet verifier CLI.
 
 Usage: pruvz-verify <bundle.json> --issuer <issuer> --root <thumbprint>
                     [--tenant <tenantId>] [--tsa-roots <pem-file>]

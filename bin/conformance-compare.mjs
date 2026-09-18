@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// The conformance comparison (PRUVZ-97): the one place expectations are read.
+// The conformance comparison: the one place expectations are read.
 //
 // Each runtime harness (Node, .NET, Python) replays every published vector
 // and emits a normalized results document computed from vector INPUTS alone.

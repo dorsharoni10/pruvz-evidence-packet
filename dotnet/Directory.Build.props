@@ -1,6 +1,6 @@
 <Project>
 
-  <!-- The single .NET version source for the PRUVZ-101 distribution split.
+  <!-- The single .NET version source for the distribution split.
        This version MUST equal package.json, conformance/python/pyproject.toml
        and the release tag: bin/check-versions.mjs enforces the equality in
        npm test and the release workflow re-checks it against the tag. -->

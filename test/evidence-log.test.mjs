@@ -3,7 +3,7 @@
 // everything it says must be refused — with the same reason code.
 //
 // These vectors are the agreement point between two independent
-// implementations: this one and the .NET implementation inside pruvz-core,
+// implementations: this one and the .NET implementation inside the product,
 // which vendors this same file and runs the same case tables. A history one
 // runtime accepts and the other refuses is a broken log, and the vectors are
 // how that shows up as a failing test instead of as a dispute over whether a
@@ -271,7 +271,7 @@ test('the misbehaving-log acceptance candidates are correctly signed — held hi
 
 // The cases below are not golden vectors: evidence-log/v1/ is immutable, and
 // these pin agreement the published vectors do not reach. Each has a mirrored
-// assertion in pruvz-core's EvidenceLogGoldenVectorTests, because a document
+// assertion in the product's EvidenceLogGoldenVectorTests, because a document
 // one runtime calls unknown and the other calls malformed is two runtimes
 // disagreeing about why a history was refused.
 test('an absent or non-string checkpoint version is UNKNOWN, not malformed', () => {

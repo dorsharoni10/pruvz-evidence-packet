@@ -1,4 +1,4 @@
-// PRUVZ-101: one version stream across npm, PyPI and NuGet, enforced
+// One version stream across npm, PyPI and NuGet, enforced
 // mechanically on every test run — not left to release-day discipline.
 import assert from 'node:assert/strict'
 import { test } from 'node:test'

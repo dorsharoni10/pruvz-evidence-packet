@@ -1,7 +1,7 @@
 # Publication of one release version to every distribution channel:
 # npm (@pruvz/evidence-packet), PyPI (pruvz-evidence-packet) and NuGet
-# (Pruvz.EvidencePacket + Pruvz.EvidencePacket.Tool). PRUVZ-101, following the
-# PRUVZ-97 npm release process; docs/VERSIONING.md release step 6.
+# (Pruvz.EvidencePacket + Pruvz.EvidencePacket.Tool), following the
+# npm release process; docs/VERSIONING.md release step 6.
 #
 # Deliberately manual: publishing registry artifacts is effectively
 # irreversible, so it happens only from an immutable reviewed tag, only when a
@@ -9,7 +9,7 @@
 # repository mode AND packaged mode AND the isolated offline acceptance —
 # passes again on the exact tagged bytes.
 #
-# One version stream, eventually complete on every channel (PRUVZ-101
+# One version stream, eventually complete on every channel (distribution
 # invariant 1): there is no transaction across independent registries, so
 # every artifact is built and verified BEFORE the first publish, and each
 # channel's publish is idempotent (an already-published version is skipped,

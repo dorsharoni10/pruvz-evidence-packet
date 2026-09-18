@@ -229,7 +229,7 @@ exact canonical bytes — and, for commitments, the digest:
 | `rejected` | Every refusal above, with the code each runtime must report |
 
 Two independent implementations must reproduce them: the reference
-implementation in this repository, and the .NET implementation in `pruvz-core`,
+implementation in this repository, and the .NET implementation in the product,
 which vendors this file by exact hash and runs the same assertions. Neither is
 authoritative alone — agreement between them is what makes the format
 verifiable rather than merely specified. A cross-runtime check that only one

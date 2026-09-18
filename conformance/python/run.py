@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""The Python conformance harness (PRUVZ-97).
+"""The Python conformance harness.
 
 Replays every published vector — the four layer packs, the verifier/v1 golden
 cases and the conformance/v1 adversarial suite — through the independent
@@ -22,7 +22,7 @@ import sys
 REPO_ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 
 if os.environ.get("PRUVZ_CONFORMANCE_PACKAGED") == "1":
-    # Packaged mode (PRUVZ-101): the harness must exercise the installed wheel,
+    # Packaged mode: the harness must exercise the installed wheel,
     # not the working tree — so the working-tree package is NOT put on the
     # path, and the schemas must come from the wheel's package data (the
     # "package" source forbids any silent fallback to the repository's

@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <!-- The offline verifier CLI as a dotnet tool (PRUVZ-101): the same argument
+  <!-- The offline verifier CLI as a dotnet tool: the same argument
        surface and exit codes as the npm `pruvz-verify` (0 FULLY_VERIFIED,
        3 PARTIALLY_VERIFIED, 1 NOT_VERIFIED, 2 usage or unusable input). All
        verification logic lives in the referenced library — the tool only

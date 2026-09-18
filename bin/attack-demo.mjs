@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Usage: npm run attack-demo [-- <case-id>]
 //
-// Reproducible tamper demonstrations (PRUVZ-97): extracts a published
+// Reproducible tamper demonstrations: extracts a published
 // adversarial bundle from conformance/v1/golden-vectors.json, writes it and
 // the published pins to a temporary directory, runs the SAME CLI a customer
 // runs (bin/verify.mjs), and shows the refusal. Nothing here is staged for

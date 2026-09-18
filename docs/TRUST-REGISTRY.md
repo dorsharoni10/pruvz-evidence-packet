@@ -253,7 +253,7 @@ state does not move and nothing is refused. The same applies to a served
 1, so manifests *below the held watermark* — the version the verifier's state
 already recorded when the walk began — are verified but never judged as
 rollback; the rollback presentation is a chain whose NEWEST document is older
-than the held version (clarified under PRUVZ-97, whose conformance suite found
+than the held version (clarified when the conformance suite found
 the earlier reading refusing every re-verification of a multi-version chain).
 The tolerance is exactly that wide: a document older than an **earlier
 document of the same served chain** is `REGISTRY_ROLLBACK` as before — a

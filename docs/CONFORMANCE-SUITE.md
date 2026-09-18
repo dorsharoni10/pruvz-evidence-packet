@@ -1,4 +1,4 @@
-# The adversarial conformance suite, version 1 (PRUVZ-97)
+# The adversarial conformance suite, version 1
 
 Three independent verifiers — Node, .NET 8 and Python — implement the complete
 Evidence Packet proof chain from the published specifications alone, and every
@@ -32,7 +32,7 @@ Independence is structural, not aspirational:
 - The .NET verifier (`conformance/dotnet/`) is implemented from the
   specifications in `docs/` alone, over the platform's maintained surface —
   `ECDsa`, `SignedCms`, `X509Chain`, `System.Formats.Asn1` — plus the pinned
-  `JsonSchema.Net`. It uses no code, assemblies or packages from `pruvz-core`.
+  `JsonSchema.Net`. It uses no code, assemblies or packages from the product.
 - The Python verifier (`conformance/python/`) is implemented from the same
   specifications over the maintained `cryptography`, `asn1crypto` and
   `jsonschema` libraries. It never calls the Node or .NET implementations and
@@ -52,7 +52,7 @@ with the vectors.
 ## 2. What the adversarial vectors cover
 
 `conformance/v1/golden-vectors.json` publishes 35 signed bundles, three raw
-byte strings, and 41 cases mapped to the PRUVZ-97 attack matrix (the
+byte strings, and 41 cases mapped to the attack matrix (the
 `attackMatrix` index in the file lists which case covers which row):
 
 - **Mutation of committed material** — a signed evidence field edited after
@@ -142,7 +142,7 @@ npm run conformance:all      # all three harnesses + the full three-way comparis
 (`conformance:all` needs the .NET 8 SDK and a Python 3.12 with
 `pip install --require-hashes -r conformance/python/requirements.txt`.)
 
-**Packaged mode (PRUVZ-101).** The same harnesses can run against the built
+**Packaged mode.** The same harnesses can run against the built
 packages instead of the working tree, which is how CI (`packaged` job) and the
 release workflow prove that the published artifacts carry the conformance-gated
 behavior. `PRUVZ_CONFORMANCE_PACKAGED=1` makes the Python harness import the
@@ -183,7 +183,7 @@ implements a cryptographic primitive.
 
 | Runtime | Package | Pin | Role |
 | --- | --- | --- | --- |
-| Node | `pkijs` / `asn1js` | `package-lock.json` | CMS/X.509 for anchor half two (PRUVZ-88) |
+| Node | `pkijs` / `asn1js` | `package-lock.json` | CMS/X.509 for anchor half two |
 | Node | `ajv` + `ajv-formats` | `package-lock.json` | JSON Schema 2020-12 |
 | .NET | `System.Security.Cryptography.Pkcs` | 10.0.11 (`packages.lock.json`) | `SignedCms` / `Rfc3161` CMS surface (Microsoft) |
 | .NET | `JsonSchema.Net` | 9.4.0 (`packages.lock.json`) | JSON Schema 2020-12 |
@@ -202,7 +202,7 @@ regenerates the lockfile/hash set with the bundled tooling, and must leave
 the full three-runtime comparison green. Security advisories against a
 pinned package are patched promptly; nothing else moves the pins.
 
-## 6. Distribution (resolved PRUVZ-97 decision, extended by PRUVZ-101)
+## 6. Distribution
 
 - One repository, one release stream: every package version ≡ the git tag
   ≡ the repository release (`1.6.1` at this writing), a stream already
@@ -210,7 +210,7 @@ pinned package are patched promptly; nothing else moves the pins.
   `conformance/v1`. A verifier bug fix is a repository PATCH release and
   never implies a format change. `bin/check-versions.mjs` enforces the
   equality mechanically (in `npm test` and against the tag on release).
-- Three channels, four artifacts, one source (PRUVZ-101):
+- Three channels, four artifacts, one source:
   **npm** `@pruvz/evidence-packet` (Node CLI + library), **PyPI**
   `pruvz-evidence-packet` (built from `conformance/python/pruvz_verifier/`,
   console entry point `pruvz-verify`), **NuGet** `Pruvz.EvidencePacket`
@@ -232,12 +232,12 @@ pinned package are patched promptly; nothing else moves the pins.
   channel; a partial registry failure is resumed by re-dispatching the same
   tag (see `docs/VERSIONING.md` release step 6).
 
-### One-time publishing setup (out-of-band manual actions, PRUVZ-101 AC 9)
+### One-time publishing setup (out-of-band manual actions)
 
 Nothing below lives in chat history or session memory; this list is the
 operational record.
 
-- **npm** — the `@pruvz` scope and account exist with 2FA (PRUVZ-97). After
+- **npm** — the `@pruvz` scope and account exist with 2FA. After
   the bootstrap `1.5.1` release: configure the package's **Trusted Publisher**
   on npmjs.com (`dorsharoni10/pruvz-evidence-packet`, workflow
   `release.yml`, environment blank), verify a publish succeeds through OIDC,
@@ -268,4 +268,4 @@ operational record.
   and delete the secret once available. Reserving the `Pruvz.` ID prefix on
   nuget.org is optional and can be requested later.
 - All of this is free-tier: public packages on npm, PyPI and NuGet cost
-  nothing, and no recurring infrastructure exists (PRUVZ-74 invariant 13).
+  nothing, and no recurring infrastructure exists (a standing invariant of this repository).

@@ -28,7 +28,7 @@ _here = os.path.dirname(os.path.abspath(__file__))
 def _resolve_schema_root() -> str:
     # PRUVZ_SCHEMA_ROOT always wins (explicit override). Otherwise an installed
     # package carries the published schemas as package data under _data/, so it
-    # is self-sufficient offline (PRUVZ-101); a repository checkout has no
+    # is self-sufficient offline; a repository checkout has no
     # _data and falls back to the repository's schema/ directory.
     # PRUVZ_SCHEMA_SOURCE=package forbids that fallback, so packaged-mode
     # conformance runs fail loudly on a wheel that shipped without its schemas
