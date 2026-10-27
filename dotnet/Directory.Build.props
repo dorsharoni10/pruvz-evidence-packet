@@ -6,7 +6,7 @@
        npm test and the release workflow re-checks it against the tag. -->
 
   <PropertyGroup>
-    <Version>1.6.1</Version>
+    <Version>1.6.2</Version>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -14,7 +14,8 @@
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     <Authors>Pruvz</Authors>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://pruvz.ai</PackageProjectUrl>
+    <PackageProjectUrl>https://pruvz.ai/evidence-packet</PackageProjectUrl>
+    <PackageTags>pruvz;ai-agents;ai-agent-verification;outcome-verification;system-of-record;evidence;verifier;audit;rfc3161;merkle</PackageTags>
     <RepositoryUrl>https://github.com/dorsharoni10/pruvz-evidence-packet</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>

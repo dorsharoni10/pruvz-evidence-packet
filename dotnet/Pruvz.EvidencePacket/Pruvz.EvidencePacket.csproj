@@ -17,7 +17,7 @@
 
   <PropertyGroup>
     <PackageId>Pruvz.EvidencePacket</PackageId>
-    <Description>Independent offline verifier for Pruvz Evidence Packet export bundles: JSON Schema and consistency validation, canonical commitments, signed seals under a pinned trust registry, Merkle log inclusion/consistency, and RFC 3161 anchor verification. Self-sufficient offline; verifies against a caller-pinned trust root only.</Description>
+    <Description>Independent offline verifier for Pruvz Evidence Packet export bundles, the per-action evidence of AI agent outcome verification (what the agent claimed vs. what the system of record showed): JSON Schema and consistency validation, canonical commitments, signed seals under a pinned trust registry, Merkle log inclusion/consistency, and RFC 3161 anchor verification. Self-sufficient offline; verifies against a caller-pinned trust root only.</Description>
     <RootNamespace>Pruvz.EvidencePacket</RootNamespace>
   </PropertyGroup>
 

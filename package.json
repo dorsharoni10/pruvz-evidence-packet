@@ -1,10 +1,24 @@
 {
   "name": "@pruvz/evidence-packet",
-  "version": "1.6.1",
-  "description": "Public JSON Schema, synthetic examples, local structural validator and independent offline verifier for the Pruvz Public Evidence Packet export contract.",
+  "version": "1.6.2",
+  "description": "Open evidence format for AI agent outcome verification: JSON Schema, synthetic examples, local structural validator and independent offline verifier for Pruvz Evidence Packets, the per-action record of what an AI agent claimed versus what Pruvz independently read back from the system of record.",
+  "keywords": [
+    "ai-agents",
+    "ai-agent-verification",
+    "outcome-verification",
+    "system-of-record",
+    "agentic-ai",
+    "audit-trail",
+    "evidence",
+    "verifier",
+    "json-schema",
+    "rfc3161",
+    "merkle",
+    "pruvz"
+  ],
   "type": "module",
   "license": "MIT",
-  "homepage": "https://pruvz.ai",
+  "homepage": "https://pruvz.ai/evidence-packet",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dorsharoni10/pruvz-evidence-packet.git"

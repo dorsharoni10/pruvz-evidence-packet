@@ -19,9 +19,9 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pruvz-evidence-packet"
-version = "1.6.1"
-description = "Independent offline verifier for Pruvz Evidence Packet export bundles: schema and consistency validation, canonical commitments, signed seals under a pinned trust registry, Merkle log inclusion/consistency, and RFC 3161 anchor verification."
-readme = {text = "Offline verifier for Pruvz Evidence Packet export bundles. Verifies against a caller-pinned trust root only — nothing is fetched from a Pruvz deployment or website. Docs, specifications and golden vectors: https://github.com/dorsharoni10/pruvz-evidence-packet", content-type = "text/markdown"}
+version = "1.6.2"
+description = "Independent offline verifier for Pruvz Evidence Packet export bundles, the per-action evidence of AI agent outcome verification (what the agent claimed vs. what the system of record showed): schema and consistency validation, canonical commitments, signed seals under a pinned trust registry, Merkle log inclusion/consistency, and RFC 3161 anchor verification."
+readme = {text = "Offline verifier for Pruvz Evidence Packet export bundles. Pruvz independently verifies the business outcomes of AI agent actions (such as a refund an agent says it issued) against systems of record and exports each one as an Evidence Packet; this package verifies those packets offline. It verifies against a caller-pinned trust root only — nothing is fetched from a Pruvz deployment or website. Walkthrough: https://pruvz.ai/evidence-packet. Docs, specifications and golden vectors: https://github.com/dorsharoni10/pruvz-evidence-packet", content-type = "text/markdown"}
 license = {text = "MIT"}
 requires-python = ">=3.10"
 dependencies = [
@@ -30,7 +30,7 @@ dependencies = [
     "jsonschema>=4.18",
     "referencing>=0.30",
 ]
-keywords = ["pruvz", "evidence", "verifier", "audit", "rfc3161", "merkle"]
+keywords = ["pruvz", "ai-agents", "ai-agent-verification", "outcome-verification", "system-of-record", "evidence", "verifier", "audit", "rfc3161", "merkle"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
