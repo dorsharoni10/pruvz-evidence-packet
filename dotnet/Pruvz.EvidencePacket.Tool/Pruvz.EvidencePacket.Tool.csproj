@@ -12,7 +12,7 @@
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>pruvz-verify</ToolCommandName>
     <RootNamespace>Pruvz.EvidencePacket.Tool</RootNamespace>
-    <Description>Offline verifier CLI for Pruvz Evidence Packet export bundles (dotnet tool `pruvz-verify`): verifies a bundle against a caller-pinned trust root with no network access, mirroring the npm CLI's argument surface and exit codes.</Description>
+    <Description>Offline verifier CLI for Pruvz Evidence Packet export bundles, the per-action evidence of AI agent outcome verification (dotnet tool `pruvz-verify`): verifies a bundle against a caller-pinned trust root with no network access, mirroring the npm CLI's argument surface and exit codes.</Description>
   </PropertyGroup>
 
   <ItemGroup>

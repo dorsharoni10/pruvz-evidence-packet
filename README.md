@@ -1,8 +1,8 @@
 # Pruvz Public Evidence Packet
 
-The open, versioned export contract for one business action recorded by [Pruvz](https://pruvz.ai), its verification state and its ordered evidence — published as a JSON Schema, with synthetic examples and a local structural validator you can run without a Pruvz account, an API key, or any connection to Pruvz services.
+[Pruvz](https://pruvz.ai) independently verifies the business outcomes of AI agent actions, such as a refund an agent says it issued, against the systems of record and keeps the evidence: what the agent saw, what policy applied at decision time, what the agent claimed, and what the systems of record actually confirmed. More: [AI agent outcome verification](https://pruvz.ai/solutions/ai-agent-outcome-verification) · [refund verification](https://pruvz.ai/solutions/ai-agent-refund-verification) · [Evidence Packet walkthrough](https://pruvz.ai/evidence-packet).
 
-[Pruvz](https://pruvz.ai) independently verifies the business outcomes of AI agent actions against systems of record and keeps the evidence: what the agent saw, what policy applied at decision time, what the agent claimed, and what the systems of record actually confirmed.
+This repository is the open, versioned export contract for one business action recorded by Pruvz, its verification state and its ordered evidence — published as a JSON Schema, with synthetic examples and a local structural validator you can run without a Pruvz account, an API key, or any connection to Pruvz services.
 
 ## What this repository is — and is not
 
@@ -22,7 +22,7 @@ The packet's parts:
 | `evidence` | The ordered evidence timeline (`GET /api/actions/{actionId}/evidence`): every append-only evidence item in sequence order, each with its server-assigned trust level. |
 | `packetFormatVersion` | Metadata of the packet file itself — the format release it conforms to. |
 
-Schemas live in [`schema/v1.5.0/`](schema/v1.5.0/) (current release; [`schema/v1.4.0/`](schema/v1.4.0/), [`schema/v1.3.0/`](schema/v1.3.0/), [`schema/v1.2.0/`](schema/v1.2.0/), [`schema/v1.1.0/`](schema/v1.1.0/) and [`schema/v1.0.0/`](schema/v1.0.0/) remain published and immutable):
+Schemas live in [`schema/v1.5.0/`](schema/v1.5.0/) (the current packet format version; package versions are separate, see [`docs/VERSIONING.md`](docs/VERSIONING.md); [`schema/v1.4.0/`](schema/v1.4.0/), [`schema/v1.3.0/`](schema/v1.3.0/), [`schema/v1.2.0/`](schema/v1.2.0/), [`schema/v1.1.0/`](schema/v1.1.0/) and [`schema/v1.0.0/`](schema/v1.0.0/) remain published and immutable):
 
 - [`evidence-packet.schema.json`](schema/v1.5.0/evidence-packet.schema.json) — the packet envelope
 - [`action.schema.json`](schema/v1.5.0/action.schema.json) — the action record

@@ -2,6 +2,14 @@
 
 All notable changes to the Public Evidence Packet format and this repository are recorded here. Format releases follow the policy in [`docs/VERSIONING.md`](docs/VERSIONING.md).
 
+## 1.6.2 — 2026-10-27
+
+**PATCH (package metadata and README wording only — the packet format, the vectors, the verifiers and the package surface are unchanged).** Packets keep declaring `packetFormatVersion: "1.5.0"`.
+
+- The npm, PyPI and NuGet descriptions now say what a packet is evidence of — the per-action record of AI agent outcome verification against systems of record — and the packages carry keywords for it, so they can be found by what they do, not only by name. The npm homepage and the NuGet project URL point to the packet walkthrough (https://pruvz.ai/evidence-packet).
+- README: the opening paragraph leads with what Pruvz verifies and links the walkthrough; the schema-directory note says "current packet format version" instead of "current release", which read as the package version.
+- Nothing else changed. All four packages are re-published at 1.6.2 solely to keep the one version stream (`docs/VERSIONING.md` release step 6).
+
 ## 1.6.1 — 2026-09-01
 
 **PATCH (verifier bug fix — the packet format, the vectors and the package surface are unchanged)** — found by the first end-to-end live acceptance of the full evidence chain against a public timestamp authority (product PRUVZ-102). Packets keep declaring `packetFormatVersion: "1.5.0"`.
